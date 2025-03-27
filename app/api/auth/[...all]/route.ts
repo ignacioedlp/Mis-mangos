@@ -50,9 +50,9 @@ const ajProjectedPost = async (req: NextRequest) => {
             message: "Forbidden",
          }, { status: 403 })
       }
+   } else {
+      return betterAuthHandlers.POST(req)
    }
-
-   return betterAuthHandlers.POST(req)
 }
 
 export { ajProjectedPost as POST }
