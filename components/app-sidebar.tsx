@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/sidebar"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import SignOutForm from "./sign-out-form"
+import type { User } from "@/lib/types"
 
 
 type UserProps = {
