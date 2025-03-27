@@ -19,7 +19,7 @@ export default function RootLayout({
         className={` antialiased`}
       >
         <Navbar />
-        <main className="container">
+        <main>
           {children}
         </main>
         <Footer />
