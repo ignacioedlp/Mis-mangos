@@ -1,4 +1,4 @@
-import { Code, Database, Layers, Lock, Server, Shield, Zap } from 'lucide-react'
+import { Code, Database, Layers, Lock, Zap } from 'lucide-react'
 import React from 'react'
 
 export default function TechStackSection() {
