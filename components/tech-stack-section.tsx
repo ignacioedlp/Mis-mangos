@@ -134,26 +134,6 @@ export default function TechStackSection() {
                      Powerful, open source object-relational database system
                   </p>
                </div>
-
-               <div className="flex flex-col items-center gap-3 rounded-xl bg-background p-6 shadow-sm transition-all hover:shadow-md">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-purple-500/10">
-                     <Shield className="h-6 w-6 text-purple-500" />
-                  </div>
-                  <h3 className="text-xl font-semibold">Arcjet</h3>
-                  <p className="text-center text-sm text-muted-foreground">
-                     Advanced security and bot protection for web applications
-                  </p>
-               </div>
-
-               <div className="flex flex-col items-center gap-3 rounded-xl bg-background p-6 shadow-sm transition-all hover:shadow-md">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-orange-500/10">
-                     <Server className="h-6 w-6 text-orange-500" />
-                  </div>
-                  <h3 className="text-xl font-semibold">Fully Integrated</h3>
-                  <p className="text-center text-sm text-muted-foreground">
-                     All technologies work seamlessly together for a robust solution
-                  </p>
-               </div>
             </div>
          </div>
       </section>
