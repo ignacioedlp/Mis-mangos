@@ -23,6 +23,7 @@ import { authClient } from "@/lib/auth-client"
 import { signInFormSchema } from "@/lib/auth-schema"
 
 import { zodResolver } from "@hookform/resolvers/zod"
+import { redirect } from "next/navigation"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { z } from "zod"
@@ -42,13 +43,13 @@ export default function SignInForm() {
       await authClient.signIn.email({
          email,
          password,
-         callbackURL: "/dashboard"
       }, {
          onRequest: () => {
             toast("Signing in...")
          },
          onSuccess: () => {
             form.reset()
+            redirect("/dashboard")
          },
          onError: (ctx) => {
             toast.error(ctx.error.message);
