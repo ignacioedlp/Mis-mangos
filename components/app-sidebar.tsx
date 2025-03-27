@@ -1,5 +1,3 @@
-"use client"
-
 import Link from "next/link"
 import { LayoutDashboard, LogOut, } from "lucide-react"
 
@@ -15,7 +13,7 @@ import {
    SidebarRail,
 } from "@/components/ui/sidebar"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { useRouter } from "next/navigation"
+import SignOutForm from "./sign-out-form"
 
 
 type UserProps = {
@@ -23,7 +21,6 @@ type UserProps = {
 }
 
 export default function AppSidebar({ user }: UserProps) {
-   const router = useRouter()
    return (
       <Sidebar variant="floating" className="border-r">
          <SidebarHeader className="border-b px-6 py-3">
@@ -37,7 +34,7 @@ export default function AppSidebar({ user }: UserProps) {
          <SidebarContent>
             <SidebarMenu className="px-2 py-4">
                <SidebarMenuItem>
-                  <SidebarMenuButton asChild tooltip="Dashboard">
+                  <SidebarMenuButton>
                      <Link href="/dashboard" className="flex items-center gap-3">
                         <div className="flex h-9 w-9 items-center justify-center rounded-md bg-primary/10 text-primary">
                            <LayoutDashboard className="h-5 w-5" />
@@ -64,14 +61,15 @@ export default function AppSidebar({ user }: UserProps) {
                      {user?.email}
                   </p>
                </div>
-               <Button
-                  variant={"ghost"}
-                  size={"icon"}
-                  onClick={() => router.push("/")}
-                  className="flex items-center cursor-pointer"
-               >
-                  <LogOut className="mr-2 h-4 w-4" />
-               </Button>
+               <SignOutForm>
+                  <Button
+                     variant={"ghost"}
+                     size={"icon"}
+                     className="flex items-center cursor-pointer"
+                  >
+                     <LogOut className="mr-2 h-4 w-4" />
+                  </Button>
+               </SignOutForm>
             </div>
          </SidebarFooter>
          <SidebarRail />

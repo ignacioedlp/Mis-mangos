@@ -4,13 +4,12 @@ import { Button } from "@/components/ui/button"
 import {
    Card,
    CardContent,
-   CardFooter,
    CardHeader
 } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
-import { Camera, Check, Clock, LogOut, Mail, MapPin, Shield } from "lucide-react"
+import { Camera, Check, Clock, Mail, MapPin, Shield } from "lucide-react"
 import { useUser } from "@/context/UserContext"
 
 export default function ProfileCard() {
@@ -80,12 +79,6 @@ export default function ProfileCard() {
                </div>
             </div>
          </CardContent>
-         <CardFooter className="border-t px-6 py-4">
-            <Button variant="outline" className="w-full">
-               <LogOut className="mr-2 h-4 w-4" />
-               Sign out
-            </Button>
-         </CardFooter>
       </Card>
    )
 }

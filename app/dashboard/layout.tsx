@@ -6,6 +6,7 @@ import { headers } from "next/headers"
 import { redirect } from "next/navigation"
 import { UserProvider } from "@/context/UserContext"
 
+
 export default async function DashboardLayout({
    children,
 }: {

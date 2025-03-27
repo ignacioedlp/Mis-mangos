@@ -7,3 +7,8 @@ interface User {
    updatedAt: Date;
    image?: string | null | undefined | undefined;
 }
+
+interface Session {
+   user: User;
+
+}
