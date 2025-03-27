@@ -15,6 +15,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import SignOutForm from "./sign-out-form"
 import type { User } from "@/lib/types"
+import Logo from "./logo"
 
 
 type UserProps = {
@@ -25,12 +26,7 @@ export default function AppSidebar({ user }: UserProps) {
    return (
       <Sidebar variant="floating" className="border-r">
          <SidebarHeader className="border-b px-6 py-3">
-            <Link href="/" className="flex items-center gap-2 font-bold">
-               <div className="flex h-8 w-8 items-center justify-center rounded-md bg-primary">
-                  <span className="text-sm font-bold text-primary-foreground">A</span>
-               </div>
-               <span className="text-xl">AuthSystem</span>
-            </Link>
+            <Logo />
          </SidebarHeader>
          <SidebarContent>
             <SidebarMenu className="px-2 py-4">
