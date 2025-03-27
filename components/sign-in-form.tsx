@@ -18,10 +18,12 @@ import {
    FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { authClient } from "@/lib/auth-client"
 import { signInFormSchema } from "@/lib/auth-schema"
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
+import { toast } from "sonner"
 import { z } from "zod"
 
 
@@ -34,7 +36,23 @@ export default function SignInForm() {
       },
    })
 
-   function onSubmit(values: z.infer<typeof signInFormSchema>) {
+   async function onSubmit(values: z.infer<typeof signInFormSchema>) {
+      const { email, password } = values;
+      const { data, error } = await authClient.signIn.email({
+         email,
+         password,
+         callbackURL: "/dashboard"
+      }, {
+         onRequest: (ctx) => {
+            toast("Signing in...")
+         },
+         onSuccess: (ctx) => {
+            form.reset()
+         },
+         onError: (ctx) => {
+            toast.error(ctx.error.message);
+         },
+      });
       console.log(values)
    }
 
