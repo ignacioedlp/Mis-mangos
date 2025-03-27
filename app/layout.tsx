@@ -19,12 +19,10 @@ export default function RootLayout({
       <body
         className={` antialiased`}
       >
-        <Navbar />
         <Toaster richColors position="top-right" />
-        <main>
+        <main className="h-screen">
           {children}
         </main>
-        <Footer />
       </body>
     </html>
   );
