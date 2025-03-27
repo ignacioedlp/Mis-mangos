@@ -41,7 +41,7 @@ export default function SignUpForm() {
 
    async function onSubmit(values: z.infer<typeof formSchema>) {
       const { name, email, password } = values;
-      const { data, error } = await authClient.signUp.email({
+      await authClient.signUp.email({
          email,
          password,
          name,
@@ -57,7 +57,6 @@ export default function SignUpForm() {
             toast.error(ctx.error.message);
          },
       });
-      console.log(values)
    }
 
    return (

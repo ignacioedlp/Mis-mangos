@@ -4,7 +4,6 @@ import { Button } from './ui/button'
 import { Lock } from 'lucide-react'
 import { auth } from '@/lib/auth'
 import { headers } from 'next/headers'
-import { redirect } from 'next/navigation'
 import SignOutForm from './sign-out-form'
 
 export default async function Navbar() {

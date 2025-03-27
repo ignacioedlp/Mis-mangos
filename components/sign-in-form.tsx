@@ -39,7 +39,7 @@ export default function SignInForm() {
 
    async function onSubmit(values: z.infer<typeof signInFormSchema>) {
       const { email, password } = values;
-      const { data, error } = await authClient.signIn.email({
+      await authClient.signIn.email({
          email,
          password,
          callbackURL: "/dashboard"
@@ -54,7 +54,6 @@ export default function SignInForm() {
             toast.error(ctx.error.message);
          },
       });
-      console.log(values)
    }
 
    return (

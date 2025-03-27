@@ -7,8 +7,3 @@ interface User {
    updatedAt: Date;
    image?: string | null | undefined;
 }
-
-interface Session {
-   user: User;
-
-}
