@@ -48,9 +48,9 @@ export default function AppSidebar({ user }: UserProps) {
          <SidebarFooter className="border-t p-4">
             <div className="flex items-center gap-3 rounded-lg bg-muted/50 p-3">
                <Avatar className="h-10 w-10 border-2 border-background">
-                  <AvatarImage src="/placeholder.svg" alt="User" />
+                  <AvatarImage src={user?.image || ""} alt="User" />
                   <AvatarFallback className="bg-primary/10 text-primary">
-                     {user?.name.charAt(0)}
+                     {user?.name ? user.name.charAt(0) : '?'}
                   </AvatarFallback>
                </Avatar>
                <div className="flex-1 overflow-hidden">

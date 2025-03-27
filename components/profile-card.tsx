@@ -1,6 +1,5 @@
 "use client"
 
-import { Button } from "@/components/ui/button"
 import {
    Card,
    CardContent,
@@ -9,7 +8,7 @@ import {
 import { Separator } from "@/components/ui/separator"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
-import { Camera, Check, Clock, Mail, MapPin, Shield } from "lucide-react"
+import { Check, Clock, Mail, MapPin, Shield } from "lucide-react"
 import { useUser } from "@/context/UserContext"
 
 export default function ProfileCard() {
@@ -21,15 +20,11 @@ export default function ProfileCard() {
             <div className="absolute -bottom-12 left-4">
                <div className="relative">
                   <Avatar className="h-24 w-24 border-4 border-background">
-                     <AvatarImage src="/placeholder.svg" alt="John Doe" />
+                     <AvatarImage src={user?.image || ''} alt="John Doe" />
                      <AvatarFallback className="text-6xl font-bold">
                         {user?.name.charAt(0)}
                      </AvatarFallback>
                   </Avatar>
-                  <Button size="icon" variant="secondary" className="absolute bottom-0 right-0 rounded-full h-8 w-8">
-                     <Camera className="h-4 w-4" />
-                     <span className="sr-only">Change profile picture</span>
-                  </Button>
                </div>
             </div>
          </CardHeader>
@@ -45,11 +40,11 @@ export default function ProfileCard() {
             <div className="flex items-center gap-2 mt-4">
                <Badge variant="outline" className="flex items-center gap-1">
                   <Check className="h-3 w-3" />
-                  Verified
+                  {user?.emailVerified ? 'Verified' : 'Not Verified'}
                </Badge>
                <Badge variant="outline" className="flex items-center gap-1">
                   <Clock className="h-3 w-3" />
-                  Member since 2025
+                  Member since {user?.createdAt.getFullYear()}
                </Badge>
             </div>
             <Separator className="my-4" />

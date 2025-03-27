@@ -5,7 +5,7 @@ interface User {
    emailVerified: boolean;
    createdAt: Date;
    updatedAt: Date;
-   image?: string | null | undefined | undefined;
+   image?: string | null | undefined;
 }
 
 interface Session {
