@@ -1,6 +1,6 @@
-# Next Auth Starter 🚀
+# Better Auth Starter 🚀
 
-Next Auth Starter is a Next.js 15 boilerplate with built-in authentication using **BetterAuth**. It supports **Google Login** and **BetterAuth credentials**, providing a solid foundation for any Next.js project requiring authentication.
+Better Auth Starter is a Next.js 15 boilerplate with built-in authentication using **BetterAuth**. It supports **Google Login** and **BetterAuth credentials**, providing a solid foundation for any Next.js project requiring authentication.
 
 ## ✨ Features
 
