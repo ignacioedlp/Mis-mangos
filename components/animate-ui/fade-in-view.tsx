@@ -47,14 +47,13 @@ export default function FadeInView({
          scale: 1,
          transition: {
             duration,
-            delay,
-            ease: [0.4, 0, 0.2, 1],
+            delay
          },
       },
       exit: {
          opacity: 0,
          scale: 0.95,
-         transition: { duration: 0.3, ease: 'easeIn' },
+         transition: { duration: 0.3 },
       },
    };
 
