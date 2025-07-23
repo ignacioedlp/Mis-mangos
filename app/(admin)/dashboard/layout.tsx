@@ -1,4 +1,4 @@
-import { SidebarProvider } from "@/components/ui/sidebar"
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
 import AppSidebar from "@/components/app-sidebar"
 import AppHeader from "@/components/app-header"
 import { auth } from "@/lib/auth"
@@ -22,17 +22,15 @@ export default async function DashboardLayout({
 
    const user = session?.user;
    return (
-      <SidebarProvider>
-         <UserProvider user={user}>
-            <div className="flex min-h-screen w-full">
-               <AppSidebar user={user} />
-               <div className="w-full flex flex-1 flex-col">
-                  <AppHeader />
-                  <main className="flex-1 p-6">{children}</main>
-               </div>
-            </div>
-         </UserProvider>
-      </SidebarProvider>
+      <UserProvider user={user}>
+         <SidebarProvider>
+            <AppSidebar variant="inset" />
+            <SidebarInset>
+               <AppHeader user={user} />
+               <main className="flex-1 p-6">{children}</main>
+            </SidebarInset>
+         </SidebarProvider>
+      </UserProvider>
    )
 }
 

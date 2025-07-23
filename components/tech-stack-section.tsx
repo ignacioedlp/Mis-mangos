@@ -1,141 +1,80 @@
 import { Code, Database, Layers, Lock, Zap } from 'lucide-react'
 import React from 'react'
+import { Badge } from './ui/badge'
+import { Card } from './ui/card'
+import FadeInView from './animate-ui/fade-in-view';
+
+
+const stack = [
+   {
+      name: "Next.js 15",
+      icon: <Zap className="h-6 w-6 text-primary" />,
+      description: "The latest version of the React framework with improved performance and features",
+   },
+   {
+      name: "Tailwind CSS",
+      icon: <Code className="h-6 w-6 text-blue-500" />,
+      description: "Utility-first CSS framework for rapid UI development",
+   },
+   {
+      name: "Shadcn UI",
+      icon: <Layers className="h-6 w-6 text-sky-500" />,
+      description: "Beautifully designed components built with Radix UI and Tailwind",
+   },
+   {
+      name: "Better-Auth",
+      icon: <Lock className="h-6 w-6 text-primary" />,
+      description: "Advanced authentication library with built-in security features",
+   },
+   {
+      name: "Prisma",
+      icon: <Code className="h-6 w-6 text-indigo-500" />,
+      description: "Next-gen ORM for Node.js and TypeScript",
+   },
+   {
+      name: "PostgreSQL",
+      icon: <Database className="h-6 w-6 text-blue-600" />,
+      description: "Powerful, open source object-relational database system",
+   },
+]
 
 export default function TechStackSection() {
+
    return (
-      <section className="bg-muted/50 py-16">
-         <div className="container space-y-8">
-            <div className="mx-auto flex max-w-[58rem] flex-col items-center space-y-4 text-center">
-               <h2 className="text-3xl font-bold leading-[1.1] sm:text-3xl md:text-4xl">Powered by Modern Technology</h2>
-               <p className="max-w-[85%] leading-normal text-muted-foreground sm:text-lg sm:leading-7">
-                  Built with the latest and most reliable technologies in the industry
-               </p>
-            </div>
+      <section className="pb-20 pt-20 md:pb-32 md:pt-32 container mx-auto">
+         <FadeInView className="text-center space-y-4 pb-16 mx-auto max-w-4xl">
+            <Badge className='px-4 py-1.5 text-sm font-medium'>Tech Stack</Badge>
+            <h2 className="mx-auto mt-4 text-3xl font-bold sm:text-5xl tracking-tight">
+               Powered by Modern Technology
+            </h2>
+            <p className="text-xl text-muted-foreground pt-1">
+               Built with the latest and most reliable technologies in the industry
+            </p>
+         </FadeInView>
 
-            <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-               <div className="flex flex-col items-center gap-3 rounded-xl bg-background p-6 shadow-sm transition-all hover:shadow-md">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
-                     <Zap className="h-6 w-6 text-primary" />
+         <Card className="grid divide-x divide-y overflow-hidden rounded-3xl border border-card sm:grid-cols-2 lg:grid-cols-3 lg:divide-y-0">
+            {stack.map((item, index) => (
+               <FadeInView
+                  key={index}
+                  delay={0.1 * (index + 2)}
+                  className="group relative transition-shadow duration-300 hover:z-[1] hover:shadow-2xl hover:shadow-primary"
+               >
+                  <div className="relative space-y-8 py-12 p-8">
+                     <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
+                        {item.icon}
+                     </div>
+                     <div className="space-y-2">
+                        <h5 className="text-xl text-muted-foreground font-semibold transition group-hover:text-primary">
+                           {item.name}
+                        </h5>
+                        <p className="text-muted-foreground">
+                           {item.description}
+                        </p>
+                     </div>
                   </div>
-                  <h3 className="text-xl font-semibold">Next.js 15</h3>
-                  <p className="text-center text-sm text-muted-foreground">
-                     The latest version of the React framework with improved performance and features
-                  </p>
-               </div>
-
-               <div className="flex flex-col items-center gap-3 rounded-xl bg-background p-6 shadow-sm transition-all hover:shadow-md">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-blue-500/10">
-                     <svg
-                        className="h-6 w-6 text-blue-500"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                     >
-                        <path
-                           d="M12 6.75V8.25"
-                           stroke="currentColor"
-                           strokeWidth="2"
-                           strokeLinecap="round"
-                           strokeLinejoin="round"
-                        />
-                        <path
-                           d="M12 15.75V17.25"
-                           stroke="currentColor"
-                           strokeWidth="2"
-                           strokeLinecap="round"
-                           strokeLinejoin="round"
-                        />
-                        <path
-                           d="M8.25 12H6.75"
-                           stroke="currentColor"
-                           strokeWidth="2"
-                           strokeLinecap="round"
-                           strokeLinejoin="round"
-                        />
-                        <path
-                           d="M17.25 12H15.75"
-                           stroke="currentColor"
-                           strokeWidth="2"
-                           strokeLinecap="round"
-                           strokeLinejoin="round"
-                        />
-                        <path
-                           d="M9.34 9.34L8.25 8.25"
-                           stroke="currentColor"
-                           strokeWidth="2"
-                           strokeLinecap="round"
-                           strokeLinejoin="round"
-                        />
-                        <path
-                           d="M15.66 15.66L14.57 14.57"
-                           stroke="currentColor"
-                           strokeWidth="2"
-                           strokeLinecap="round"
-                           strokeLinejoin="round"
-                        />
-                        <path
-                           d="M9.34 14.66L8.25 15.75"
-                           stroke="currentColor"
-                           strokeWidth="2"
-                           strokeLinecap="round"
-                           strokeLinejoin="round"
-                        />
-                        <path
-                           d="M15.66 8.34L14.57 9.43"
-                           stroke="currentColor"
-                           strokeWidth="2"
-                           strokeLinecap="round"
-                           strokeLinejoin="round"
-                        />
-                     </svg>
-                  </div>
-                  <h3 className="text-xl font-semibold">Tailwind CSS</h3>
-                  <p className="text-center text-sm text-muted-foreground">
-                     Utility-first CSS framework for rapid UI development
-                  </p>
-               </div>
-
-               <div className="flex flex-col items-center gap-3 rounded-xl bg-background p-6 shadow-sm transition-all hover:shadow-md">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-800/10">
-                     <Layers className="h-6 w-6 text-slate-800" />
-                  </div>
-                  <h3 className="text-xl font-semibold">ShadCN UI</h3>
-                  <p className="text-center text-sm text-muted-foreground">
-                     Beautifully designed components built with Radix UI and Tailwind
-                  </p>
-               </div>
-
-               <div className="flex flex-col items-center gap-3 rounded-xl bg-background p-6 shadow-sm transition-all hover:shadow-md">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-green-500/10">
-                     <Lock className="h-6 w-6 text-green-500" />
-                  </div>
-                  <h3 className="text-xl font-semibold">Better-Auth</h3>
-                  <p className="text-center text-sm text-muted-foreground">
-                     Advanced authentication library with built-in security features
-                  </p>
-               </div>
-
-               <div className="flex flex-col items-center gap-3 rounded-xl bg-background p-6 shadow-sm transition-all hover:shadow-md">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-indigo-500/10">
-                     <Code className="h-6 w-6 text-indigo-500" />
-                  </div>
-                  <h3 className="text-xl font-semibold">Prisma</h3>
-                  <p className="text-center text-sm text-muted-foreground">
-                     Next-generation ORM for Node.js and TypeScript
-                  </p>
-               </div>
-
-               <div className="flex flex-col items-center gap-3 rounded-xl bg-background p-6 shadow-sm transition-all hover:shadow-md">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-blue-600/10">
-                     <Database className="h-6 w-6 text-blue-600" />
-                  </div>
-                  <h3 className="text-xl font-semibold">PostgreSQL</h3>
-                  <p className="text-center text-sm text-muted-foreground">
-                     Powerful, open source object-relational database system
-                  </p>
-               </div>
-            </div>
-         </div>
+               </FadeInView>
+            ))}
+         </Card>
       </section>
    )
 }
