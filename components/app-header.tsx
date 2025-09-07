@@ -14,7 +14,7 @@ type UserProps = {
 
 export default function AppHeader({ user }: UserProps) {
    return (
-      <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b px-6">
+      <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b px-6 bg-background">
          <SidebarTrigger />
          <Separator
             orientation="vertical"

@@ -4,13 +4,14 @@ import React from 'react'
 
 export default function Logo() {
    return (
-      <Link href="/" className="flex items-center">
+      <Link href="/" className="flex justify-start w-full px-2">
          <Image
             src={'/logo.png'}
             alt="Logo"
-            width={128}
-            height={128}
+            width={50}
+            height={50}
             priority
+            className='rounded-full'
          />
       </Link>
    )

@@ -116,7 +116,7 @@ export function PWAInstaller() {
           </Button>
         </div>
         <CardDescription>
-          Install Better Auth for a better mobile experience with offline support
+          Install Mis Mangos for a better mobile experience with offline support
         </CardDescription>
       </CardHeader>
       <CardContent className="pt-0">

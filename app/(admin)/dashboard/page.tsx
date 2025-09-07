@@ -1,4 +1,3 @@
-import ProfileCard from "@/components/profile-card"
 import { getMonthlyDashboard } from "@/actions/expense-actions"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -19,8 +18,7 @@ export default function DashboardPage() {
 
          <DashboardStats />
          
-         <div className="grid gap-6 lg:grid-cols-[1fr_2fr]">
-            <ProfileCard />
+         <div className="grid gap-6">
             <DashboardList />
          </div>
       </div>

@@ -1,6 +1,6 @@
 {
-  "name": "Better Auth - Personal Finance Manager",
-  "short_name": "Better Auth",
+  "name": "Mis mangos",
+  "short_name": "Mis mangos",
   "description": "Complete personal finance management with budget tracking, expense management, and intelligent notifications",
   "start_url": "/dashboard",
   "display": "standalone",

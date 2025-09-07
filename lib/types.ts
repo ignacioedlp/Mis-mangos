@@ -94,6 +94,7 @@ export interface BudgetAnalysisDTO {
    totalBudgetPercentage: number;
    hasUnassignedIncome: boolean;
    unassignedAmount?: number;
+   totalSavings?: number;
 }
 
 export interface CategoryBudgetStatusDTO {

@@ -2,7 +2,7 @@ import { getBudgetAnalysis } from "@/actions/expense-actions"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
-import { TrendingUp, TrendingDown, AlertTriangle, DollarSign, Percent } from "lucide-react"
+import { TrendingUp, TrendingDown, AlertTriangle, DollarSign, Percent, PiggyBank } from "lucide-react"
 import { formatCurrency, formatPercentage } from "@/lib/utils"
 
 interface BudgetDashboardProps {
@@ -53,7 +53,7 @@ export async function BudgetDashboard({ year, month }: BudgetDashboardProps) {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid gap-4 md:grid-cols-3">
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             <div className="space-y-2">
               <div className="flex items-center gap-2">
                 <Percent className="h-4 w-4 text-muted-foreground" />
@@ -61,6 +61,16 @@ export async function BudgetDashboard({ year, month }: BudgetDashboardProps) {
               </div>
               <p className="text-2xl font-bold">
                 {formatPercentage(budgetData.totalBudgetPercentage)}
+              </p>
+            </div>
+            
+            <div className="space-y-2">
+              <div className="flex items-center gap-2">
+                <PiggyBank className="h-4 w-4 text-blue-600" />
+                <span className="text-sm text-muted-foreground">Total Saved</span>
+              </div>
+              <p className="text-2xl font-bold text-blue-600">
+                {formatCurrency(budgetData.totalSavings || 0)}
               </p>
             </div>
             

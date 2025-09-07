@@ -713,6 +713,12 @@ export async function getBudgetAnalysis(year?: number, month?: number) {
 
   const totalBudgetPercentage = categoryAnalysis.reduce((sum, cat) => sum + cat.budgetPercentage, 0);
   const hasUnassignedIncome = totalBudgetPercentage < 100;
+  
+  // Calculate total savings (money not used from budgets)
+  const totalSavings = categoryAnalysis.reduce((sum, cat) => {
+    // Only count positive remaining amounts as savings (don't subtract overspends)
+    return sum + Math.max(0, cat.remaining);
+  }, 0);
 
   return {
     year: y,
@@ -721,7 +727,8 @@ export async function getBudgetAnalysis(year?: number, month?: number) {
     categories: categoryAnalysis,
     totalBudgetPercentage,
     hasUnassignedIncome,
-    unassignedAmount: hasUnassignedIncome ? (monthlyIncome * (100 - totalBudgetPercentage)) / 100 : 0
+    unassignedAmount: hasUnassignedIncome ? (monthlyIncome * (100 - totalBudgetPercentage)) / 100 : 0,
+    totalSavings
   };
 }
 

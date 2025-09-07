@@ -12,12 +12,12 @@ const notoSansKR = Noto_Sans_KR({
 });
 
 export const metadata: Metadata = {
-  title: "Better Auth - Personal Finance Manager",
+  title: "Mis Mangos - Personal Finance Manager",
   description: "Complete personal finance management with budget tracking, expense management, and intelligent notifications",
   keywords: ["finance", "budget", "expenses", "personal finance", "money management", "Argentina", "ARS"],
-  authors: [{ name: "Better Auth Team" }],
-  creator: "Better Auth",
-  publisher: "Better Auth",
+  authors: [{ name: "ToxeDev" }],
+  creator: "Mis Mangos",
+  publisher: "Mis Mangos",
   formatDetection: {
     email: false,
     address: false,
@@ -27,17 +27,17 @@ export const metadata: Metadata = {
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: "Better Auth",
+    title: "Mis Mangos",
   },
   openGraph: {
     type: "website",
-    siteName: "Better Auth",
-    title: "Better Auth - Personal Finance Manager",
+    siteName: "Mis Mangos",
+    title: "Mis Mangos - Personal Finance Manager",
     description: "Complete personal finance management with budget tracking, expense management, and intelligent notifications",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Better Auth - Personal Finance Manager",
+    title: "Mis Mangos - Personal Finance Manager",
     description: "Complete personal finance management with budget tracking, expense management, and intelligent notifications",
   },
   viewport: {
