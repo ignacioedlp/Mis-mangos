@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useMemo } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -17,6 +17,32 @@ interface CreateExpenseDialogProps {
 export function CreateExpenseDialog({ categories, subcategories }: CreateExpenseDialogProps) {
   const [open, setOpen] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [selectedCategoryId, setSelectedCategoryId] = useState("")
+
+  // Filtrar subcategorías basadas en la categoría seleccionada
+  const filteredSubcategories = useMemo(() => {
+    if (!selectedCategoryId) return []
+    return subcategories.filter(sub => sub.categoryId === selectedCategoryId)
+  }, [selectedCategoryId, subcategories])
+
+  // Función para resetear el formulario cuando se abre el diálogo
+  const handleOpenChange = (newOpen: boolean) => {
+    setOpen(newOpen)
+    if (newOpen) {
+      // Resetear el estado cuando se abre el diálogo
+      setSelectedCategoryId("")
+    }
+  }
+
+  // Función para manejar el cambio de categoría
+  const handleCategoryChange = (categoryId: string) => {
+    setSelectedCategoryId(categoryId)
+    // Resetear la subcategoría seleccionada cuando cambia la categoría
+    const subcategorySelect = document.getElementById("expense-subcategory") as HTMLSelectElement
+    if (subcategorySelect) {
+      subcategorySelect.value = ""
+    }
+  }
 
   async function handleSubmit(formData: FormData) {
     setLoading(true)
@@ -28,37 +54,37 @@ export function CreateExpenseDialog({ categories, subcategories }: CreateExpense
       const subcategoryId = String(formData.get("subcategoryId") || "")
       
       if (!name.trim()) {
-        toast.error("Expense name is required")
+        toast.error("El nombre del gasto es requerido")
         return
       }
       
       if (estimatedAmount <= 0) {
-        toast.error("Amount must be greater than 0")
+        toast.error("El monto debe ser mayor a 0")
         return
       }
       
       if (!categoryId) {
-        toast.error("Please select a category")
+        toast.error("Por favor selecciona una categoría")
         return
       }
       
       if (!subcategoryId) {
-        toast.error("Please select a subcategory")
+        toast.error("Por favor selecciona una subcategoría")
         return
       }
       
       await createExpense({ name, estimatedAmount, frequency, categoryId, subcategoryId })
-      toast.success("Expense created successfully!")
-      setOpen(false)
+      toast.success("¡Gasto creado exitosamente!")
+      handleOpenChange(false)
     } catch {
-      toast.error("Failed to create expense")
+      toast.error("Error al crear el gasto")
     } finally {
       setLoading(false)
     }
   }
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
         <Button>
           <Plus className="h-4 w-4 mr-2" />
@@ -67,21 +93,21 @@ export function CreateExpenseDialog({ categories, subcategories }: CreateExpense
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Create New Expense</DialogTitle>
-          <DialogDescription>Add a new recurring expense to track your spending.</DialogDescription>
+          <DialogTitle>Crear Nuevo Gasto</DialogTitle>
+          <DialogDescription>Agrega un nuevo gasto recurrente para hacer seguimiento de tus gastos.</DialogDescription>
         </DialogHeader>
         <form action={handleSubmit} className="space-y-4">
           <div className="grid gap-2">
-            <Label htmlFor="expense-name">Expense Name</Label>
+            <Label htmlFor="expense-name">Nombre del Gasto</Label>
             <Input 
               id="expense-name" 
               name="name" 
-              placeholder="e.g., Rent, Internet, Groceries" 
+              placeholder="ej. Renta, Internet, Supermercado" 
               required
             />
           </div>
           <div className="grid gap-2">
-            <Label htmlFor="expense-amount">Estimated Amount ($)</Label>
+            <Label htmlFor="expense-amount">Monto Estimado ($)</Label>
             <Input 
               id="expense-amount" 
               name="estimatedAmount" 
@@ -92,52 +118,67 @@ export function CreateExpenseDialog({ categories, subcategories }: CreateExpense
             />
           </div>
           <div className="grid gap-2">
-            <Label htmlFor="expense-frequency">Frequency</Label>
+            <Label htmlFor="expense-frequency">Frecuencia</Label>
             <select 
               id="expense-frequency" 
               name="frequency" 
-              className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors"
+              className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
               required
             >
-              <option value="WEEKLY">Weekly</option>
-              <option value="MONTHLY">Monthly</option>
-              <option value="ANNUAL">Annual</option>
+              <option value="WEEKLY">Semanal</option>
+              <option value="MONTHLY">Mensual</option>
+              <option value="ANNUAL">Anual</option>
             </select>
           </div>
           <div className="grid gap-2">
-            <Label htmlFor="expense-category">Category</Label>
+            <Label htmlFor="expense-category">Categoría</Label>
             <select 
               id="expense-category" 
               name="categoryId" 
-              className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors"
+              value={selectedCategoryId}
+              onChange={(e) => handleCategoryChange(e.target.value)}
+              className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
               required
             >
-              <option value="">Select a category...</option>
+              <option value="">Selecciona una categoría...</option>
               {categories.map((c) => (
                 <option key={c.id} value={c.id}>{c.name}</option>
               ))}
             </select>
           </div>
           <div className="grid gap-2">
-            <Label htmlFor="expense-subcategory">Subcategory</Label>
+            <Label htmlFor="expense-subcategory">Subcategoría</Label>
             <select 
               id="expense-subcategory" 
               name="subcategoryId" 
-              className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors"
+              className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
               required
+              disabled={!selectedCategoryId}
             >
-              <option value="">Select a subcategory...</option>
-              {subcategories.map((s) => (
+              <option value="">
+                {!selectedCategoryId 
+                  ? "Primero selecciona una categoría..." 
+                  : filteredSubcategories.length === 0 
+                    ? "No hay subcategorías disponibles" 
+                    : "Selecciona una subcategoría..."
+                }
+              </option>
+              {filteredSubcategories.map((s) => (
                 <option key={s.id} value={s.id}>{s.name}</option>
               ))}
             </select>
+            {selectedCategoryId && filteredSubcategories.length === 0 && (
+              <p className="text-xs text-muted-foreground">
+                No hay subcategorías para esta categoría. Puedes crear una desde la sección de Categorías.
+              </p>
+            )}
           </div>
           <div className="flex justify-end gap-2">
-            <Button type="button" variant="outline" onClick={() => setOpen(false)}>
-              Cancel
+            <Button type="button" variant="outline" onClick={() => handleOpenChange(false)}>
+              Cancelar
             </Button>
             <Button type="submit" disabled={loading}>
-              {loading ? "Creating..." : "Create Expense"}
+              {loading ? "Creando..." : "Crear Gasto"}
             </Button>
           </div>
         </form>
