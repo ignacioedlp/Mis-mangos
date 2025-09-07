@@ -86,7 +86,7 @@ export function PendingAlerts() {
       <CardContent>
         <div className="space-y-3">
           {pendingItems.map((item) => (
-            <div key={item.id} className="flex items-center justify-between p-3 rounded-lg border border-orange-200 bg-orange-50 dark:border-orange-800 dark:bg-orange-950/20">
+            <div key={item.id} className="flex items-center justify-between p-3 rounded-lg border border-orange-800 bg-orange-950/20">
               <div className="flex flex-col">
                 <span className="font-medium text-sm">{item.name}</span>
                 <span className="text-xs text-muted-foreground">
