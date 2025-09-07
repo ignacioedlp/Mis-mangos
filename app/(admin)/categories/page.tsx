@@ -1,12 +1,13 @@
-import { listCategories, listSubcategories, deleteCategory, deleteSubcategory } from "@/actions/expense-actions"
-import { Button } from "@/components/ui/button"
+import { listCategories, listSubcategories } from "@/actions/expense-actions"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
-import { Trash2, FolderPlus, Percent } from "lucide-react"
+import { FolderPlus, Percent } from "lucide-react"
 import { CreateCategoryDialog } from "@/components/category-dialog"
 import { CreateSubcategoryDialog } from "@/components/subcategory-dialog"
 import { EditCategoryDialog } from "@/components/edit-category-dialog"
+import { DeleteCategoryButton } from "@/components/delete-category-button"
+import { DeleteSubcategoryButton } from "@/components/delete-subcategory-button"
 
 async function CategoriesData() {
   const [categories, subcategories] = await Promise.all([
@@ -25,18 +26,6 @@ async function CategoriesData() {
 
 export default async function CategoriesPage() {
   const { categories, subcategories } = await CategoriesData()
-
-  async function deleteCategoryAction(formData: FormData) {
-    "use server"
-    const id = String(formData.get("id") || "")
-    await deleteCategory(id)
-  }
-
-  async function deleteSubcategoryAction(formData: FormData) {
-    "use server"
-    const id = String(formData.get("id") || "")
-    await deleteSubcategory(id)
-  }
 
   return (
     <div className="space-y-6">
@@ -99,17 +88,10 @@ export default async function CategoriesPage() {
                       <TableCell>
                         <div className="flex items-center gap-1">
                           <EditCategoryDialog category={category} />
-                          <form action={deleteCategoryAction} className="inline">
-                            <input type="hidden" name="id" value={category.id} />
-                            <Button 
-                              variant="ghost" 
-                              size="sm" 
-                              type="submit"
-                              className="h-8 w-8 p-0 text-destructive hover:text-destructive"
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </Button>
-                          </form>
+                          <DeleteCategoryButton 
+                            categoryId={category.id} 
+                            categoryName={category.name} 
+                          />
                         </div>
                       </TableCell>
                     </TableRow>
@@ -158,17 +140,10 @@ export default async function CategoriesPage() {
                           </Badge>
                         </TableCell>
                         <TableCell>
-                          <form action={deleteSubcategoryAction} className="inline">
-                            <input type="hidden" name="id" value={subcategory.id} />
-                            <Button 
-                              variant="ghost" 
-                              size="sm" 
-                              type="submit"
-                              className="h-8 w-8 p-0 text-destructive hover:text-destructive"
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </Button>
-                          </form>
+                          <DeleteSubcategoryButton 
+                            subcategoryId={subcategory.id} 
+                            subcategoryName={subcategory.name} 
+                          />
                         </TableCell>
                       </TableRow>
                     )

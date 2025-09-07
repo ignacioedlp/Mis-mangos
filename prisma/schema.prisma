@@ -121,9 +121,9 @@ model Expense {
   userId           String
   user             User              @relation(fields: [userId], references: [id], onDelete: Cascade)
   categoryId       String
-  category         Category          @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  category         Category          @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   subcategoryId    String
-  subcategory      Subcategory       @relation(fields: [subcategoryId], references: [id], onDelete: Restrict)
+  subcategory      Subcategory       @relation(fields: [subcategoryId], references: [id], onDelete: Cascade)
   createdAt        DateTime          @default(now())
   updatedAt        DateTime          @updatedAt
 

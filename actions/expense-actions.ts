@@ -36,6 +36,48 @@ async function requireUserId() {
   return session.user.id as string;
 }
 
+// Helper functions for cascade delete information
+export async function getCategoryDeletionInfo(categoryId: string) {
+  await requireUserId();
+  
+  const [subcategories, expenses] = await Promise.all([
+    prisma.subcategory.findMany({
+      where: { categoryId },
+      select: { id: true, name: true }
+    }),
+    prisma.expense.findMany({
+      where: { 
+        categoryId,
+        deletedAt: null
+      },
+      select: { id: true, name: true }
+    })
+  ]);
+  
+  return {
+    subcategories,
+    expenses,
+    totalItems: subcategories.length + expenses.length
+  };
+}
+
+export async function getSubcategoryDeletionInfo(subcategoryId: string) {
+  await requireUserId();
+  
+  const expenses = await prisma.expense.findMany({
+    where: { 
+      subcategoryId,
+      deletedAt: null
+    },
+    select: { id: true, name: true }
+  });
+  
+  return {
+    expenses,
+    totalItems: expenses.length
+  };
+}
+
 // Categories
 export async function createCategory(input: unknown) {
   const userId = await requireUserId();
@@ -75,9 +117,46 @@ export async function updateCategory(id: string, input: unknown) {
 
 export async function deleteCategory(id: string) {
   const userId = await requireUserId();
+  
+  // Con borrado en cascada habilitado, primero informamos al usuario qué se eliminará
+  const [subcategoriesInCategory, expensesUsingCategory] = await Promise.all([
+    prisma.subcategory.findMany({
+      where: { categoryId: id },
+      select: { id: true, name: true }
+    }),
+    prisma.expense.findMany({
+      where: { 
+        categoryId: id,
+        deletedAt: null // Solo considerar gastos no eliminados
+      },
+      select: { 
+        id: true, 
+        name: true 
+      }
+    })
+  ]);
+  
+  // Informar al usuario sobre el impacto de la eliminación
+  const warnings = [];
+  if (subcategoriesInCategory.length > 0) {
+    const subcategoryNames = subcategoriesInCategory.map(s => s.name).join(", ");
+    warnings.push(`${subcategoriesInCategory.length} subcategoría(s): ${subcategoryNames}`);
+  }
+  if (expensesUsingCategory.length > 0) {
+    const expenseNames = expensesUsingCategory.map(e => e.name).join(", ");
+    warnings.push(`${expensesUsingCategory.length} gasto(s): ${expenseNames}`);
+  }
+  
+  if (warnings.length > 0) {
+    console.warn(`⚠️  ELIMINACIÓN EN CASCADA: Al eliminar esta categoría también se eliminarán: ${warnings.join(" y ")}`);
+  }
+  
+  // Proceder con la eliminación en cascada
   const result = await prisma.category.delete({ where: { id, userId } });
   revalidatePath("/categories");
   revalidatePath("/expenses");
+  revalidatePath("/dashboard");
+  revalidatePath("/monthly");
   return result;
 }
 
@@ -110,9 +189,31 @@ export async function updateSubcategory(id: string, input: unknown) {
 
 export async function deleteSubcategory(id: string) {
   await requireUserId();
+  
+  // Con borrado en cascada habilitado, primero informamos al usuario qué se eliminará
+  const expensesUsingSubcategory = await prisma.expense.findMany({
+    where: { 
+      subcategoryId: id,
+      deletedAt: null // Solo considerar gastos no eliminados
+    },
+    select: { 
+      id: true, 
+      name: true 
+    }
+  });
+  
+  // Informar al usuario sobre el impacto de la eliminación
+  if (expensesUsingSubcategory.length > 0) {
+    const expenseNames = expensesUsingSubcategory.map(e => e.name).join(", ");
+    console.warn(`⚠️  ELIMINACIÓN EN CASCADA: Al eliminar esta subcategoría también se eliminarán ${expensesUsingSubcategory.length} gasto(s): ${expenseNames}`);
+  }
+  
+  // Proceder con la eliminación en cascada
   const result = await prisma.subcategory.delete({ where: { id } });
   revalidatePath("/categories");
   revalidatePath("/expenses");
+  revalidatePath("/dashboard");
+  revalidatePath("/monthly");
   return result;
 }
 
