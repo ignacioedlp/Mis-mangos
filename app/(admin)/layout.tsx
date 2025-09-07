@@ -5,6 +5,9 @@ import { auth } from "@/lib/auth"
 import { headers } from "next/headers"
 import { redirect } from "next/navigation"
 import { UserProvider } from "@/context/UserContext"
+import ToastHandler from "@/components/toast-handler"
+import { PWAInstaller } from "@/components/pwa-installer"
+import { Suspense } from "react"
 
 
 export default async function DashboardLayout({
@@ -27,7 +30,13 @@ export default async function DashboardLayout({
             <AppSidebar variant="inset" />
             <SidebarInset>
                <AppHeader user={user} />
-               <main className="flex-1 p-6">{children}</main>
+               <main className="flex-1 p-6">
+                  <Suspense fallback={null}>
+                     <ToastHandler />
+                  </Suspense>
+                  {children}
+                  <PWAInstaller />
+               </main>
             </SidebarInset>
          </SidebarProvider>
       </UserProvider>

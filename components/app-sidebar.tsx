@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { LayoutDashboard } from "lucide-react"
+import { LayoutDashboard, FolderOpen, DollarSign, Calendar, TrendingUp, PieChart, FileText } from "lucide-react"
 import {
    Sidebar,
    SidebarContent,
@@ -18,7 +18,52 @@ import { usePathname } from "next/navigation"
 
 export default function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
    const pathname = usePathname();
-   const isActive = pathname.startsWith("/dashboard")
+   
+   const menuItems = [
+      {
+         href: "/dashboard",
+         icon: LayoutDashboard,
+         label: "Dashboard",
+         isActive: pathname.startsWith("/dashboard")
+      },
+      {
+         href: "/categories",
+         icon: FolderOpen,
+         label: "Categories",
+         isActive: pathname.startsWith("/categories")
+      },
+      {
+         href: "/expenses",
+         icon: DollarSign,
+         label: "Expenses",
+         isActive: pathname.startsWith("/expenses")
+      },
+      {
+         href: "/monthly",
+         icon: Calendar,
+         label: "Monthly",
+         isActive: pathname.startsWith("/monthly")
+      },
+      {
+         href: "/budget",
+         icon: PieChart,
+         label: "Budget",
+         isActive: pathname.startsWith("/budget")
+      },
+      {
+         href: "/reports",
+         icon: FileText,
+         label: "Reports",
+         isActive: pathname.startsWith("/reports")
+      },
+      {
+         href: "/comparison",
+         icon: TrendingUp,
+         label: "Comparison",
+         isActive: pathname.startsWith("/comparison")
+      }
+   ];
+
    return (
       <Sidebar collapsible="offcanvas" {...props}>
          <SidebarHeader className="flex items-center">
@@ -26,16 +71,21 @@ export default function AppSidebar({ ...props }: React.ComponentProps<typeof Sid
          </SidebarHeader>
          <SidebarContent>
             <SidebarMenu className="px-2 py-4">
-               <SidebarMenuItem>
-                  <SidebarMenuButton isActive={isActive} size="lg">
-                     <Link href="/dashboard" className={`${isActive ? "text-foreground" : "text-primary"} flex items-center gap-3`}>
-                        <div className="flex h-9 w-9 items-center justify-center rounded-md bg-primary/10">
-                           <LayoutDashboard className="h-5 w-5" />
-                        </div>
-                        <span className={`text-sm font-medium`}>Dashboard</span>
-                     </Link>
-                  </SidebarMenuButton>
-               </SidebarMenuItem>
+               {menuItems.map((item) => {
+                  const Icon = item.icon;
+                  return (
+                     <SidebarMenuItem key={item.href}>
+                        <SidebarMenuButton isActive={item.isActive} size="lg">
+                           <Link href={item.href} className={`${item.isActive ? "text-foreground" : "text-primary"} flex items-center gap-3`}>
+                              <div className="flex h-9 w-9 items-center justify-center rounded-md bg-primary/10">
+                                 <Icon className="h-5 w-5" />
+                              </div>
+                              <span className="text-sm font-medium">{item.label}</span>
+                           </Link>
+                        </SidebarMenuButton>
+                     </SidebarMenuItem>
+                  );
+               })}
             </SidebarMenu>
          </SidebarContent>
          <SidebarFooter>
