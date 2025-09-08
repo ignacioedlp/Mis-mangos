@@ -8,7 +8,7 @@ export interface User {
    image?: string | null | undefined;
 }
 
-export type ExpenseFrequency = "WEEKLY" | "MONTHLY" | "ANNUAL";
+export type ExpenseFrequency = "WEEKLY" | "MONTHLY" | "ANNUAL" | "ONE_TIME";
 
 export interface CategoryDTO {
    id: string;

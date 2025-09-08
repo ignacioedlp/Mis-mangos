@@ -78,6 +78,7 @@ enum ExpenseFrequency {
   WEEKLY
   MONTHLY
   ANNUAL
+  ONE_TIME  // For non-recurring expenses like car tinting, repairs, etc.
 }
 
 model Category {

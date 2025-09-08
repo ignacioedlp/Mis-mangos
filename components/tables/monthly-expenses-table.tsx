@@ -39,7 +39,8 @@ export function MonthlyExpensesTable({
   const frequencyColors = {
     WEEKLY: "bg-blue-100 text-blue-800",
     MONTHLY: "bg-green-100 text-green-800", 
-    ANNUAL: "bg-purple-100 text-purple-800"
+    ANNUAL: "bg-purple-100 text-purple-800",
+    ONE_TIME: "bg-orange-100 text-orange-800"
   }
 
   // Función para obtener el valor de ordenamiento
@@ -150,7 +151,7 @@ export function MonthlyExpensesTable({
                 variant="secondary" 
                 className={frequencyColors[item.frequency as keyof typeof frequencyColors]}
               >
-                {item.frequency.toLowerCase()}
+                {item.frequency === 'ONE_TIME' ? 'único' : item.frequency.toLowerCase()}
               </Badge>
             </TableCell>
             <TableCell>

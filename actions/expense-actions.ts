@@ -20,7 +20,7 @@ const subcategorySchema = z.object({
 const expenseSchema = z.object({
   name: z.string().min(1).max(100),
   estimatedAmount: z.coerce.number().nonnegative(),
-  frequency: z.enum(["WEEKLY", "MONTHLY", "ANNUAL"]),
+  frequency: z.enum(["WEEKLY", "MONTHLY", "ANNUAL", "ONE_TIME"]),
   categoryId: z.string().uuid(),
   subcategoryId: z.string().uuid(),
   active: z.boolean().optional().default(true),
@@ -225,12 +225,15 @@ export async function createExpense(input: unknown) {
     data: { ...data, userId },
   });
   const { year, month } = getYearMonth();
-  // Ensure an occurrence for current month exists
+  
+  // For ONE_TIME expenses, create occurrence only for current month
+  // For recurring expenses, create occurrence for current month as before
   await prisma.expenseOccurrence.upsert({
     where: { expenseId_year_month: { expenseId: created.id, year, month } },
     update: {},
     create: { expenseId: created.id, year, month },
   });
+  
   revalidatePath("/expenses");
   revalidatePath("/dashboard");
   return created;
@@ -426,15 +429,17 @@ export async function generateMonthOccurrences(year: number, month: number) {
   const userId = await requireUserId();
   
   // Get all active expenses for the user (excluding soft-deleted ones)
+  // Exclude ONE_TIME expenses as they should only exist in their original month
   const expenses = await prisma.expense.findMany({
     where: { 
       userId, 
       active: true, 
-      deletedAt: null 
+      deletedAt: null,
+      frequency: { not: "ONE_TIME" } // Don't generate occurrences for one-time expenses
     }
   });
   
-  // Generate occurrences for each expense
+  // Generate occurrences for each recurring expense
   const occurrences = [];
   for (const expense of expenses) {
     const existing = await prisma.expenseOccurrence.findUnique({
@@ -671,6 +676,7 @@ export async function getBudgetAnalysis(year?: number, month?: number) {
         where: { 
           deletedAt: null,
           active: true,
+          frequency: { not: "ONE_TIME" }, // Exclude one-time expenses from budget analysis
           occurrences: {
             some: {
               year: y,
@@ -752,7 +758,8 @@ export async function getCategoryBudgetStatus(categoryId: string, year?: number,
       expenses: {
         where: { 
           deletedAt: null,
-          active: true 
+          active: true,
+          frequency: { not: "ONE_TIME" } // Exclude one-time expenses from budget tracking
         },
         include: {
           occurrences: {

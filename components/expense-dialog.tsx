@@ -49,7 +49,7 @@ export function CreateExpenseDialog({ categories, subcategories }: CreateExpense
     try {
       const name = String(formData.get("name") || "")
       const estimatedAmount = Number(formData.get("estimatedAmount") || 0)
-      const frequency = String(formData.get("frequency") || "MONTHLY") as "WEEKLY" | "MONTHLY" | "ANNUAL"
+      const frequency = String(formData.get("frequency") || "MONTHLY") as "WEEKLY" | "MONTHLY" | "ANNUAL" | "ONE_TIME"
       const categoryId = String(formData.get("categoryId") || "")
       const subcategoryId = String(formData.get("subcategoryId") || "")
       
@@ -128,6 +128,7 @@ export function CreateExpenseDialog({ categories, subcategories }: CreateExpense
               <option value="WEEKLY">Semanal</option>
               <option value="MONTHLY">Mensual</option>
               <option value="ANNUAL">Anual</option>
+              <option value="ONE_TIME">Único (no recurrente)</option>
             </select>
           </div>
           <div className="grid gap-2">

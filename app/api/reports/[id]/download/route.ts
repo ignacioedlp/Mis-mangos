@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { getReportById } from "@/actions/report-actions"
 import { headers } from "next/headers"
 import { auth } from "@/lib/auth"
+import { generateReportPDF } from "@/lib/pdf-generator"
 
 export async function GET(
   request: NextRequest,
@@ -25,24 +26,24 @@ export async function GET(
       return NextResponse.json({ error: "Report data not available" }, { status: 400 });
     }
 
-    // Generar contenido del reporte basado en el tipo
+    // Generar nombre del archivo PDF basado en el tipo
     let filename = "";
     
     switch (report.type) {
       case "MONTHLY_SUMMARY":
-        filename = `monthly-summary-${report.startDate.toISOString().slice(0, 7)}.json`;
+        filename = `monthly-summary-${report.startDate.toISOString().slice(0, 7)}.pdf`;
         break;
       
       case "BUDGET_ANALYSIS":
-        filename = `budget-analysis-${report.startDate.toISOString().slice(0, 7)}.json`;
+        filename = `budget-analysis-${report.startDate.toISOString().slice(0, 7)}.pdf`;
         break;
       
       case "SPENDING_TRENDS":
-        filename = `spending-trends-${report.startDate.toISOString().slice(0, 7)}-to-${report.endDate.toISOString().slice(0, 7)}.json`;
+        filename = `spending-trends-${report.startDate.toISOString().slice(0, 7)}-to-${report.endDate.toISOString().slice(0, 7)}.pdf`;
         break;
       
       default:
-        filename = `report-${report.id}.json`;
+        filename = `report-${report.id}.pdf`;
     }
 
     // Crear el contenido del reporte con metadata adicional
@@ -59,11 +60,12 @@ export async function GET(
       downloadedAt: new Date().toISOString()
     };
 
-    const content = JSON.stringify(reportContent, null, 2);
-    const contentType = "application/json";
+    // Generar el PDF a partir del JSON
+    const pdfBuffer = generateReportPDF(reportContent);
+    const contentType = "application/pdf";
 
     // Crear respuesta con headers para descarga
-    const response = new NextResponse(content, {
+    const response = new NextResponse(pdfBuffer, {
       status: 200,
       headers: {
         "Content-Type": contentType,
