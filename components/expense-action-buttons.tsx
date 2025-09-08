@@ -1,11 +1,11 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useTransition } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { togglePaid, skipOccurrence } from "@/actions/expense-actions"
+import { togglePaidAction, skipOccurrenceAction } from "@/actions/monthly-actions"
 import { toast } from "sonner"
 import { Calendar, Check, X, SkipForward } from "lucide-react"
 import { formatCurrency } from "@/lib/utils"
@@ -30,38 +30,29 @@ export function ExpenseActionButtons({
   month 
 }: ExpenseActionButtonsProps) {
   const [paidOpen, setPaidOpen] = useState(false)
-  const [loading, setLoading] = useState(false)
+  const [isPending, startTransition] = useTransition()
 
-  async function handleTogglePaid(formData: FormData) {
-    setLoading(true)
-    try {
-      const finalAmount = Number(formData.get("finalAmount") || estimatedAmount)
-      
-      if (finalAmount <= 0) {
-        toast.error("Amount must be greater than 0")
-        return
+  const handleTogglePaid = async (formData: FormData) => {
+    startTransition(async () => {
+      try {
+        await togglePaidAction(expenseId, year || new Date().getFullYear(), month || new Date().getMonth() + 1, formData)
+        toast.success(isPaid ? "Expense unmarked as paid" : "Expense marked as paid!")
+        setPaidOpen(false)
+      } catch (error) {
+        toast.error(error instanceof Error ? error.message : "Failed to update expense")
       }
-      
-      await togglePaid(expenseId, year, month, finalAmount)
-      toast.success(isPaid ? "Expense unmarked as paid" : "Expense marked as paid!")
-      setPaidOpen(false)
-    } catch {
-      toast.error("Failed to update expense")
-    } finally {
-      setLoading(false)
-    }
+    })
   }
 
-  async function handleToggleSkip() {
-    setLoading(true)
-    try {
-      await skipOccurrence(expenseId, year, month)
-      toast.success(isSkipped ? "Expense unskipped for this month" : "Expense skipped for this month!")
-    } catch {
-      toast.error("Failed to skip expense")
-    } finally {
-      setLoading(false)
-    }
+  const handleToggleSkip = () => {
+    startTransition(async () => {
+      try {
+        await skipOccurrenceAction(expenseId, year || new Date().getFullYear(), month || new Date().getMonth() + 1)
+        toast.success(isSkipped ? "Expense unskipped for this month" : "Expense skipped for this month!")
+      } catch {
+        toast.error("Failed to skip expense")
+      }
+    })
   }
 
   // If expense is skipped, show different UI
@@ -73,7 +64,7 @@ export function ExpenseActionButtons({
           variant="outline" 
           size="sm"
           onClick={handleToggleSkip}
-          disabled={loading}
+          disabled={isPending}
         >
           <Calendar className="h-3 w-3 mr-1" />
           Unskip
@@ -89,7 +80,7 @@ export function ExpenseActionButtons({
         variant="ghost" 
         size="sm"
         onClick={handleToggleSkip}
-        disabled={loading}
+        disabled={isPending}
         title="Skip this expense for this month"
       >
         <SkipForward className="h-3 w-3" />
@@ -149,8 +140,8 @@ export function ExpenseActionButtons({
               <Button type="button" variant="outline" onClick={() => setPaidOpen(false)}>
                 Cancel
               </Button>
-              <Button type="submit" disabled={loading}>
-                {loading ? "Updating..." : (isPaid ? "Unmark" : "Mark Paid")}
+              <Button type="submit" disabled={isPending}>
+                {isPending ? "Updating..." : (isPaid ? "Unmark" : "Mark Paid")}
               </Button>
             </div>
           </form>

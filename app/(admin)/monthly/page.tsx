@@ -1,16 +1,14 @@
 import { getMonthlyDetails, generateMonthOccurrences, getSalary, getExportData } from "@/actions/expense-actions"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { CalendarDays, Plus, TrendingUp, TrendingDown, DollarSign, BarChart3 } from "lucide-react"
-import { ExpenseActionButtons } from "@/components/expense-action-buttons"
 import { formatCurrency } from "@/lib/utils"
 import { MonthSelector } from "@/components/month-selector"
 import { ExpenseCharts } from "@/components/expense-charts"
 import { ExportDialog } from "@/components/export-dialog"
 import { SalaryDialog } from "@/components/salary-dialog"
 import { PendingAlerts } from "@/components/pending-alerts"
+import { MonthlyExpensesTable } from "@/components/tables/monthly-expenses-table"
 
 interface MonthlyPageProps {
   searchParams: Promise<{ year?: string; month?: string }>
@@ -32,12 +30,6 @@ export default async function MonthlyPage({ searchParams }: MonthlyPageProps) {
   async function generateOccurrencesAction() {
     "use server"
     await generateMonthOccurrences(year, month)
-  }
-
-  const frequencyColors = {
-    WEEKLY: "bg-blue-100 text-blue-800",
-    MONTHLY: "bg-green-100 text-green-800", 
-    ANNUAL: "bg-purple-100 text-purple-800"
   }
 
   return (
@@ -166,85 +158,12 @@ export default async function MonthlyPage({ searchParams }: MonthlyPageProps) {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          {data.items.length === 0 ? (
-            <div className="text-center py-8 text-muted-foreground">
-              <p>No expenses found.</p>
-              <p className="text-sm">Add some expenses to get started!</p>
-            </div>
-          ) : (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Expense</TableHead>
-                  <TableHead>Category</TableHead>
-                  <TableHead>Frequency</TableHead>
-                  <TableHead>Estimated</TableHead>
-                  <TableHead>Actual</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {data.items.map((item) => (
-                  <TableRow key={item.expenseId}>
-                    <TableCell>
-                      <div className="flex flex-col">
-                        <span className="font-medium">{item.name}</span>
-                        <span className="text-xs text-muted-foreground">
-                          {item.categoryName} / {item.subcategoryName}
-                        </span>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <Badge variant="outline">{item.categoryName}</Badge>
-                    </TableCell>
-                    <TableCell>
-                      <Badge 
-                        variant="secondary" 
-                        className={frequencyColors[item.frequency as keyof typeof frequencyColors]}
-                      >
-                        {item.frequency.toLowerCase()}
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="font-medium">
-                      {formatCurrency(item.estimatedAmount)}
-                    </TableCell>
-                    <TableCell className="font-medium">
-                      {item.actualAmount ? (
-                        <span className="text-green-600">{formatCurrency(item.actualAmount)}</span>
-                      ) : (
-                        <span className="text-muted-foreground">-</span>
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      {!item.hasOccurrence ? (
-                        <Badge variant="destructive">No occurrence</Badge>
-                      ) : item.isSkipped ? (
-                        <Badge variant="outline" className="text-orange-600">Skipped</Badge>
-                      ) : item.isPaid ? (
-                        <Badge variant="default">Paid</Badge>
-                      ) : (
-                        <Badge variant="secondary">Pending</Badge>
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      {item.hasOccurrence && (
-                        <ExpenseActionButtons
-                          expenseId={item.expenseId}
-                          expenseName={item.name}
-                          estimatedAmount={item.estimatedAmount}
-                          isPaid={item.isPaid}
-                          isSkipped={item.isSkipped}
-                          year={year}
-                          month={month}
-                        />
-                      )}
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          )}
+          <MonthlyExpensesTable
+            data={data.items}
+            year={year}
+            month={month}
+            emptyMessage="No expenses found. Add some expenses to get started!"
+          />
         </CardContent>
       </Card>
     </div>

@@ -10,7 +10,7 @@ import { createExpense } from "@/actions/expense-actions"
 import { toast } from "sonner"
 
 interface CreateExpenseDialogProps {
-  categories: Array<{ id: string; name: string }>
+  categories: Array<{ id: string; name: string; budgetPercentage?: number | null }>
   subcategories: Array<{ id: string; name: string; categoryId: string }>
 }
 

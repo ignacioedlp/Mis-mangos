@@ -251,7 +251,11 @@ export async function listExpenses() {
   // Serialize Decimal to number for client components
   return expenses.map(expense => ({
     ...expense,
-    estimatedAmount: Number(expense.estimatedAmount)
+    estimatedAmount: Number(expense.estimatedAmount),
+    category: {
+      ...expense.category,
+      budgetPercentage: expense.category.budgetPercentage ? Number(expense.category.budgetPercentage) : null
+    }
   }));
 }
 
@@ -302,7 +306,11 @@ export async function listDeletedExpenses() {
   // Serialize Decimal to number for client components
   return expenses.map(expense => ({
     ...expense,
-    estimatedAmount: Number(expense.estimatedAmount)
+    estimatedAmount: Number(expense.estimatedAmount),
+    category: {
+      ...expense.category,
+      budgetPercentage: expense.category.budgetPercentage ? Number(expense.category.budgetPercentage) : null
+    }
   }));
 }
 

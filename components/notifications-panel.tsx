@@ -71,11 +71,17 @@ export function NotificationsPanel() {
   async function handleArchive(notificationId: string) {
     try {
       await archiveNotification(notificationId)
+      
+      // Find the notification before removing it
+      const notificationToArchive = notifications?.find(n => n.id === notificationId)
+      
       setNotifications(prev => prev.filter(n => n.id !== notificationId))
-      setUnreadCount(prev => {
-        const notification = notifications.find(n => n.id === notificationId)
-        return notification && !notification.isRead ? Math.max(0, prev - 1) : prev
-      })
+      
+      // Update unread count only if the archived notification was unread
+      if (notificationToArchive && !notificationToArchive.isRead) {
+        setUnreadCount(prev => Math.max(0, prev - 1))
+      }
+      
       toast.success("Notification archived")
     } catch {
       toast.error("Failed to archive notification")
@@ -151,14 +157,14 @@ export function NotificationsPanel() {
             <div className="flex justify-center py-8">
               <div className="text-sm text-muted-foreground">Loading notifications...</div>
             </div>
-          ) : notifications.length === 0 ? (
+          ) : notifications && notifications?.length === 0 ? (
             <div className="text-center py-8">
               <Bell className="h-12 w-12 mx-auto mb-4 text-muted-foreground/50" />
               <p className="text-muted-foreground">No notifications yet</p>
               <p className="text-sm text-muted-foreground">We&apos;ll notify you about budget updates and important financial events</p>
             </div>
           ) : (
-            notifications.map((notification) => (
+            notifications?.map((notification) => (
               <Card 
                 key={notification.id} 
                 className={`${getPriorityColor(notification.priority)} ${
@@ -228,7 +234,7 @@ export function NotificationsPanel() {
           )}
         </div>
 
-        {notifications.length > 0 && (
+        {notifications && notifications?.length > 0 && (
           <div className="mt-4 pt-4 border-t">
             <Button 
               variant="outline" 
@@ -236,7 +242,7 @@ export function NotificationsPanel() {
               className="w-full"
               onClick={() => {
                 // Mark all as read
-                notifications.filter(n => !n.isRead).forEach(n => {
+                notifications?.filter(n => !n.isRead).forEach(n => {
                   handleMarkAsRead(n.id)
                 })
               }}

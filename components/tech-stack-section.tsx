@@ -9,32 +9,32 @@ const stack = [
    {
       name: "Next.js 15",
       icon: <Zap className="h-6 w-6 text-primary" />,
-      description: "The latest version of the React framework with improved performance and features",
+      description: "La última versión del framework React con rendimiento y características mejoradas",
    },
    {
       name: "Tailwind CSS",
       icon: <Code className="h-6 w-6 text-blue-500" />,
-      description: "Utility-first CSS framework for rapid UI development",
+      description: "Framework CSS utility-first para desarrollo rápido de interfaces",
    },
    {
       name: "Shadcn UI",
       icon: <Layers className="h-6 w-6 text-sky-500" />,
-      description: "Beautifully designed components built with Radix UI and Tailwind",
+      description: "Componentes bellamente diseñados construidos con Radix UI y Tailwind",
    },
    {
       name: "Better-Auth",
       icon: <Lock className="h-6 w-6 text-primary" />,
-      description: "Advanced authentication library with built-in security features",
+      description: "Sistema de autenticación avanzado con características de seguridad integradas",
    },
    {
       name: "Prisma",
       icon: <Code className="h-6 w-6 text-indigo-500" />,
-      description: "Next-gen ORM for Node.js and TypeScript",
+      description: "ORM de nueva generación para Node.js y TypeScript",
    },
    {
       name: "PostgreSQL",
       icon: <Database className="h-6 w-6 text-blue-600" />,
-      description: "Powerful, open source object-relational database system",
+      description: "Sistema de base de datos objeto-relacional potente y de código abierto",
    },
 ]
 
@@ -43,12 +43,12 @@ export default function TechStackSection() {
    return (
       <section className="pb-20 pt-20 md:pb-32 md:pt-32 container mx-auto">
          <FadeInView className="text-center space-y-4 pb-16 mx-auto max-w-4xl">
-            <Badge className='px-4 py-1.5 text-sm font-medium'>Tech Stack</Badge>
+            <Badge className='px-4 py-1.5 text-sm font-medium'>Tecnología</Badge>
             <h2 className="mx-auto mt-4 text-3xl font-bold sm:text-5xl tracking-tight">
-               Powered by Modern Technology
+               Construido con Tecnología Moderna
             </h2>
             <p className="text-xl text-muted-foreground pt-1">
-               Built with the latest and most reliable technologies in the industry
+               Desarrollado con las tecnologías más avanzadas y confiables de la industria
             </p>
          </FadeInView>
 

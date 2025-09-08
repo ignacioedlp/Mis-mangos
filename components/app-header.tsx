@@ -1,8 +1,4 @@
 "use client"
-
-import { Search } from "lucide-react"
-
-import { Button } from "@/components/ui/button"
 import { SidebarTrigger } from "@/components/ui/sidebar"
 import type { User } from "@/lib/types"
 import { Separator } from "./ui/separator"
@@ -23,10 +19,6 @@ export default function AppHeader({ user }: UserProps) {
          <div className="flex flex-1 items-center justify-between">
             <h1 className="text-xl font-semibold">Welcome, {user?.name} </h1>
             <div className="flex items-center gap-4">
-               <Button variant="outline" size="icon">
-                  <Search className="h-4 w-4" />
-                  <span className="sr-only">Search</span>
-               </Button>
                <NotificationsPanel />
             </div>
          </div>
