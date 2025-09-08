@@ -1,7 +1,7 @@
 "use client"
 
 import { Button } from "@/components/ui/button";
-import { ExternalLink, Github, DollarSign, TrendingUp } from "lucide-react";
+import { ExternalLink, DollarSign, TrendingUp } from "lucide-react";
 import Link from "next/link";
 import { Badge } from "./ui/badge";
 import FadeInView from "./animate-ui/fade-in-view";
