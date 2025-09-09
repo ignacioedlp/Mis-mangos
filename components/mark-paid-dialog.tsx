@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { togglePaid } from "@/actions/expense-actions"
 import { toast } from "sonner"
+import { formatCurrency } from "@/lib/utils"
 
 interface MarkPaidDialogProps {
   expenseId: string
@@ -46,45 +47,45 @@ export function MarkPaidDialog({ expenseId, expenseName, estimatedAmount, isPaid
           variant={isPaid ? "outline" : "default"} 
           size="sm"
         >
-          {isPaid ? "Unmark" : "Mark paid"}
+          {isPaid ? "Pagado" : "Marcar como pagado"}
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>
-            {isPaid ? "Unmark as Paid" : "Mark as Paid"}
+              {isPaid ? "Desmarcar como Pagado" : "Marcar como Pagado"}
           </DialogTitle>
           <DialogDescription>
             {isPaid 
-              ? `Unmark "${expenseName}" as paid for this month.`
-              : `Mark "${expenseName}" as paid and optionally adjust the final amount.`
+              ? `Desmarcar "${expenseName}" como pagado para este mes.`
+              : `Marcar "${expenseName}" como pagado y opcionalmente ajustar el monto final.`
             }
           </DialogDescription>
         </DialogHeader>
         <form action={handleSubmit} className="space-y-4">
           {!isPaid && (
             <div className="grid gap-2">
-              <Label htmlFor="final-amount">Final Amount ($)</Label>
+              <Label htmlFor="final-amount">Monto Final ($)</Label>
               <Input 
                 id="final-amount" 
                 name="finalAmount" 
                 type="number" 
                 step="0.01" 
-                defaultValue={estimatedAmount.toFixed(2)}
+                defaultValue={formatCurrency(estimatedAmount)}
                 placeholder="0.00"
                 required
               />
               <p className="text-xs text-muted-foreground">
-                Estimated: ${estimatedAmount.toFixed(2)}
+                Estimado: {formatCurrency(estimatedAmount)}
               </p>
             </div>
           )}
           <div className="flex justify-end gap-2">
             <Button type="button" variant="outline" onClick={() => setOpen(false)}>
-              Cancel
+              Cancelar
             </Button>
             <Button type="submit" disabled={loading}>
-              {loading ? "Updating..." : (isPaid ? "Unmark" : "Mark Paid")}
+              {loading ? "Actualizando..." : (isPaid ? "Desmarcar" : "Marcar como Pagado")}
             </Button>
           </div>
         </form>

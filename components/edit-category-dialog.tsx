@@ -54,12 +54,12 @@ export function EditCategoryDialog({ category }: EditCategoryDialogProps) {
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Edit Category</DialogTitle>
-          <DialogDescription>Update the category name and budget percentage.</DialogDescription>
+          <DialogTitle>Editar categoría</DialogTitle>
+          <DialogDescription>Actualiza el nombre de la categoría y el porcentaje del presupuesto.</DialogDescription>
         </DialogHeader>
         <form action={handleSubmit} className="space-y-4">
           <div className="grid gap-2">
-            <Label htmlFor="edit-category-name">Category Name</Label>
+            <Label htmlFor="edit-category-name">Nombre de la categoría</Label>
             <Input 
               id="edit-category-name" 
               name="name" 
@@ -69,7 +69,7 @@ export function EditCategoryDialog({ category }: EditCategoryDialogProps) {
             />
           </div>
           <div className="grid gap-2">
-            <Label htmlFor="edit-budget-percentage">Budget Percentage (Optional)</Label>
+            <Label htmlFor="edit-budget-percentage">Porcentaje del Presupuesto (Opcional)</Label>
             <Input 
               id="edit-budget-percentage" 
               name="budgetPercentage" 
@@ -81,15 +81,15 @@ export function EditCategoryDialog({ category }: EditCategoryDialogProps) {
               placeholder="e.g., 30 (for 30% of income)"
             />
             <p className="text-xs text-muted-foreground">
-              What percentage of your monthly income should be allocated to this category?
+              ¿Qué porcentaje de tus ingresos mensuales debería asignarse a esta categoría?
             </p>
           </div>
           <div className="flex justify-end gap-2">
             <Button type="button" variant="outline" onClick={() => setOpen(false)}>
-              Cancel
+              Cancelar
             </Button>
             <Button type="submit" disabled={loading}>
-              {loading ? "Updating..." : "Update Category"}
+              {loading ? "Actualizando..." : "Actualizar categoría"}
             </Button>
           </div>
         </form>

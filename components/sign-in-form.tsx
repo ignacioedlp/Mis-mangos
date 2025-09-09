@@ -58,7 +58,7 @@ export default function SignInForm() {
                name="email"
                render={({ field }) => (
                   <FormItem>
-                     <FormLabel>Email</FormLabel>
+                     <FormLabel>Correo</FormLabel>
                      <FormControl>
                         <Input placeholder="m@example.com" {...field} />
                      </FormControl>
@@ -71,7 +71,7 @@ export default function SignInForm() {
                name="password"
                render={({ field }) => (
                   <FormItem>
-                     <FormLabel>Password</FormLabel>
+                     <FormLabel>Contraseña</FormLabel>
                      <FormControl>
                         <Input type="password" placeholder="********" {...field} />
                      </FormControl>
@@ -80,7 +80,7 @@ export default function SignInForm() {
                )}
             />
             <Button type="submit" className="w-full">
-               Sign In
+               Iniciar Sesión
             </Button>
          </form>
       </Form>

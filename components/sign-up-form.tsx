@@ -58,7 +58,7 @@ export default function SignUpForm() {
                name="name"
                render={({ field }) => (
                   <FormItem>
-                     <FormLabel>Name</FormLabel>
+                     <FormLabel>Nombre</FormLabel>
                      <FormControl>
                         <Input placeholder="John Doe" {...field} />
                      </FormControl>
@@ -71,7 +71,7 @@ export default function SignUpForm() {
                name="email"
                render={({ field }) => (
                   <FormItem>
-                     <FormLabel>Email</FormLabel>
+                     <FormLabel>Correo</FormLabel>
                      <FormControl>
                         <Input placeholder="m@example.com" {...field} />
                      </FormControl>
@@ -84,7 +84,7 @@ export default function SignUpForm() {
                name="password"
                render={({ field }) => (
                   <FormItem>
-                     <FormLabel>Password</FormLabel>
+                     <FormLabel>Contraseña</FormLabel>
                      <FormControl>
                         <Input type="password" placeholder="********" {...field} />
                      </FormControl>
@@ -93,7 +93,7 @@ export default function SignUpForm() {
                )}
             />
             <Button type="submit" className="w-full">
-               Register
+               Registrarse
             </Button>
          </form>
       </Form>

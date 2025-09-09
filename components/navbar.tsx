@@ -26,7 +26,7 @@ export default function Navbar() {
                            className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
                         >
                            <Button variant="outline">
-                              Dashboard
+                              Panel
                            </Button>
 
                         </Link>
@@ -40,11 +40,11 @@ export default function Navbar() {
                            className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
                         >
                            <Button variant="outline">
-                              Login
+                              Iniciar Sesion
                            </Button>
                         </Link>
                         <Button asChild>
-                           <Link href="/sign-up">Sign up</Link>
+                           <Link href="/sign-up">Registrarse</Link>
                         </Button>
                      </>
                   )}

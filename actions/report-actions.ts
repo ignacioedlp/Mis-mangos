@@ -56,8 +56,8 @@ export async function generateMonthlySummaryReport(year: number, month: number) 
     data: {
       userId,
       type: "MONTHLY_SUMMARY",
-      title: `Monthly Summary - ${monthlyData.monthName}`,
-      description: `Complete financial summary for ${monthlyData.monthName}`,
+      title: `Resumen mensual - ${monthlyData.monthName}`,
+      description: `Resumen financiero completo para ${monthlyData.monthName}`,
       startDate: new Date(year, month - 1, 1),
       endDate: new Date(year, month, 0),
       categories: monthlyData.categoryData.map(c => c.category),
@@ -98,8 +98,8 @@ export async function generateBudgetAnalysisReport(year: number, month: number) 
     data: {
       userId,
       type: "BUDGET_ANALYSIS",
-      title: `Budget Analysis - ${new Date(year, month - 1).toLocaleString('default', { month: 'long', year: 'numeric' })}`,
-      description: `Detailed budget performance analysis`,
+      title: `Análisis de Presupuesto - ${new Date(year, month - 1).toLocaleString('default', { month: 'long', year: 'numeric' })}`,
+      description: `Análisis detallado del rendimiento del presupuesto para ${new Date(year, month - 1).toLocaleString('default', { month: 'long', year: 'numeric' })}`,
       startDate: new Date(year, month - 1, 1),
       endDate: new Date(year, month, 0),
       categories: budgetData.categories.map(c => c.id),
@@ -151,8 +151,8 @@ export async function generateSpendingTrendsReport(startYear: number, startMonth
     data: {
       userId,
       type: "SPENDING_TRENDS",
-      title: `Spending Trends - ${months.length} months`,
-      description: `Spending analysis from ${monthlyData[0]?.monthName} to ${monthlyData[monthlyData.length - 1]?.monthName}`,
+      title: `Tendencias de Gastos - ${months.length} meses`,
+      description: `Análisis de gastos desde ${monthlyData[0]?.monthName} hasta ${monthlyData[monthlyData.length - 1]?.monthName}`,
       startDate: new Date(startYear, startMonth - 1, 1),
       endDate: new Date(endYear, endMonth, 0),
       categories: [],
@@ -227,14 +227,14 @@ function generateMonthlyInsights(monthlyData: any, budgetData: any, salary: any)
     if (spendingRate > 90) {
       insights.push({
         type: "warning",
-        title: "High Spending Rate",
-        message: `You spent ${spendingRate.toFixed(1)}% of your income this month. Consider reviewing your expenses.`
+        title: "Alto Nivel de Gastos",
+        message: `Has gastado ${spendingRate.toFixed(1)}% de tu ingreso este mes. Considera revisar tus gastos.`
       });
     } else if (spendingRate < 70) {
       insights.push({
         type: "positive",
-        title: "Great Savings Rate",
-        message: `You saved ${(100 - spendingRate).toFixed(1)}% of your income this month. Excellent financial discipline!`
+        title: "Gran Tasa de Ahorro",
+        message: `Has ahorrado ${(100 - spendingRate).toFixed(1)}% de tu ingreso este mes. ¡Excelente disciplina financiera!`
       });
     }
   }
@@ -244,8 +244,8 @@ function generateMonthlyInsights(monthlyData: any, budgetData: any, salary: any)
   if (overBudgetCategories.length > 0) {
     insights.push({
       type: "warning",
-      title: "Budget Exceeded",
-      message: `${overBudgetCategories.length} categories exceeded their budget. Focus on ${overBudgetCategories[0].name} which was ${Math.abs(overBudgetCategories[0].remaining).toFixed(0)} over budget.`
+      title: "Presupuesto Superado",
+      message: `${overBudgetCategories.length} categorías superaron su presupuesto. Enfócate en ${overBudgetCategories[0].name} que estuvo ${Math.abs(overBudgetCategories[0].remaining).toFixed(0)} sobre presupuesto.`
     });
   }
 
@@ -254,8 +254,8 @@ function generateMonthlyInsights(monthlyData: any, budgetData: any, salary: any)
   if (unpaidCount > 0) {
     insights.push({
       type: "info",
-      title: "Pending Payments",
-      message: `You have ${unpaidCount} expenses still pending payment for this month.`
+      title: "Pagos Pendientes",
+      message: `Tienes ${unpaidCount} gastos aún pendientes de pago para este mes.`
     });
   }
 
@@ -270,8 +270,8 @@ function generateBudgetRecommendations(budgetData: any) {
     recommendations.push({
       type: "allocation",
       priority: "medium",
-      title: "Allocate Unassigned Budget",
-      description: `You have ${budgetData.unassignedAmount.toFixed(0)} ARS unassigned. Consider allocating it to emergency fund or investment categories.`
+      title: "Asignar Presupuesto No Asignado",
+      description: `Tienes ${budgetData.unassignedAmount.toFixed(0)} ARS no asignados. Considera asignarlo a un fondo de emergencia o categorías de inversión.`
     });
   }
 
@@ -285,8 +285,8 @@ function generateBudgetRecommendations(budgetData: any) {
     recommendations.push({
       type: "reduction",
       priority: "high",
-      title: `Reduce ${worstCategory.name} Spending`,
-      description: `This category is ${Math.abs(worstCategory.remaining).toFixed(0)} ARS over budget. Consider reviewing expenses in this area.`
+      title: `Reducir Gastos en ${worstCategory.name}`,
+      description: `Esta categoría está ${Math.abs(worstCategory.remaining).toFixed(0)} ARS sobre presupuesto. Considera revisar los gastos en esta área.`
     });
   }
 
@@ -296,8 +296,8 @@ function generateBudgetRecommendations(budgetData: any) {
     recommendations.push({
       type: "reallocation",
       priority: "low",
-      title: "Consider Budget Reallocation",
-      description: `Categories like ${underUsedCategories[0].name} are under-utilized. You might reallocate some budget to other areas.`
+      title: "Considerar Reasignación de Presupuesto",
+      description: `Categorías como ${underUsedCategories[0].name} están subutilizadas. Podrías reasignar parte del presupuesto a otras áreas.`
     });
   }
 
@@ -339,8 +339,8 @@ function generateTrendInsights(monthlyData: any[]) {
   if (Math.abs(spendingChange) > 10) {
     insights.push({
       type: spendingChange > 0 ? "warning" : "positive",
-      title: `Spending ${spendingChange > 0 ? "Increased" : "Decreased"}`,
-      message: `Your spending ${spendingChange > 0 ? "increased" : "decreased"} by ${Math.abs(spendingChange).toFixed(1)}% compared to last month.`
+      title: `Gasto ${spendingChange > 0 ? "Aumentado" : "Disminuido"}`,
+      message: `Tu gasto ${spendingChange > 0 ? "aumentó" : "disminuyó"} en ${Math.abs(spendingChange).toFixed(1)}% en comparación con el mes pasado.`
     });
   }
 

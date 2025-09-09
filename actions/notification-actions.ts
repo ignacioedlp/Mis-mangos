@@ -124,8 +124,8 @@ export async function generateBudgetNotifications(year?: number, month?: number)
         userId,
         "BUDGET_EXCEEDED",
         "HIGH",
-        `Budget Exceeded: ${category.name}`,
-        `You've exceeded your ${category.name} budget by ${Math.abs(category.remaining).toLocaleString('es-AR', { style: 'currency', currency: 'ARS' })}. Consider reviewing your spending in this category.`,
+        `Presupuesto superado: ${category.name}`,
+        `Has superado tu presupuesto de ${category.name} en ${Math.abs(category.remaining).toLocaleString('es-AR', { style: 'currency', currency: 'ARS' })}. Considera revisar tus gastos en esta categoría.`,
         {
           categoryId: category.id,
           categoryName: category.name,
@@ -134,7 +134,7 @@ export async function generateBudgetNotifications(year?: number, month?: number)
           overAmount: Math.abs(category.remaining)
         },
         `/budget?year=${budgetData.year}&month=${budgetData.month}`,
-        "View Budget"
+        "Ver Presupuesto"
       );
       notifications.push(notification);
     }
@@ -145,8 +145,8 @@ export async function generateBudgetNotifications(year?: number, month?: number)
         userId,
         "BUDGET_WARNING",
         "MEDIUM",
-        `Budget Warning: ${category.name}`,
-        `You've used ${category.usagePercentage.toFixed(1)}% of your ${category.name} budget. You have ${category.remaining.toLocaleString('es-AR', { style: 'currency', currency: 'ARS' })} remaining.`,
+        `Advertencia de Presupuesto: ${category.name}`,
+        `Has utilizado ${category.usagePercentage.toFixed(1)}% de tu presupuesto de ${category.name}. Te queda ${category.remaining.toLocaleString('es-AR', { style: 'currency', currency: 'ARS' })}.`,
         {
           categoryId: category.id,
           categoryName: category.name,
@@ -154,7 +154,7 @@ export async function generateBudgetNotifications(year?: number, month?: number)
           remaining: category.remaining
         },
         `/budget?year=${budgetData.year}&month=${budgetData.month}`,
-        "View Budget"
+        "Ver Presupuesto"
       );
       notifications.push(notification);
     }
@@ -166,14 +166,14 @@ export async function generateBudgetNotifications(year?: number, month?: number)
       userId,
       "BUDGET_AVAILABLE",
       "LOW",
-      "Unassigned Budget Available",
-      `You have ${budgetData.unassignedAmount.toLocaleString('es-AR', { style: 'currency', currency: 'ARS' })} (${(100 - budgetData.totalBudgetPercentage).toFixed(1)}%) of your income unassigned. Consider allocating it to categories or savings.`,
+      "Presupuesto No Asignado Disponible",
+      `Tienes ${budgetData.unassignedAmount.toLocaleString('es-AR', { style: 'currency', currency: 'ARS' })} (${(100 - budgetData.totalBudgetPercentage).toFixed(1)}%) de tu ingreso no asignado. Considera asignarlo a categorías o ahorros.`,
       {
         unassignedAmount: budgetData.unassignedAmount,
         unassignedPercentage: 100 - budgetData.totalBudgetPercentage
       },
       "/categories",
-      "Manage Categories"
+      "Gestionar Categorías"
     );
     notifications.push(notification);
   }
@@ -227,8 +227,8 @@ export async function generatePaymentReminders() {
       userId,
       "PAYMENT_REMINDER",
       "MEDIUM",
-      `${unpaidExpenses.length} Payments Pending`,
-      `You have ${unpaidExpenses.length} unpaid expenses totaling ${totalUnpaid.toLocaleString('es-AR', { style: 'currency', currency: 'ARS' })} for this month.`,
+      `${unpaidExpenses.length} Pagos Pendientes`,
+      `Tienes ${unpaidExpenses.length} gastos impagos que totalizan ${totalUnpaid.toLocaleString('es-AR', { style: 'currency', currency: 'ARS' })} para este mes.`,
       {
         count: unpaidExpenses.length,
         totalAmount: totalUnpaid,
@@ -240,7 +240,7 @@ export async function generatePaymentReminders() {
         }))
       },
       "/dashboard",
-      "View Expenses"
+      "Ver Gastos"
     );
     notifications.push(notification);
   }

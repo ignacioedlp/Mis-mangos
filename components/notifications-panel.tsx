@@ -140,28 +140,28 @@ export function NotificationsPanel() {
         <SheetHeader>
           <SheetTitle className="flex items-center gap-2">
             <Bell className="h-5 w-5" />
-            Notifications
+            Notificaciones
             {unreadCount > 0 && (
               <Badge variant="secondary" className="ml-auto">
-                {unreadCount} unread
+                {unreadCount} no leídas
               </Badge>
             )}
           </SheetTitle>
           <SheetDescription>
-            Stay updated on your financial activity and budget status
+            Mantente actualizado sobre tu actividad financiera y estado del presupuesto
           </SheetDescription>
         </SheetHeader>
 
         <div className="mt-6 space-y-4 max-h-[calc(100vh-200px)] overflow-y-auto">
           {loading ? (
             <div className="flex justify-center py-8">
-              <div className="text-sm text-muted-foreground">Loading notifications...</div>
+              <div className="text-sm text-muted-foreground">Cargando...</div>
             </div>
           ) : notifications && notifications?.length === 0 ? (
             <div className="text-center py-8">
               <Bell className="h-12 w-12 mx-auto mb-4 text-muted-foreground/50" />
-              <p className="text-muted-foreground">No notifications yet</p>
-              <p className="text-sm text-muted-foreground">We&apos;ll notify you about budget updates and important financial events</p>
+              <p className="text-muted-foreground">No hay notificaciones aún</p>
+              <p className="text-sm text-muted-foreground">Te notificaremos sobre actualizaciones de presupuesto y eventos financieros importantes</p>
             </div>
           ) : (
             notifications?.map((notification) => (
@@ -180,7 +180,7 @@ export function NotificationsPanel() {
                           {notification.title}
                           {!notification.isRead && (
                             <Badge variant="secondary" className="ml-2 text-xs">
-                              New
+                              Nuevo
                             </Badge>
                           )}
                         </CardTitle>
@@ -248,7 +248,7 @@ export function NotificationsPanel() {
               }}
               disabled={unreadCount === 0}
             >
-              Mark All as Read ({unreadCount})
+              Marcar todas como leídas ({unreadCount})
             </Button>
           </div>
         )}

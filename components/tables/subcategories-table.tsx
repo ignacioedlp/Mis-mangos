@@ -28,7 +28,7 @@ interface SubcategoriesTableProps {
 export function SubcategoriesTable({ 
   data, 
   categories,
-  emptyMessage = "No subcategories yet. Create categories first, then add subcategories"
+  emptyMessage = "Aun no hay subcategorías. Crea tu primera subcategoría para comenzar"
 }: SubcategoriesTableProps) {
   // Función para obtener el valor de ordenamiento
   const getSortValue = React.useCallback((item: SubcategoryData, key: string) => {
@@ -62,14 +62,14 @@ export function SubcategoriesTable({
             currentSort={sortConfig}
             onSort={requestSort}
           >
-            Name
+            Nombre
           </SortableTableHead>
           <SortableTableHead
             sortKey="category"
             currentSort={sortConfig}
             onSort={requestSort}
           >
-            Category
+            Categoria
           </SortableTableHead>
           <SortableTableHead
             sortable={false}
@@ -78,7 +78,7 @@ export function SubcategoriesTable({
             onSort={requestSort}
             className="w-20"
           >
-            Actions
+            Acciones
           </SortableTableHead>
         </TableRow>
       </TableHeader>

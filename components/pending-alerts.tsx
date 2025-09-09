@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge"
 import { AlertTriangle, Clock } from "lucide-react"
 import { getPendingExpenses } from "@/actions/expense-actions"
+import { formatCurrency } from "@/lib/utils"
 
 interface PendingItem {
   id: string
@@ -44,11 +45,12 @@ export function PendingAlerts() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Clock className="h-5 w-5" />
-            Pending Expenses
+            Gastos Pendientes
+            {/* Pending Expenses */} 
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="text-sm text-muted-foreground">Loading...</div>
+          <div className="text-sm text-muted-foreground">Cargando...</div>
         </CardContent>
       </Card>
     )
@@ -60,12 +62,12 @@ export function PendingAlerts() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Clock className="h-5 w-5 text-green-600" />
-            Pending Expenses
+            Gastos Pendientes
           </CardTitle>
-          <CardDescription>All expenses are up to date!</CardDescription>
+          <CardDescription>¡Todos los gastos están actualizados!</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="text-sm text-green-600">No pending expenses for this month.</div>
+          <div className="text-sm text-green-600">No hay gastos pendientes para este mes.</div>
         </CardContent>
       </Card>
     )
@@ -76,11 +78,11 @@ export function PendingAlerts() {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <AlertTriangle className="h-5 w-5 text-orange-600" />
-          Pending Expenses
+          Gastos Pendientes
           <Badge variant="destructive">{pendingItems.length}</Badge>
         </CardTitle>
         <CardDescription>
-          You have {pendingItems.length} unpaid expense{pendingItems.length !== 1 ? 's' : ''} this month
+          Tienes {pendingItems.length} gasto{pendingItems.length !== 1 ? 's' : ''} sin pagar este mes
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -94,10 +96,10 @@ export function PendingAlerts() {
                 </span>
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-sm font-medium">${item.estimatedAmount.toFixed(2)}</span>
+                <span className="text-sm font-medium">{formatCurrency(item.estimatedAmount)}</span>
                 {item.daysOverdue > 15 && (
                   <Badge variant="destructive" className="text-xs">
-                    {item.daysOverdue}d overdue
+                    {item.daysOverdue}d de retraso
                   </Badge>
                 )}
               </div>
@@ -105,7 +107,7 @@ export function PendingAlerts() {
           ))}
           <div className="pt-2 border-t">
             <div className="text-sm font-medium">
-              Total pending: ${pendingItems.reduce((sum, item) => sum + item.estimatedAmount, 0).toFixed(2)}
+              Total pendiente: {formatCurrency(pendingItems.reduce((sum, item) => sum + item.estimatedAmount, 0))}
             </div>
           </div>
         </div>

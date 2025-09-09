@@ -24,7 +24,7 @@ interface CategoriesTableProps {
 
 export function CategoriesTable({ 
   data, 
-  emptyMessage = "No categories yet. Create your first category to get started",
+  emptyMessage = "No hay categorías aún. Crea tu primera categoría para comenzar",
   emptyIcon 
 }: CategoriesTableProps) {
   // Función para obtener el valor de ordenamiento
@@ -61,7 +61,7 @@ export function CategoriesTable({
             currentSort={sortConfig}
             onSort={requestSort}
           >
-            Name
+            Nombre
           </SortableTableHead>
           <SortableTableHead
             sortKey="budgetPercentage"
@@ -69,7 +69,7 @@ export function CategoriesTable({
             onSort={requestSort}
             className="w-24"
           >
-            Budget %
+            Presupuesto %
           </SortableTableHead>
           <SortableTableHead
             sortKey="subcategories"
@@ -77,7 +77,7 @@ export function CategoriesTable({
             onSort={requestSort}
             className="w-20"
           >
-            Subcategories
+            Subcategorías
           </SortableTableHead>
           <SortableTableHead
             sortable={false}
@@ -86,7 +86,7 @@ export function CategoriesTable({
             onSort={requestSort}
             className="w-24"
           >
-            Actions
+            Acciones
           </SortableTableHead>
         </TableRow>
       </TableHeader>

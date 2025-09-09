@@ -8,6 +8,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { DollarSign } from "lucide-react"
 import { setSalary } from "@/actions/expense-actions"
 import { toast } from "sonner"
+import { formatCurrency } from "@/lib/utils"
 
 interface SalaryDialogProps {
   year: number
@@ -46,19 +47,19 @@ export function SalaryDialog({ year, month, currentSalary }: SalaryDialogProps) 
       <DialogTrigger asChild>
         <Button variant="outline" size="sm">
           <DollarSign className="h-4 w-4 mr-2" />
-          {currentSalary ? `Salary: $${currentSalary.toFixed(0)}` : "Set Salary"}
+          {currentSalary ? `Salary: ${formatCurrency(currentSalary)}` : "Set Salary"}
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Set Monthly Salary</DialogTitle>
+          <DialogTitle>Establecer Salario Mensual</DialogTitle>
           <DialogDescription>
-            Set your salary for {monthName} to calculate expense proportions and savings rate.
+            Establece tu salario para {monthName} para calcular las proporciones de gastos y la tasa de ahorro.
           </DialogDescription>
         </DialogHeader>
         <form action={handleSubmit} className="space-y-4">
           <div className="grid gap-2">
-            <Label htmlFor="salary-amount">Monthly Salary ($)</Label>
+            <Label htmlFor="salary-amount">Salario Mensual ($)</Label>
             <Input 
               id="salary-amount" 
               name="amount" 
@@ -71,10 +72,10 @@ export function SalaryDialog({ year, month, currentSalary }: SalaryDialogProps) 
           </div>
           <div className="flex justify-end gap-2">
             <Button type="button" variant="outline" onClick={() => setOpen(false)}>
-              Cancel
+              Cancelar
             </Button>
             <Button type="submit" disabled={loading}>
-              {loading ? "Saving..." : "Save Salary"}
+              {loading ? "Guardando..." : "Guardar Salario"}
             </Button>
           </div>
         </form>

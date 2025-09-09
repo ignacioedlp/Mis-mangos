@@ -34,7 +34,7 @@ export function MonthlyExpensesTable({
   data, 
   year, 
   month, 
-  emptyMessage = "No expenses found. Add some expenses to get started!" 
+  emptyMessage = "No tienes gastos programados para este mes" 
 }: MonthlyExpensesTableProps) {
   const frequencyColors = {
     WEEKLY: "bg-blue-100 text-blue-800",
@@ -85,28 +85,28 @@ export function MonthlyExpensesTable({
             currentSort={sortConfig}
             onSort={requestSort}
           >
-            Expense
+            Gasto
           </SortableTableHead>
           <SortableTableHead
             sortKey="categoryName"
             currentSort={sortConfig}
             onSort={requestSort}
           >
-            Category
+            Categoría
           </SortableTableHead>
           <SortableTableHead
             sortKey="frequency"
             currentSort={sortConfig}
             onSort={requestSort}
           >
-            Frequency
+            Frecuencia
           </SortableTableHead>
           <SortableTableHead
             sortKey="estimatedAmount"
             currentSort={sortConfig}
             onSort={requestSort}
           >
-            Estimated
+            Estimado
           </SortableTableHead>
           <SortableTableHead
             sortKey="actualAmount"
@@ -120,7 +120,7 @@ export function MonthlyExpensesTable({
             currentSort={sortConfig}
             onSort={requestSort}
           >
-            Status
+            Estado
           </SortableTableHead>
           <SortableTableHead
             sortable={false}
@@ -128,7 +128,7 @@ export function MonthlyExpensesTable({
             currentSort={sortConfig}
             onSort={requestSort}
           >
-            Actions
+            Acciones
           </SortableTableHead>
         </TableRow>
       </TableHeader>

@@ -10,7 +10,7 @@ export default function Footer() {
          </div>
          <div className="container flex flex-col items-center justify-center gap-4 md:h-24 md:flex-row">
             <p className="text-center text-sm leading-loose text-muted-foreground">
-               &copy; {new Date().getFullYear()} AuthSystem. All rights reserved.
+               &copy; {new Date().getFullYear()} Mis Mangos. Todos los derechos reservados.
             </p>
          </div>
       </footer>

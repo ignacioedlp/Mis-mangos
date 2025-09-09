@@ -17,7 +17,7 @@ export default function AppHeader({ user }: UserProps) {
             className="mx-2 data-[orientation=vertical]:h-4"
          />
          <div className="flex flex-1 items-center justify-between">
-            <h1 className="text-xl font-semibold">Welcome, {user?.name} </h1>
+            <h1 className="text-xl font-semibold">Bienvenido, {user?.name} </h1>
             <div className="flex items-center gap-4">
                <NotificationsPanel />
             </div>

@@ -45,17 +45,17 @@ export function CreateCategoryDialog() {
       <DialogTrigger asChild>
         <Button size="sm">
           <Plus className="h-4 w-4 mr-2" />
-          Add Category
+          Agregar Categoría
         </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Create New Category</DialogTitle>
-          <DialogDescription>Add a new expense category and optionally set a budget percentage.</DialogDescription>
+          <DialogTitle>Crear Nueva Categoría</DialogTitle>
+          <DialogDescription>Agrega una nueva categoría de gastos y opcionalmente establece un porcentaje de presupuesto.</DialogDescription>
         </DialogHeader>
         <form action={handleSubmit} className="space-y-4">
           <div className="grid gap-2">
-            <Label htmlFor="category-name">Category Name</Label>
+            <Label htmlFor="category-name">Nombre de la Categoría</Label>
             <Input 
               id="category-name" 
               name="name" 
@@ -64,7 +64,7 @@ export function CreateCategoryDialog() {
             />
           </div>
           <div className="grid gap-2">
-            <Label htmlFor="budget-percentage">Budget Percentage (Optional)</Label>
+            <Label htmlFor="budget-percentage">Porcentaje de Presupuesto (Opcional)</Label>
             <Input 
               id="budget-percentage" 
               name="budgetPercentage" 
@@ -75,15 +75,15 @@ export function CreateCategoryDialog() {
               placeholder="e.g., 30 (for 30% of income)"
             />
             <p className="text-xs text-muted-foreground">
-              What percentage of your monthly income should be allocated to this category?
+              ¿Qué porcentaje de tus ingresos mensuales debería asignarse a esta categoría?
             </p>
           </div>
           <div className="flex justify-end gap-2">
             <Button type="button" variant="outline" onClick={() => setOpen(false)}>
-              Cancel
+              Cancelar
             </Button>
             <Button type="submit" disabled={loading}>
-              {loading ? "Creating..." : "Create Category"}
+              {loading ? "Creando..." : "Crear Categoría"}
             </Button>
           </div>
         </form>

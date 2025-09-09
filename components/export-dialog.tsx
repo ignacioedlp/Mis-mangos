@@ -8,6 +8,7 @@ import { toast } from "sonner"
 import jsPDF from 'jspdf'
 import autoTable from 'jspdf-autotable'
 import Papa from 'papaparse'
+import { formatCurrency } from "@/lib/utils"
 
 interface ExportDialogProps {
   data: {
@@ -43,35 +44,35 @@ export function ExportDialog({ data }: ExportDialogProps) {
     setLoading(true)
     try {
       const csvData = data.items.map(item => ({
-        'Expense Name': item.name,
-        'Category': item.categoryName,
-        'Subcategory': item.subcategoryName,
-        'Frequency': item.frequency,
-        'Estimated Amount': item.estimatedAmount,
-        'Actual Amount': item.actualAmount || '',
-        'Status': item.isPaid ? 'Paid' : 'Pending',
+        'Nombre del Gasto': item.name,
+        'Categoría': item.categoryName,
+        'Subcategoría': item.subcategoryName,
+        'Frecuencia': item.frequency,
+        'Monto Estimado': item.estimatedAmount,
+        'Monto Real': item.actualAmount || '',
+        'Estado': item.isPaid ? 'Pagado' : 'Pendiente',
       }))
 
       // Add summary row
       csvData.push({
-        'Expense Name': '--- SUMMARY ---',
-        'Category': '',
-        'Subcategory': '',
-        'Frequency': '',
-        'Estimated Amount': data.totalEstimated,
-        'Actual Amount': data.totalActual,
-        'Status': `${data.totalPaid} paid, ${data.totalPending} pending`,
+        'Nombre del Gasto': '--- SUMMARY ---',
+        'Categoría': '',
+        'Subcategoría': '',
+        'Frecuencia': '',
+        'Monto Estimado': data.totalEstimated,
+        'Monto Real': data.totalActual,
+        'Estado': `${data.totalPaid} pagado, ${data.totalPending} pendientes`,
       })
 
       if (data.salary) {
         csvData.push({
-          'Expense Name': '--- SALARY ---',
-          'Category': '',
-          'Subcategory': '',
-          'Frequency': '',
-          'Estimated Amount': data.salary,
-          'Actual Amount': data.salary - data.totalActual,
-          'Status': `Savings: ${(((data.salary - data.totalActual) / data.salary) * 100).toFixed(1)}%`,
+          'Nombre del Gasto': '--- SALARY ---',
+          'Categoría': '',
+          'Subcategoría': '',
+          'Frecuencia': '',
+          'Monto Estimado': data.salary,
+          'Monto Real': data.salary - data.totalActual,
+          'Estado': `Ahorros: ${(((data.salary - data.totalActual) / data.salary) * 100).toFixed(1)}%`,
         })
       }
 
@@ -102,25 +103,25 @@ export function ExportDialog({ data }: ExportDialogProps) {
       
       // Title
       doc.setFontSize(20)
-      doc.text(`Expense Report - ${data.monthName}`, 20, 20)
-      
+      doc.text(`Reporte de Gastos - ${data.monthName}`, 20, 20)
+
       // Summary
       doc.setFontSize(12)
       let yPos = 40
-      doc.text(`Total Estimated: $${data.totalEstimated.toFixed(2)}`, 20, yPos)
+      doc.text(`Total Estimado: ${formatCurrency(data.totalEstimated)}`, 20, yPos)
       yPos += 10
-      doc.text(`Total Actual: $${data.totalActual.toFixed(2)}`, 20, yPos)
+      doc.text(`Total Actual: ${formatCurrency(data.totalActual)}`, 20, yPos)
       yPos += 10
-      doc.text(`Items Paid: ${data.totalPaid}`, 20, yPos)
+      doc.text(`Items Pagados: ${data.totalPaid}`, 20, yPos)
       yPos += 10
-      doc.text(`Items Pending: ${data.totalPending}`, 20, yPos)
-      
+      doc.text(`Items Pendientes: ${data.totalPending}`, 20, yPos)
+
       if (data.salary) {
         yPos += 10
-        doc.text(`Monthly Salary: $${data.salary.toFixed(2)}`, 20, yPos)
+        doc.text(`Salario Mensual: ${formatCurrency(data.salary)}`, 20, yPos)
         yPos += 10
         const savingsRate = ((data.salary - data.totalActual) / data.salary) * 100
-        doc.text(`Savings Rate: ${savingsRate.toFixed(1)}%`, 20, yPos)
+        doc.text(`Tasa de Ahorro: ${savingsRate.toFixed(1)}%`, 20, yPos)
       }
       
       yPos += 20
@@ -131,13 +132,13 @@ export function ExportDialog({ data }: ExportDialogProps) {
         item.categoryName,
         item.subcategoryName,
         item.frequency,
-        `$${item.estimatedAmount.toFixed(2)}`,
-        item.actualAmount ? `$${item.actualAmount.toFixed(2)}` : '-',
-        item.isPaid ? 'Paid' : 'Pending'
+        formatCurrency(item.estimatedAmount),
+        item.actualAmount ? formatCurrency(item.actualAmount) : '-',
+        item.isPaid ? 'Pagado' : 'Pendiente'
       ])
 
       autoTable(doc, {
-        head: [['Name', 'Category', 'Subcategory', 'Frequency', 'Estimated', 'Actual', 'Status']],
+        head: [['Nombre', 'Categoría', 'Subcategoría', 'Frecuencia', 'Estimado', 'Real', 'Estado']],
         body: tableData,
         startY: yPos,
         styles: { fontSize: 8 },
@@ -148,18 +149,18 @@ export function ExportDialog({ data }: ExportDialogProps) {
       if (data.categoryData.length > 0) {
         doc.addPage()
         doc.setFontSize(16)
-        doc.text('Category Breakdown', 20, 20)
-        
+        doc.text('Desglose por Categoría', 20, 20)
+
         const categoryTableData = data.categoryData.map(cat => [
           cat.category,
           cat.count.toString(),
-          `$${cat.estimated.toFixed(2)}`,
-          `$${cat.actual.toFixed(2)}`,
+          formatCurrency(cat.estimated),
+          formatCurrency(cat.actual),
           `${((cat.actual / cat.estimated) * 100).toFixed(1)}%`
         ])
 
         autoTable(doc, {
-          head: [['Category', 'Count', 'Estimated', 'Actual', '% of Estimated']],
+          head: [['Categoría', 'Cantidad', 'Estimado', 'Real', '% de Estimado']],
           body: categoryTableData,
           startY: 40,
           styles: { fontSize: 10 },
@@ -182,14 +183,14 @@ export function ExportDialog({ data }: ExportDialogProps) {
       <DialogTrigger asChild>
         <Button variant="outline" size="sm">
           <Download className="h-4 w-4 mr-2" />
-          Export
+          Exportar Datos
         </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Export Data</DialogTitle>
+          <DialogTitle>Exportar Datos</DialogTitle>
           <DialogDescription>
-            Export your expense data for {data.monthName} in different formats
+            Exporta los datos de tus gastos para {data.monthName} en diferentes formatos
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4">
@@ -199,7 +200,7 @@ export function ExportDialog({ data }: ExportDialogProps) {
             className="flex items-center gap-2"
           >
             <FileSpreadsheet className="h-4 w-4" />
-            Export as CSV
+            Exportar como CSV
           </Button>
           <Button
             onClick={exportToPDF}
@@ -208,7 +209,7 @@ export function ExportDialog({ data }: ExportDialogProps) {
             className="flex items-center gap-2"
           >
             <FileText className="h-4 w-4" />
-            Export as PDF
+            Exportar como PDF
           </Button>
         </div>
       </DialogContent>

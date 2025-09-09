@@ -48,33 +48,33 @@ export function CreateSubcategoryDialog({ categories }: CreateSubcategoryDialogP
       <DialogTrigger asChild>
         <Button size="sm" disabled={categories.length === 0}>
           <Plus className="h-4 w-4 mr-2" />
-          Add Subcategory
+          Agregar Subcategoría
         </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Create New Subcategory</DialogTitle>
-          <DialogDescription>Add a subcategory to better organize your expenses.</DialogDescription>
+          <DialogTitle>Crear Nueva Subcategoría</DialogTitle>
+          <DialogDescription>Agrega una subcategoría para organizar mejor tus gastos.</DialogDescription>
         </DialogHeader>
         <form action={handleSubmit} className="space-y-4">
           <div className="grid gap-2">
-            <Label htmlFor="subcategory-name">Subcategory Name</Label>
+            <Label htmlFor="subcategory-name">Nombre de la Subcategoría</Label>
             <Input 
               id="subcategory-name" 
               name="name" 
-              placeholder="e.g., Electricity, Groceries, Gas" 
+              placeholder="e.g., Electricidad, Compras, Gas" 
               required
             />
           </div>
           <div className="grid gap-2">
-            <Label htmlFor="parent-category">Parent Category</Label>
+            <Label htmlFor="parent-category">Categoría Principal</Label>
             <select 
               id="parent-category" 
               name="categoryId" 
               className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors"
               required
             >
-              <option value="">Select a category...</option>
+              <option value="">Selecciona una categoría...</option>
               {categories.map((c) => (
                 <option key={c.id} value={c.id}>{c.name}</option>
               ))}
@@ -82,10 +82,10 @@ export function CreateSubcategoryDialog({ categories }: CreateSubcategoryDialogP
           </div>
           <div className="flex justify-end gap-2">
             <Button type="button" variant="outline" onClick={() => setOpen(false)}>
-              Cancel
+              Cancelar
             </Button>
             <Button type="submit" disabled={loading}>
-              {loading ? "Creating..." : "Create Subcategory"}
+              {loading ? "Creando..." : "Crear Subcategoría"}
             </Button>
           </div>
         </form>

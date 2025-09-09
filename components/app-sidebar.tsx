@@ -18,48 +18,48 @@ import { usePathname } from "next/navigation"
 
 export default function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
    const pathname = usePathname();
-   
+
    const menuItems = [
       {
          href: "/dashboard",
          icon: LayoutDashboard,
-         label: "Dashboard",
+         label: "Panel mensual",
          isActive: pathname.startsWith("/dashboard")
       },
       {
          href: "/categories",
          icon: FolderOpen,
-         label: "Categories",
+         label: "Categorías",
          isActive: pathname.startsWith("/categories")
       },
       {
          href: "/expenses",
          icon: DollarSign,
-         label: "Expenses",
+         label: "Gastos",
          isActive: pathname.startsWith("/expenses")
       },
       {
          href: "/monthly",
          icon: Calendar,
-         label: "Monthly",
+         label: "Mensual",
          isActive: pathname.startsWith("/monthly")
       },
       {
          href: "/budget",
          icon: PieChart,
-         label: "Budget",
+         label: "Presupuesto",
          isActive: pathname.startsWith("/budget")
       },
       {
          href: "/reports",
          icon: FileText,
-         label: "Reports",
+         label: "Reportes",
          isActive: pathname.startsWith("/reports")
       },
       {
          href: "/comparison",
          icon: TrendingUp,
-         label: "Comparison",
+         label: "Comparador",
          isActive: pathname.startsWith("/comparison")
       }
    ];

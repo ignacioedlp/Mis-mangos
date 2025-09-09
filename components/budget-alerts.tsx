@@ -32,12 +32,12 @@ export async function BudgetAlerts({ year, month }: BudgetAlertsProps) {
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium flex items-center gap-2">
             <CheckCircle className="h-4 w-4 text-green-600" />
-            Budget Status
+            Estado del Presupuesto
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="text-sm text-green-600">
-            All categories are within budget! Great job managing your expenses.
+            ¡Todas las categorías están dentro del presupuesto! Gran trabajo gestionando tus gastos.
           </div>
         </CardContent>
       </Card>
@@ -52,7 +52,7 @@ export async function BudgetAlerts({ year, month }: BudgetAlertsProps) {
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium flex items-center gap-2">
               <AlertTriangle className="h-4 w-4 text-red-600" />
-              Budget Exceeded
+              Presupuesto Excedido
               <Badge variant="destructive">{overBudgetCategories.length}</Badge>
             </CardTitle>
           </CardHeader>
@@ -62,12 +62,12 @@ export async function BudgetAlerts({ year, month }: BudgetAlertsProps) {
                 <div className="flex flex-col">
                   <span className="font-medium text-sm">{category.name}</span>
                   <span className="text-xs text-muted-foreground">
-                    {formatPercentage(category.usagePercentage)} used
+                    {formatPercentage(category.usagePercentage)} utilizado
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Badge variant="destructive" className="text-xs">
-                    +{formatCurrency(Math.abs(category.remaining))} over
+                    +{formatCurrency(Math.abs(category.remaining))} sobre el presupuesto
                   </Badge>
                 </div>
               </div>
@@ -82,7 +82,7 @@ export async function BudgetAlerts({ year, month }: BudgetAlertsProps) {
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium flex items-center gap-2">
               <TrendingUp className="h-4 w-4 text-orange-600" />
-              Near Budget Limit
+              Cerca del Límite del Presupuesto
               <Badge variant="outline" className="text-orange-600">{nearLimitCategories.length}</Badge>
             </CardTitle>
           </CardHeader>
@@ -92,7 +92,7 @@ export async function BudgetAlerts({ year, month }: BudgetAlertsProps) {
                 <div className="flex flex-col">
                   <span className="font-medium text-sm">{category.name}</span>
                   <span className="text-xs text-muted-foreground">
-                    {formatPercentage(category.usagePercentage)} used
+                    {formatPercentage(category.usagePercentage)} utilizado
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
@@ -109,19 +109,19 @@ export async function BudgetAlerts({ year, month }: BudgetAlertsProps) {
       {/* Budget Summary */}
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Budget Summary</CardTitle>
+          <CardTitle className="text-sm font-medium">Resumen del Presupuesto</CardTitle>
           <DollarSign className="h-4 w-4 text-muted-foreground" />
         </CardHeader>
         <CardContent>
           <div className="flex items-center justify-between">
             <div>
               <div className="text-2xl font-bold">{formatPercentage(budgetData.totalBudgetPercentage)}</div>
-              <p className="text-xs text-muted-foreground">allocated</p>
+              <p className="text-xs text-muted-foreground">asignado</p>
             </div>
             {budgetData.hasUnassignedIncome && (
               <div className="text-right">
                 <div className="text-sm font-medium">{formatCurrency(budgetData.unassignedAmount || 0)}</div>
-                <p className="text-xs text-muted-foreground">unassigned</p>
+                <p className="text-xs text-muted-foreground">no asignado</p>
               </div>
             )}
           </div>

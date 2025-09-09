@@ -84,12 +84,12 @@ export default async function MonthlyPage({ searchParams }: MonthlyPageProps) {
             <DollarSign className="h-4 w-4 text-green-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-600">
+            <div className="text-xl font-bold text-green-600">
               {salary ? formatCurrency(salary.amount) : 'Not set'}
             </div>
             <p className="text-xs text-muted-foreground">
               {salary && data.totalActual > 0 
-                ? `${((data.totalActual / salary.amount) * 100).toFixed(1)}% spent`
+                ? `${formatCurrency((data.totalActual / salary.amount) * 100)}% spent`
                 : 'Set salary to track %'
               }
             </p>
@@ -101,7 +101,7 @@ export default async function MonthlyPage({ searchParams }: MonthlyPageProps) {
             <DollarSign className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{formatCurrency(data.totalEstimated)}</div>
+            <div className="text-xl font-bold">{formatCurrency(data.totalEstimated)}</div>
             <p className="text-xs text-muted-foreground">{data.monthName}</p>
           </CardContent>
         </Card>
@@ -111,7 +111,7 @@ export default async function MonthlyPage({ searchParams }: MonthlyPageProps) {
             <TrendingDown className="h-4 w-4 text-red-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-red-600">{formatCurrency(data.totalActual)}</div>
+            <div className="text-xl font-bold text-red-600">{formatCurrency(data.totalActual)}</div>
             <p className="text-xs text-muted-foreground">
               {data.totalEstimated > 0 ? ((data.totalActual / data.totalEstimated) * 100).toFixed(1) : 0}% of estimated
             </p>
@@ -123,7 +123,7 @@ export default async function MonthlyPage({ searchParams }: MonthlyPageProps) {
             <TrendingUp className="h-4 w-4 text-blue-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-blue-600">
+            <div className="text-xl font-bold text-blue-600">
               {salary ? formatCurrency(salary.amount - data.totalActual) : '-'}
             </div>
             <p className="text-xs text-muted-foreground">
@@ -140,7 +140,7 @@ export default async function MonthlyPage({ searchParams }: MonthlyPageProps) {
             <BarChart3 className="h-4 w-4 text-orange-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-orange-600">{data.totalPaid}/{data.items.length}</div>
+            <div className="text-xl font-bold text-orange-600">{data.totalPaid}/{data.items.length}</div>
             <p className="text-xs text-muted-foreground">expenses completed</p>
           </CardContent>
         </Card>
@@ -152,9 +152,9 @@ export default async function MonthlyPage({ searchParams }: MonthlyPageProps) {
       {/* Detailed Expense List */}
       <Card>
         <CardHeader>
-          <CardTitle>Expense Details</CardTitle>
+          <CardTitle>Detalle de Gastos</CardTitle>
           <CardDescription>
-            Complete list of expenses for {data.monthName}
+            Lista completa de gastos para {data.monthName}
           </CardDescription>
         </CardHeader>
         <CardContent>

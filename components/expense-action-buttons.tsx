@@ -59,7 +59,7 @@ export function ExpenseActionButtons({
   if (isSkipped) {
     return (
       <div className="flex items-center gap-2">
-        <span className="text-xs text-orange-600 font-medium">Skipped</span>
+        <span className="text-xs text-orange-600 font-medium">Salteado</span>
         <Button 
           variant="outline" 
           size="sm"
@@ -67,7 +67,7 @@ export function ExpenseActionButtons({
           disabled={isPending}
         >
           <Calendar className="h-3 w-3 mr-1" />
-          Unskip
+          Restaurar
         </Button>
       </div>
     )
@@ -81,7 +81,7 @@ export function ExpenseActionButtons({
         size="sm"
         onClick={handleToggleSkip}
         disabled={isPending}
-        title="Skip this expense for this month"
+        title="Saltar esta ocurrencia"
       >
         <SkipForward className="h-3 w-3" />
       </Button>
@@ -96,12 +96,12 @@ export function ExpenseActionButtons({
             {isPaid ? (
               <>
                 <X className="h-3 w-3 mr-1" />
-                Unmark
+                Desmarcar
               </>
             ) : (
               <>
                 <Check className="h-3 w-3 mr-1" />
-                Mark paid
+                Marcar como pagado
               </>
             )}
           </Button>
@@ -109,39 +109,39 @@ export function ExpenseActionButtons({
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
             <DialogTitle>
-              {isPaid ? "Unmark as Paid" : "Mark as Paid"}
+              {isPaid ? "Desmarcar como Pagado" : "Marcar como Pagado"}
             </DialogTitle>
             <DialogDescription>
               {isPaid 
-                ? `Unmark "${expenseName}" as paid for this month.`
-                : `Mark "${expenseName}" as paid and optionally adjust the final amount.`
+                ? `Desmarcar "${expenseName}" como pagado para este mes.`
+                : `Marcar "${expenseName}" como pagado y opcionalmente ajustar el monto final.`
               }
             </DialogDescription>
           </DialogHeader>
           <form action={handleTogglePaid} className="space-y-4">
             {!isPaid && (
               <div className="grid gap-2">
-                <Label htmlFor="final-amount">Final Amount ($)</Label>
+                <Label htmlFor="final-amount">Monto Final ($)</Label>
                 <Input 
                   id="final-amount" 
                   name="finalAmount" 
                   type="number" 
                   step="0.01" 
-                  defaultValue={estimatedAmount.toFixed(2)}
+                  defaultValue={formatCurrency(estimatedAmount)}
                   placeholder="0.00"
                   required
                 />
                 <p className="text-xs text-muted-foreground">
-                  Estimated: {formatCurrency(estimatedAmount)}
+                  Estimado: {formatCurrency(estimatedAmount)}
                 </p>
               </div>
             )}
             <div className="flex justify-end gap-2">
               <Button type="button" variant="outline" onClick={() => setPaidOpen(false)}>
-                Cancel
+                Cancelar
               </Button>
               <Button type="submit" disabled={isPending}>
-                {isPending ? "Updating..." : (isPaid ? "Unmark" : "Mark Paid")}
+                {isPending ? "Actualizando..." : (isPaid ? "Desmarcar" : "Marcar como Pagado")}
               </Button>
             </div>
           </form>

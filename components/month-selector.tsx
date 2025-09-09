@@ -15,8 +15,8 @@ export function MonthSelector({ currentYear, currentMonth }: MonthSelectorProps)
   const pathname = usePathname()
 
   const monthNames = [
-    "January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December"
+    "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+    "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
   ]
 
   function navigateToMonth(year: number, month: number) {
@@ -71,7 +71,7 @@ export function MonthSelector({ currentYear, currentMonth }: MonthSelectorProps)
       
       {!isCurrentMonth && (
         <Button variant="ghost" size="sm" onClick={goToCurrentMonth}>
-          Today
+          Hoy
         </Button>
       )}
     </div>

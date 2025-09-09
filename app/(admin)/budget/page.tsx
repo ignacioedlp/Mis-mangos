@@ -14,9 +14,9 @@ export default async function BudgetPage({ searchParams }: BudgetPageProps) {
   return (
     <div className="space-y-6">
       <div className="flex flex-col gap-2">
-        <h2 className="text-3xl font-bold tracking-tight">Budget Analysis</h2>
+        <h2 className="text-3xl font-bold tracking-tight">Análisis de Presupuesto</h2>
         <p className="text-muted-foreground">
-          Track your spending against your budget allocation by category
+          Compara tus gastos con la asignación de tu presupuesto por categoría
         </p>
       </div>
 

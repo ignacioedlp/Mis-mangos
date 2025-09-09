@@ -104,7 +104,7 @@ export function PWAInstaller() {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Smartphone className="h-5 w-5 text-primary" />
-            <CardTitle className="text-base">Install App</CardTitle>
+            <CardTitle className="text-base">Instalar App</CardTitle>
           </div>
           <Button
             variant="ghost"
@@ -116,17 +116,17 @@ export function PWAInstaller() {
           </Button>
         </div>
         <CardDescription>
-          Install Mis Mangos for a better mobile experience with offline support
+            Instala esta aplicación en tu dispositivo para una mejor experiencia.
         </CardDescription>
       </CardHeader>
       <CardContent className="pt-0">
         <div className="flex gap-2">
           <Button onClick={handleInstallClick} className="flex-1">
             <Download className="h-4 w-4 mr-2" />
-            Install
+            Instalar
           </Button>
           <Button variant="outline" onClick={handleDismiss}>
-            Not now
+            Más tarde
           </Button>
         </div>
       </CardContent>

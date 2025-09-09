@@ -1,6 +1,7 @@
 "use client"
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { formatCurrency } from "@/lib/utils"
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, AreaChart, Area } from 'recharts'
 
 interface ComparisonChartsProps {
@@ -20,12 +21,12 @@ export function ComparisonCharts({ data }: ComparisonChartsProps) {
     return (
       <Card>
         <CardHeader>
-          <CardTitle>Comparison Charts</CardTitle>
-          <CardDescription>No data available for charts</CardDescription>
+          <CardTitle>Grafico de Comparación</CardTitle>
+          <CardDescription>No hay datos disponibles para los gráficos</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="text-center py-8 text-muted-foreground">
-            <p>Select a time period to view comparison charts</p>
+            <p>Selecciona un período de tiempo para ver los gráficos de comparación</p>
           </div>
         </CardContent>
       </Card>
@@ -47,8 +48,8 @@ export function ComparisonCharts({ data }: ComparisonChartsProps) {
       {/* Spending Trends */}
       <Card>
         <CardHeader>
-          <CardTitle>Spending Trends</CardTitle>
-          <CardDescription>Estimated vs actual spending over time</CardDescription>
+          <CardTitle>Tendencias de gastos</CardTitle>
+          <CardDescription>Gasto estimado vs real a lo largo del tiempo</CardDescription>
         </CardHeader>
         <CardContent>
           <ResponsiveContainer width="100%" height={300}>
@@ -58,8 +59,8 @@ export function ComparisonCharts({ data }: ComparisonChartsProps) {
               <YAxis />
               <Tooltip 
                 formatter={(value: number, name: string) => [
-                  `$${value.toFixed(2)}`, 
-                  name === 'estimated' ? 'Estimated' : 'Actual'
+                  `${formatCurrency(value)}`, 
+                  name === 'estimated' ? 'Estimado' : 'Real'
                 ]}
               />
               <Line type="monotone" dataKey="estimated" stroke="#8884d8" strokeWidth={2} />
@@ -72,8 +73,8 @@ export function ComparisonCharts({ data }: ComparisonChartsProps) {
       {/* Savings Rate Trend */}
       <Card>
         <CardHeader>
-          <CardTitle>Savings Rate Trend</CardTitle>
-          <CardDescription>Your savings rate percentage over time</CardDescription>
+          <CardTitle>Tendencia de la Tasa de Ahorro</CardTitle>
+          <CardDescription>Tu porcentaje de tasa de ahorro a lo largo del tiempo</CardDescription>
         </CardHeader>
         <CardContent>
           <ResponsiveContainer width="100%" height={300}>
@@ -82,7 +83,7 @@ export function ComparisonCharts({ data }: ComparisonChartsProps) {
               <XAxis dataKey="month" />
               <YAxis />
               <Tooltip 
-                formatter={(value: number) => [`${value.toFixed(1)}%`, 'Savings Rate']}
+                formatter={(value: number) => [`${value.toFixed(1)}%`, 'Tasa de Ahorro']}
               />
               <Area 
                 type="monotone" 
@@ -99,8 +100,8 @@ export function ComparisonCharts({ data }: ComparisonChartsProps) {
       {/* Income vs Expenses */}
       <Card>
         <CardHeader>
-          <CardTitle>Income vs Expenses</CardTitle>
-          <CardDescription>Monthly salary compared to actual spending</CardDescription>
+          <CardTitle>Ingreso vs Gastos</CardTitle>
+          <CardDescription>Salario mensual en comparación con el gasto real</CardDescription>
         </CardHeader>
         <CardContent>
           <ResponsiveContainer width="100%" height={300}>
@@ -110,8 +111,8 @@ export function ComparisonCharts({ data }: ComparisonChartsProps) {
               <YAxis />
               <Tooltip 
                 formatter={(value: number, name: string) => [
-                  `$${value.toFixed(2)}`, 
-                  name === 'salary' ? 'Salary' : 'Spending'
+                  `${formatCurrency(value)}`, 
+                  name === 'salary' ? 'Salario' : 'Gasto'
                 ]}
               />
               <Bar dataKey="salary" fill="#4ade80" />
@@ -124,8 +125,8 @@ export function ComparisonCharts({ data }: ComparisonChartsProps) {
       {/* Net Savings */}
       <Card>
         <CardHeader>
-          <CardTitle>Net Savings</CardTitle>
-          <CardDescription>Amount saved each month (Salary - Expenses)</CardDescription>
+          <CardTitle>Ahorros Netos</CardTitle>
+          <CardDescription>Monto ahorrado cada mes (Salario - Gastos)</CardDescription>
         </CardHeader>
         <CardContent>
           <ResponsiveContainer width="100%" height={300}>
@@ -135,8 +136,8 @@ export function ComparisonCharts({ data }: ComparisonChartsProps) {
               <YAxis />
               <Tooltip 
                 formatter={(value: number) => [
-                  `$${value.toFixed(2)}`, 
-                  value >= 0 ? 'Saved' : 'Deficit'
+                  `${formatCurrency(value)}`, 
+                  value >= 0 ? 'Ahorrado' : 'Déficit'
                 ]}
               />
               <Bar 

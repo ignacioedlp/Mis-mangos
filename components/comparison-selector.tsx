@@ -16,8 +16,8 @@ export function ComparisonSelector({ startYear, startMonth, endYear, endMonth }:
   const searchParams = useSearchParams()
 
   const monthNames = [
-    "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+    "Ene", "Feb", "Mar", "Abr", "May", "Jun",
+    "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"
   ]
 
   function updateComparison(newStartYear: number, newStartMonth: number, newEndYear: number, newEndMonth: number) {
@@ -51,13 +51,13 @@ export function ComparisonSelector({ startYear, startMonth, endYear, endMonth }:
         </div>
         <div className="flex gap-2">
           <Button variant="outline" size="sm" onClick={() => setPreset(3)}>
-            Last 3M
+            Ultimos 3M
           </Button>
           <Button variant="outline" size="sm" onClick={() => setPreset(6)}>
-            Last 6M
+            Ultimos 6M
           </Button>
           <Button variant="outline" size="sm" onClick={() => setPreset(12)}>
-            Last Year
+            Ultimo Año
           </Button>
         </div>
       </CardContent>

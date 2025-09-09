@@ -1,6 +1,7 @@
 "use client"
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { formatCurrency } from "@/lib/utils"
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts'
 
 interface ExpenseChartsProps {
@@ -22,12 +23,12 @@ export function ExpenseCharts({ categoryData }: ExpenseChartsProps) {
     return (
       <Card>
         <CardHeader>
-          <CardTitle>Expense Analytics</CardTitle>
-          <CardDescription>No data available for charts</CardDescription>
+          <CardTitle>Analisis de gastos</CardTitle>
+          <CardDescription>No hay datos disponibles para los gráficos</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="text-center py-8 text-muted-foreground">
-            <p>Generate expense occurrences to see analytics</p>
+            <p>Genera ocurrencias de gastos para ver análisis</p>
           </div>
         </CardContent>
       </Card>
@@ -46,8 +47,8 @@ export function ExpenseCharts({ categoryData }: ExpenseChartsProps) {
       {/* Bar Chart - Estimated vs Actual */}
       <Card>
         <CardHeader>
-          <CardTitle>Estimated vs Actual Spending</CardTitle>
-          <CardDescription>Compare planned vs actual expenses by category</CardDescription>
+          <CardTitle>Gastos Estimados vs Reales</CardTitle>
+          <CardDescription>Compara los gastos planificados vs reales por categoría</CardDescription>
         </CardHeader>
         <CardContent>
           <ResponsiveContainer width="100%" height={300}>
@@ -63,10 +64,10 @@ export function ExpenseCharts({ categoryData }: ExpenseChartsProps) {
               <YAxis tick={{ fontSize: 12 }} />
               <Tooltip 
                 formatter={(value: number, name: string) => [
-                  `$${value.toFixed(2)}`, 
-                  name === 'estimated' ? 'Estimated' : 'Actual'
+                  `${formatCurrency(value)}`, 
+                  name === 'estimated' ? 'Estimado' : 'Real'
                 ]}
-                labelFormatter={(label) => `Category: ${label}`}
+                labelFormatter={(label) => `Categoría: ${label}`}
               />
               <Bar dataKey="estimated" fill="#8884d8" name="estimated" />
               <Bar dataKey="actual" fill="#82ca9d" name="actual" />
@@ -78,8 +79,8 @@ export function ExpenseCharts({ categoryData }: ExpenseChartsProps) {
       {/* Pie Chart - Spending Distribution */}
       <Card>
         <CardHeader>
-          <CardTitle>Spending Distribution</CardTitle>
-          <CardDescription>Breakdown of expenses by category</CardDescription>
+          <CardTitle>Distribución de Gastos</CardTitle>
+          <CardDescription>Desglose de gastos por categoría</CardDescription>
         </CardHeader>
         <CardContent>
           <ResponsiveContainer width="100%" height={300}>
@@ -98,7 +99,7 @@ export function ExpenseCharts({ categoryData }: ExpenseChartsProps) {
                   <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                 ))}
               </Pie>
-              <Tooltip formatter={(value: number) => [`$${value.toFixed(2)}`, 'Amount']} />
+              <Tooltip formatter={(value: number) => [`${formatCurrency(value)}`, 'Monto']} />
             </PieChart>
           </ResponsiveContainer>
         </CardContent>
@@ -107,8 +108,8 @@ export function ExpenseCharts({ categoryData }: ExpenseChartsProps) {
       {/* Summary Stats */}
       <Card className="lg:col-span-2">
         <CardHeader>
-          <CardTitle>Category Summary</CardTitle>
-          <CardDescription>Detailed breakdown by category</CardDescription>
+          <CardTitle>Resumen por Categoría</CardTitle>
+          <CardDescription>Desglose detallado por categoría</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -124,9 +125,9 @@ export function ExpenseCharts({ categoryData }: ExpenseChartsProps) {
                 <div className="flex-1 min-w-0">
                   <p className="font-medium text-sm truncate">{item.category}</p>
                   <div className="text-xs text-muted-foreground space-y-1">
-                    <p>Est: ${item.estimated.toFixed(2)}</p>
-                    <p>Actual: ${item.actual.toFixed(2)}</p>
-                    <p>{item.count} expense{item.count !== 1 ? 's' : ''}</p>
+                    <p>Est: {formatCurrency(item.estimated)}</p>
+                    <p>Actual: {formatCurrency(item.actual)}</p>
+                    <p>{item.count} gasto{item.count !== 1 ? 's' : ''}</p>
                   </div>
                 </div>
               </div>

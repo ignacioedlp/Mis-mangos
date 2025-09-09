@@ -28,7 +28,7 @@ interface ReportsTableProps {
 
 export function ReportsTable({ 
   data, 
-  emptyMessage = "No reports generated yet. Use the generator above to create your first report",
+  emptyMessage = "No tienes reportes generados aún",
   emptyIcon 
 }: ReportsTableProps) {
   function getReportIcon(type: string) {
@@ -88,7 +88,7 @@ export function ReportsTable({
     return (
       <div className="text-center py-8 text-muted-foreground">
         {emptyIcon && <div className="mb-4">{emptyIcon}</div>}
-        <p className="text-lg font-medium mb-2">No reports generated yet</p>
+        <p className="text-lg font-medium mb-2">No tienes reportes generados aún</p>
         <p className="text-sm">{emptyMessage}</p>
       </div>
     )
@@ -103,42 +103,42 @@ export function ReportsTable({
             currentSort={sortConfig}
             onSort={requestSort}
           >
-            Report
+            Reporte
           </SortableTableHead>
           <SortableTableHead
             sortKey="type"
             currentSort={sortConfig}
             onSort={requestSort}
           >
-            Type
+            Tipo
           </SortableTableHead>
           <SortableTableHead
             sortKey="period"
             currentSort={sortConfig}
             onSort={requestSort}
           >
-            Period
+            Periodo
           </SortableTableHead>
           <SortableTableHead
             sortKey="status"
             currentSort={sortConfig}
             onSort={requestSort}
           >
-            Status
+            Estado
           </SortableTableHead>
           <SortableTableHead
             sortKey="generatedAt"
             currentSort={sortConfig}
             onSort={requestSort}
           >
-            Generated
+            Generado el
           </SortableTableHead>
           <SortableTableHead
             sortKey="downloadCount"
             currentSort={sortConfig}
             onSort={requestSort}
           >
-            Downloads
+            Descargas
           </SortableTableHead>
           <SortableTableHead
             sortable={false}
@@ -147,7 +147,7 @@ export function ReportsTable({
             onSort={requestSort}
             className="w-32"
           >
-            Actions
+            Acciones
           </SortableTableHead>
         </TableRow>
       </TableHeader>

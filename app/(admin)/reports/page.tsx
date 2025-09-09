@@ -15,9 +15,9 @@ export default async function ReportsPage() {
   return (
     <div className="space-y-6">
       <div className="flex flex-col gap-2">
-        <h2 className="text-3xl font-bold tracking-tight">Reports & Analytics</h2>
+        <h2 className="text-3xl font-bold tracking-tight">Reportes y Analiticas</h2>
         <p className="text-muted-foreground">
-          Generate detailed reports and analyze your financial data
+          Genera reportes detallados y analiza tus datos financieros
         </p>
       </div>
 
@@ -29,16 +29,16 @@ export default async function ReportsPage() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <FileText className="h-5 w-5" />
-            Generated Reports
+            Reportes Generados
           </CardTitle>
           <CardDescription>
-            Your previously generated reports and analytics
+            Tus reportes y analíticas generados previamente
           </CardDescription>
         </CardHeader>
         <CardContent>
           <ReportsTable
             data={reports}
-            emptyMessage="No reports generated yet. Use the generator above to create your first report"
+            emptyMessage="No hay reportes generados aún. Usa el generador de arriba para crear tu primer reporte"
             emptyIcon={<FileText className="h-12 w-12 mx-auto mb-4 opacity-50" />}
           />
         </CardContent>

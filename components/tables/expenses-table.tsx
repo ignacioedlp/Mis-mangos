@@ -29,7 +29,7 @@ interface ExpensesTableProps {
 
 export function ExpensesTable({ 
   data, 
-  emptyMessage = "No expenses yet. Create your first expense to get started",
+  emptyMessage = "No hay gastos aún. Crea tu primer gasto para comenzar",
   emptyIcon 
 }: ExpensesTableProps) {
   const frequencyColors = {
@@ -75,28 +75,28 @@ export function ExpensesTable({
             currentSort={sortConfig}
             onSort={requestSort}
           >
-            Name
+            Nombre
           </SortableTableHead>
           <SortableTableHead
             sortKey="category"
             currentSort={sortConfig}
             onSort={requestSort}
           >
-            Category
+            Categoría
           </SortableTableHead>
           <SortableTableHead
             sortKey="estimatedAmount"
             currentSort={sortConfig}
             onSort={requestSort}
           >
-            Amount
+            Monto
           </SortableTableHead>
           <SortableTableHead
             sortKey="frequency"
             currentSort={sortConfig}
             onSort={requestSort}
           >
-            Frequency
+            Frecuencia
           </SortableTableHead>
           <SortableTableHead
             sortable={false}
@@ -105,7 +105,7 @@ export function ExpensesTable({
             onSort={requestSort}
             className="w-20"
           >
-            Actions
+            Acciones
           </SortableTableHead>
         </TableRow>
       </TableHeader>

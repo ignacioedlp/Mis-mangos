@@ -19,15 +19,15 @@ export async function BudgetDashboard({ year, month }: BudgetDashboardProps) {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <DollarSign className="h-5 w-5" />
-            Budget Analysis
+            Análisis de Presupuesto
           </CardTitle>
-          <CardDescription>Track your spending against your budget allocation</CardDescription>
+          <CardDescription>Realiza un seguimiento de tus gastos en comparación con la asignación de tu presupuesto</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="text-center py-8 text-muted-foreground">
             <DollarSign className="h-12 w-12 mx-auto mb-4 opacity-50" />
-            <p className="text-lg font-medium mb-2">No salary data found</p>
-            <p className="text-sm">Please set your monthly salary to see budget analysis</p>
+            <p className="text-lg font-medium mb-2">No se encontraron datos de salario</p>
+            <p className="text-sm">Por favor, establece tu salario mensual para ver el análisis del presupuesto</p>
           </div>
         </CardContent>
       </Card>
@@ -46,10 +46,10 @@ export async function BudgetDashboard({ year, month }: BudgetDashboardProps) {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <DollarSign className="h-5 w-5" />
-            Budget Overview - {monthName}
+            Resumen del Presupuesto - {monthName}
           </CardTitle>
           <CardDescription>
-            Monthly income: {formatCurrency(budgetData.monthlyIncome)}
+            Ingreso mensual: {formatCurrency(budgetData.monthlyIncome)}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -57,7 +57,7 @@ export async function BudgetDashboard({ year, month }: BudgetDashboardProps) {
             <div className="space-y-2">
               <div className="flex items-center gap-2">
                 <Percent className="h-4 w-4 text-muted-foreground" />
-                <span className="text-sm text-muted-foreground">Budget Allocated</span>
+                <span className="text-sm text-muted-foreground">Presupuesto Asignado</span>
               </div>
               <p className="text-2xl font-bold">
                 {formatPercentage(budgetData.totalBudgetPercentage)}
@@ -67,7 +67,7 @@ export async function BudgetDashboard({ year, month }: BudgetDashboardProps) {
             <div className="space-y-2">
               <div className="flex items-center gap-2">
                 <PiggyBank className="h-4 w-4 text-blue-600" />
-                <span className="text-sm text-muted-foreground">Total Saved</span>
+                <span className="text-sm text-muted-foreground">Total Ahorrado</span>
               </div>
               <p className="text-2xl font-bold text-blue-600">
                 {formatCurrency(budgetData.totalSavings || 0)}
@@ -78,7 +78,7 @@ export async function BudgetDashboard({ year, month }: BudgetDashboardProps) {
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
                   <TrendingUp className="h-4 w-4 text-green-600" />
-                  <span className="text-sm text-muted-foreground">Unassigned</span>
+                  <span className="text-sm text-muted-foreground">No Asignado</span>
                 </div>
                 <p className="text-2xl font-bold text-green-600">
                   {formatCurrency(budgetData.unassignedAmount || 0)}
@@ -89,7 +89,7 @@ export async function BudgetDashboard({ year, month }: BudgetDashboardProps) {
             <div className="space-y-2">
               <div className="flex items-center gap-2">
                 <AlertTriangle className="h-4 w-4 text-orange-600" />
-                <span className="text-sm text-muted-foreground">Over Budget</span>
+                <span className="text-sm text-muted-foreground">Sobre Presupuesto</span>
               </div>
               <p className="text-2xl font-bold text-orange-600">
                 {budgetData.categories.filter(c => c.isOverBudget).length}
@@ -110,25 +110,25 @@ export async function BudgetDashboard({ year, month }: BudgetDashboardProps) {
                   <CardTitle className="text-base">{category.name}</CardTitle>
                   {category.isOverBudget && (
                     <Badge variant="destructive" className="text-xs">
-                      Over Budget
+                      Sobre Presupuesto
                     </Badge>
                   )}
                 </div>
                 <CardDescription className="flex items-center gap-1">
                   <Percent className="h-3 w-3" />
-                  {category.budgetPercentage}% of income
+                  {category.budgetPercentage}% del ingreso
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-2">
                   <div className="flex justify-between text-sm">
-                    <span>Spent</span>
+                    <span>Gastado</span>
                     <span className={category.isOverBudget ? "text-red-600" : "text-green-600"}>
                       {formatCurrency(category.actualSpent)}
                     </span>
                   </div>
                   <div className="flex justify-between text-sm text-muted-foreground">
-                    <span>Budget</span>
+                    <span>Presupuesto</span>
                     <span>{formatCurrency(category.budgetAmount)}</span>
                   </div>
                   <Progress 
@@ -136,15 +136,15 @@ export async function BudgetDashboard({ year, month }: BudgetDashboardProps) {
                     className="h-2"
                   />
                   <div className="flex justify-between text-xs text-muted-foreground">
-                    <span>{formatPercentage(category.usagePercentage)} used</span>
+                    <span>{formatPercentage(category.usagePercentage)} usado</span>
                     <span>
                       {category.remaining >= 0 ? (
                         <span className="text-green-600">
-                          {formatCurrency(category.remaining)} left
+                          {formatCurrency(category.remaining)} restante
                         </span>
                       ) : (
                         <span className="text-red-600">
-                          {formatCurrency(Math.abs(category.remaining))} over
+                          {formatCurrency(Math.abs(category.remaining))} sobre
                         </span>
                       )}
                     </span>
@@ -152,7 +152,7 @@ export async function BudgetDashboard({ year, month }: BudgetDashboardProps) {
                 </div>
                 
                 <div className="flex items-center justify-between text-xs text-muted-foreground">
-                  <span>{category.expenseCount} expenses</span>
+                  <span>{category.expenseCount} gastos</span>
                   {category.isOverBudget ? (
                     <TrendingDown className="h-3 w-3 text-red-600" />
                   ) : (
@@ -168,9 +168,9 @@ export async function BudgetDashboard({ year, month }: BudgetDashboardProps) {
       {budgetData.categories.filter(c => c.budgetPercentage === 0).length > 0 && (
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">Categories Without Budget</CardTitle>
+            <CardTitle className="text-base">Categorías Sin Presupuesto</CardTitle>
             <CardDescription>
-              These categories don&apos;t have a budget percentage assigned
+              Estas categorías no tienen un porcentaje de presupuesto asignado
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -179,7 +179,7 @@ export async function BudgetDashboard({ year, month }: BudgetDashboardProps) {
                 .filter(c => c.budgetPercentage === 0)
                 .map((category) => (
                   <Badge key={category.id} variant="outline">
-                    {category.name} ({formatCurrency(category.actualSpent)} spent)
+                    {category.name} ({formatCurrency(category.actualSpent)} gastado)
                   </Badge>
                 ))}
             </div>

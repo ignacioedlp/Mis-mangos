@@ -27,8 +27,8 @@ export default async function CategoriesPage() {
   return (
     <div className="space-y-6">
       <div className="flex flex-col gap-2">
-        <h2 className="text-3xl font-bold tracking-tight">Categories & Subcategories</h2>
-        <p className="text-muted-foreground">Organize your expenses with categories and subcategories</p>
+        <h2 className="text-3xl font-bold tracking-tight">Categorias y subcategorias</h2>
+        <p className="text-muted-foreground">Organiza tus gastos con categorías y subcategorías</p>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2">
@@ -39,9 +39,9 @@ export default async function CategoriesPage() {
               <div>
                 <CardTitle className="flex items-center gap-2">
                   <FolderPlus className="h-5 w-5" />
-                  Categories
+                  Categorías
                 </CardTitle>
-                <CardDescription>Main expense categories</CardDescription>
+                <CardDescription>Categorías principales de gastos</CardDescription>
               </div>
               <CreateCategoryDialog />
             </div>
@@ -49,7 +49,7 @@ export default async function CategoriesPage() {
           <CardContent>
             <CategoriesTable
               data={categories}
-              emptyMessage="No categories yet. Create your first category to get started"
+              emptyMessage="No hay categorías aún. Crea tu primera categoría para comenzar"
               emptyIcon={<FolderPlus className="h-8 w-8 mx-auto mb-2 opacity-50" />}
             />
           </CardContent>
@@ -60,8 +60,8 @@ export default async function CategoriesPage() {
           <CardHeader>
             <div className="flex items-center justify-between">
               <div>
-                <CardTitle>Subcategories</CardTitle>
-                <CardDescription>Detailed expense subcategories</CardDescription>
+                <CardTitle>Subcategorías</CardTitle>
+                <CardDescription>Subcategorías de gastos detalladas</CardDescription>
               </div>
               <CreateSubcategoryDialog categories={categories} />
             </div>
@@ -70,7 +70,7 @@ export default async function CategoriesPage() {
             <SubcategoriesTable
               data={subcategories}
               categories={categories}
-              emptyMessage="No subcategories yet. Create categories first, then add subcategories"
+              emptyMessage="Aun no hay subcategorías. Crea tu primera subcategoría para comenzar"
             />
           </CardContent>
         </Card>

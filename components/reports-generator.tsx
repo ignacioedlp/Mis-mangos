@@ -22,37 +22,37 @@ export function ReportsGenerator() {
   const reportTypes = [
     {
       value: "MONTHLY_SUMMARY",
-      label: "Monthly Summary",
-      description: "Complete financial summary for a specific month",
+      label: "Resumen Mensual",
+      description: "Resumen financiero completo para un mes específico",
       icon: <Calendar className="h-4 w-4" />
     },
     {
       value: "BUDGET_ANALYSIS",
-      label: "Budget Analysis",
-      description: "Detailed budget performance analysis",
+      label: "Análisis de Presupuesto",
+      description: "Análisis detallado del rendimiento del presupuesto",
       icon: <PieChart className="h-4 w-4" />
     },
     {
       value: "SPENDING_TRENDS",
-      label: "Spending Trends",
-      description: "Multi-month spending analysis and trends",
+      label: "Tendencias de Gastos",
+      description: "Análisis y tendencias de gastos a lo largo de varios meses",
       icon: <TrendingUp className="h-4 w-4" />
     }
   ]
 
   const months = [
-    { value: "1", label: "January" },
-    { value: "2", label: "February" },
-    { value: "3", label: "March" },
-    { value: "4", label: "April" },
-    { value: "5", label: "May" },
-    { value: "6", label: "June" },
-    { value: "7", label: "July" },
-    { value: "8", label: "August" },
-    { value: "9", label: "September" },
-    { value: "10", label: "October" },
-    { value: "11", label: "November" },
-    { value: "12", label: "December" }
+    { value: "1", label: "Enero" },
+    { value: "2", label: "Febrero" },
+    { value: "3", label: "Marzo" },
+    { value: "4", label: "Abril" },
+    { value: "5", label: "Mayo" },
+    { value: "6", label: "Junio" },
+    { value: "7", label: "Julio" },
+    { value: "8", label: "Agosto" },
+    { value: "9", label: "Septiembre" },
+    { value: "10", label: "Octubre" },
+    { value: "11", label: "Noviembre" },
+    { value: "12", label: "Diciembre" }
   ]
 
   const years = Array.from({ length: 5 }, (_, i) => {
@@ -110,19 +110,19 @@ export function ReportsGenerator() {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <FileText className="h-5 w-5" />
-          Generate New Report
+          Generador de Reportes
         </CardTitle>
         <CardDescription>
-          Create detailed financial reports and analytics
+          Crea reportes y análisis financieros detallados
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
         {/* Report Type Selection */}
         <div className="space-y-2">
-          <Label>Report Type</Label>
+          <Label>Tipo de Reporte</Label>
           <Select value={reportType} onValueChange={setReportType}>
             <SelectTrigger>
-              <SelectValue placeholder="Select report type..." />
+              <SelectValue placeholder="Seleccionar tipo de reporte..." />
             </SelectTrigger>
             <SelectContent>
               {reportTypes.map((type) => (
@@ -153,7 +153,7 @@ export function ReportsGenerator() {
             {(reportType === "MONTHLY_SUMMARY" || reportType === "BUDGET_ANALYSIS") && (
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label>Year</Label>
+                  <Label>Año</Label>
                   <Select value={year} onValueChange={setYear}>
                     <SelectTrigger>
                       <SelectValue />
@@ -168,7 +168,7 @@ export function ReportsGenerator() {
                   </Select>
                 </div>
                 <div className="space-y-2">
-                  <Label>Month</Label>
+                  <Label>Mes</Label>
                   <Select value={month} onValueChange={setMonth}>
                     <SelectTrigger>
                       <SelectValue />
@@ -189,7 +189,7 @@ export function ReportsGenerator() {
               <div className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label>Start Year</Label>
+                    <Label>Año de Inicio</Label>
                     <Select value={startYear} onValueChange={setStartYear}>
                       <SelectTrigger>
                         <SelectValue />
@@ -204,7 +204,7 @@ export function ReportsGenerator() {
                     </Select>
                   </div>
                   <div className="space-y-2">
-                    <Label>Start Month</Label>
+                    <Label>Mes de Inicio</Label>
                     <Select value={startMonth} onValueChange={setStartMonth}>
                       <SelectTrigger>
                         <SelectValue />
@@ -221,7 +221,7 @@ export function ReportsGenerator() {
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label>End Year</Label>
+                    <Label>Año de Fin</Label>
                     <Select value={endYear} onValueChange={setEndYear}>
                       <SelectTrigger>
                         <SelectValue />
@@ -236,7 +236,7 @@ export function ReportsGenerator() {
                     </Select>
                   </div>
                   <div className="space-y-2">
-                    <Label>End Month</Label>
+                    <Label>Mes de Fin</Label>
                     <Select value={endMonth} onValueChange={setEndMonth}>
                       <SelectTrigger>
                         <SelectValue />
@@ -262,7 +262,7 @@ export function ReportsGenerator() {
           disabled={!reportType || loading}
           className="w-full"
         >
-          {loading ? "Generating Report..." : "Generate Report"}
+          {loading ? "Generando Reporte..." : "Generar Reporte"}
         </Button>
       </CardContent>
     </Card>
