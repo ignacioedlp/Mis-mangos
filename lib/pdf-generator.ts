@@ -39,7 +39,9 @@ type MonthlySummaryData = {
     totalPending: number
     monthlyIncome: number
     savingsAmount: number
-    savingsRate: number
+  savingsRate: number
+  oneTimeCount?: number
+  oneTimeAmount?: number
   }
   categoryBreakdown?: Array<{
     category: string
@@ -53,6 +55,7 @@ type MonthlySummaryData = {
     estimated: number
     actual?: number
     isPaid: boolean
+  frequency?: string
   }>
 }
 
@@ -170,6 +173,14 @@ function addMonthlySummaryContent(doc: jsPDF, reportContent: ReportData) {
     ['Ingreso Mensual', `$${data.summary?.monthlyIncome?.toLocaleString('es-ES') || '0'}`],
     ['Ahorro', `$${data.summary?.savingsAmount?.toLocaleString('es-ES') || '0'} (${data.summary?.savingsRate?.toFixed(1) || '0'}%)`]
   ]
+
+  // Agregar métricas de gastos únicos si están disponibles
+  if ((data.summary?.oneTimeCount ?? 0) > 0 || (data.summary?.oneTimeAmount ?? 0) > 0) {
+    summaryData.push(
+      ['Únicos Pagados', `${data.summary?.oneTimeCount || 0} items`],
+      ['Monto en Únicos', `$${data.summary?.oneTimeAmount?.toLocaleString('es-ES') || '0'}`]
+    )
+  }
   
   autoTable(doc, {
     startY: yPosition,
@@ -209,7 +220,7 @@ function addMonthlySummaryContent(doc: jsPDF, reportContent: ReportData) {
     yPosition = doc.lastAutoTable.finalY + 15
   }
   
-  // Lista de gastos (primeros 20)
+  // Lista de gastos (prioriza únicos pagados, muestra primeros 20)
   if (data.expenses && data.expenses.length > 0) {
     if (yPosition > 250) {
       doc.addPage()
@@ -220,9 +231,19 @@ function addMonthlySummaryContent(doc: jsPDF, reportContent: ReportData) {
     doc.text('Detalle de Gastos', 20, yPosition)
     yPosition += 5
     
-    const expenseData = data.expenses.slice(0, 20).map((expense) => [
+    // Orden: ONE_TIME pagados primero, luego pagados, luego pendientes
+    const ordered = [...data.expenses].sort((a, b) => {
+      const aOnePaid = (a.frequency === 'ONE_TIME' ? 1 : 0) * (a.isPaid ? 1 : 0)
+      const bOnePaid = (b.frequency === 'ONE_TIME' ? 1 : 0) * (b.isPaid ? 1 : 0)
+      if (bOnePaid !== aOnePaid) return bOnePaid - aOnePaid
+      if (b.isPaid !== a.isPaid) return (b.isPaid ? 1 : 0) - (a.isPaid ? 1 : 0)
+      return 0
+    })
+
+    const expenseData = ordered.slice(0, 20).map((expense) => [
       expense.name,
       expense.category,
+      expense.frequency === 'ONE_TIME' ? 'Único' : 'Recurrente',
       `$${expense.estimated?.toLocaleString('es-ES') || '0'}`,
       expense.actual ? `$${expense.actual.toLocaleString('es-ES')}` : 'Pendiente',
       expense.isPaid ? 'Pagado' : 'Pendiente'
@@ -230,7 +251,7 @@ function addMonthlySummaryContent(doc: jsPDF, reportContent: ReportData) {
     
     autoTable(doc, {
       startY: yPosition,
-      head: [['Gasto', 'Categoría', 'Estimado', 'Real', 'Estado']],
+      head: [['Gasto', 'Categoría', 'Tipo', 'Estimado', 'Real', 'Estado']],
       body: expenseData,
       theme: 'striped',
       headStyles: { fillColor: [79, 70, 229] },

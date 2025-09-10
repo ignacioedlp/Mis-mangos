@@ -22,6 +22,11 @@ export async function generateMonthlySummaryReport(year: number, month: number) 
     getSalary(year, month)
   ]);
 
+  // Calcular métricas de gastos únicos pagados en el mes
+  const oneTimeItems = monthlyData.items.filter((it) => it.frequency === 'ONE_TIME' && it.isPaid && !it.isSkipped);
+  const oneTimeCount = oneTimeItems.length;
+  const oneTimeAmount = oneTimeItems.reduce((sum, it) => sum + (it.actualAmount || it.estimatedAmount), 0);
+
   const reportData = {
     period: {
       year,
@@ -35,7 +40,9 @@ export async function generateMonthlySummaryReport(year: number, month: number) 
       totalPending: monthlyData.totalPending,
       monthlyIncome: salary?.amount || 0,
       savingsAmount: salary ? salary.amount - monthlyData.totalActual : 0,
-      savingsRate: salary ? ((salary.amount - monthlyData.totalActual) / salary.amount) * 100 : 0
+      savingsRate: salary ? ((salary.amount - monthlyData.totalActual) / salary.amount) * 100 : 0,
+      oneTimeCount,
+      oneTimeAmount
     },
     categoryBreakdown: monthlyData.categoryData,
     budgetAnalysis: budgetData.categories,
