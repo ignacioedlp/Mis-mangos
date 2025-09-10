@@ -676,7 +676,7 @@ export async function getBudgetAnalysis(year?: number, month?: number) {
         where: { 
           deletedAt: null,
           active: true,
-          frequency: { not: "ONE_TIME" }, // Exclude one-time expenses from budget analysis
+          // Include expenses (recurring and ONE_TIME) that have a PAID occurrence in the target month
           occurrences: {
             some: {
               year: y,
@@ -700,13 +700,21 @@ export async function getBudgetAnalysis(year?: number, month?: number) {
     const budgetAmount = (monthlyIncome * budgetPercentage) / 100;
     
     // Calculate actual spending for this category
-    const actualSpent = category.expenses.reduce((total, expense) => {
+    let actualSpent = 0;
+    let oneTimeSpent = 0;
+    let oneTimeCount = 0;
+    for (const expense of category.expenses) {
       const occurrence = expense.occurrences[0];
       if (occurrence) {
-        return total + Number(occurrence.amount || expense.estimatedAmount);
+        const amount = Number(occurrence.amount || expense.estimatedAmount);
+        actualSpent += amount;
+        if (expense.frequency === "ONE_TIME") {
+          oneTimeSpent += amount;
+          oneTimeCount += 1;
+        }
       }
-      return total;
-    }, 0);
+    }
+    const recurringSpent = actualSpent - oneTimeSpent;
 
     const remaining = budgetAmount - actualSpent;
     const usagePercentage = budgetAmount > 0 ? (actualSpent / budgetAmount) * 100 : 0;
@@ -718,6 +726,9 @@ export async function getBudgetAnalysis(year?: number, month?: number) {
       budgetPercentage,
       budgetAmount,
       actualSpent,
+      oneTimeSpent,
+      oneTimeCount,
+      recurringSpent,
       remaining,
       usagePercentage,
       isOverBudget,
@@ -759,7 +770,10 @@ export async function getCategoryBudgetStatus(categoryId: string, year?: number,
         where: { 
           deletedAt: null,
           active: true,
-          frequency: { not: "ONE_TIME" } // Exclude one-time expenses from budget tracking
+          // Include both recurring and ONE_TIME expenses if they have a PAID occurrence in month
+          occurrences: {
+            some: { year: y, month: m, isPaid: true, isSkipped: false }
+          }
         },
         include: {
           occurrences: {

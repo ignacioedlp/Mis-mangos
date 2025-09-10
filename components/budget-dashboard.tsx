@@ -6,13 +6,40 @@ import { Progress } from "@/components/ui/progress"
 import { TrendingUp, TrendingDown, AlertTriangle, DollarSign, Percent, PiggyBank } from "lucide-react"
 import { formatCurrency, formatPercentage } from "@/lib/utils"
 
+// Tipos locales para evitar any y mejorar DX
+type CategoryBudget = {
+  id: string
+  name: string
+  budgetPercentage: number
+  budgetAmount: number
+  actualSpent: number
+  oneTimeSpent: number
+  oneTimeCount: number
+  recurringSpent: number
+  remaining: number
+  usagePercentage: number
+  isOverBudget: boolean
+  expenseCount: number
+}
+
+type BudgetAnalysis = {
+  year: number
+  month: number
+  monthlyIncome: number
+  categories: CategoryBudget[]
+  totalBudgetPercentage: number
+  hasUnassignedIncome: boolean
+  unassignedAmount?: number
+  totalSavings?: number
+}
+
 // Componente para la barra de distribución stackeada
 function BudgetDistributionBar({
   categories,
   totalBudgetPercentage,
   unassignedPercentage,
 }: {
-  categories: { id: string; name: string; budgetPercentage: number; isOverBudget: boolean }[];
+  categories: Pick<CategoryBudget, 'id' | 'name' | 'budgetPercentage' | 'isOverBudget'>[];
   totalBudgetPercentage: number;
   unassignedPercentage: number;
 }) {
@@ -76,7 +103,7 @@ interface BudgetDashboardProps {
 }
 
 export async function BudgetDashboard({ year, month }: BudgetDashboardProps) {
-  const budgetData = await getBudgetAnalysis(year, month)
+  const budgetData = (await getBudgetAnalysis(year, month)) as BudgetAnalysis
   
   if (budgetData.monthlyIncome === 0) {
     return (
@@ -172,9 +199,9 @@ export async function BudgetDashboard({ year, month }: BudgetDashboardProps) {
 
       {/* Category Breakdown */}
   <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {budgetData.categories
+        {(budgetData.categories as CategoryBudget[])
           .filter(category => category.budgetPercentage > 0)
-          .map((category) => (
+          .map((category: CategoryBudget) => (
             <Card key={category.id} className={category.isOverBudget ? "border-destructive/30" : ""}>
               <CardHeader className="pb-3">
                 <div className="flex items-center justify-between">
@@ -223,7 +250,14 @@ export async function BudgetDashboard({ year, month }: BudgetDashboardProps) {
                 </div>
                 
                 <div className="flex items-center justify-between text-xs text-muted-foreground">
-                  <span>{category.expenseCount} gastos</span>
+                  <span>
+                    {category.expenseCount} gastos
+                    {category.oneTimeCount > 0 && (
+                      <span className="ml-2 inline-flex items-center gap-1">
+                        • {category.oneTimeCount} único(s) ({formatCurrency(category.oneTimeSpent)})
+                      </span>
+                    )}
+                  </span>
                   {category.isOverBudget ? (
                     <TrendingDown className="h-3 w-3 text-destructive" />
                   ) : (
