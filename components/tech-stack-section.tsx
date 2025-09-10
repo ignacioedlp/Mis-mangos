@@ -13,12 +13,12 @@ const stack = [
    },
    {
       name: "Tailwind CSS",
-      icon: <Code className="h-6 w-6 text-blue-500" />,
+      icon: <Code className="h-6 w-6 text-primary" />,
       description: "Framework CSS utility-first para desarrollo rápido de interfaces",
    },
    {
       name: "Shadcn UI",
-      icon: <Layers className="h-6 w-6 text-sky-500" />,
+      icon: <Layers className="h-6 w-6 text-primary" />,
       description: "Componentes bellamente diseñados construidos con Radix UI y Tailwind",
    },
    {
@@ -28,12 +28,12 @@ const stack = [
    },
    {
       name: "Prisma",
-      icon: <Code className="h-6 w-6 text-indigo-500" />,
+      icon: <Code className="h-6 w-6 text-primary" />,
       description: "ORM de nueva generación para Node.js y TypeScript",
    },
    {
       name: "PostgreSQL",
-      icon: <Database className="h-6 w-6 text-blue-600" />,
+      icon: <Database className="h-6 w-6 text-primary" />,
       description: "Sistema de base de datos objeto-relacional potente y de código abierto",
    },
 ]

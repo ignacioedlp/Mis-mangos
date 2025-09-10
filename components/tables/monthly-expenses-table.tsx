@@ -37,10 +37,23 @@ export function MonthlyExpensesTable({
   emptyMessage = "No tienes gastos programados para este mes" 
 }: MonthlyExpensesTableProps) {
   const frequencyColors = {
-    WEEKLY: "bg-blue-100 text-blue-800",
-    MONTHLY: "bg-green-100 text-green-800", 
-    ANNUAL: "bg-purple-100 text-purple-800",
-    ONE_TIME: "bg-orange-100 text-orange-800"
+    WEEKLY: "bg-muted text-foreground",
+    MONTHLY: "bg-primary/10 text-primary", 
+    ANNUAL: "bg-accent/10 text-accent-foreground",
+    ONE_TIME: "bg-muted text-foreground"
+  }
+
+  const getStatusName = (expense: MonthlyExpenseItem) => {
+    switch (expense.frequency) {
+      case 'WEEKLY':
+        return 'Semanal'
+      case 'MONTHLY':
+        return 'Mensual'
+      case 'ANNUAL':
+        return 'Anual'
+      case 'ONE_TIME':
+        return 'Único'
+    }
   }
 
   // Función para obtener el valor de ordenamiento
@@ -151,7 +164,7 @@ export function MonthlyExpensesTable({
                 variant="secondary" 
                 className={frequencyColors[item.frequency as keyof typeof frequencyColors]}
               >
-                {item.frequency === 'ONE_TIME' ? 'único' : item.frequency.toLowerCase()}
+                {getStatusName(item)}
               </Badge>
             </TableCell>
             <TableCell>
@@ -161,20 +174,20 @@ export function MonthlyExpensesTable({
             </TableCell>
             <TableCell>
               {item.actualAmount ? (
-                <span className="text-green-600 font-medium">{formatCurrency(item.actualAmount)}</span>
+                <span className="text-primary font-medium">{formatCurrency(item.actualAmount)}</span>
               ) : (
                 <span className="text-muted-foreground">-</span>
               )}
             </TableCell>
             <TableCell>
               {!item.hasOccurrence ? (
-                <Badge variant="destructive">No occurrence</Badge>
+                <Badge variant="destructive">Sin ocurrencias</Badge>
               ) : item.isSkipped ? (
-                <Badge variant="outline" className="text-orange-600">Skipped</Badge>
+                <Badge variant="outline" className="text-accent-foreground">Omitido</Badge>
               ) : item.isPaid ? (
-                <Badge variant="default">Paid</Badge>
+                <Badge variant="default">Pagado</Badge>
               ) : (
-                <Badge variant="secondary">Pending</Badge>
+                <Badge variant="outline">Pendiente</Badge>
               )}
             </TableCell>
             <TableCell>

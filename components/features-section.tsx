@@ -12,37 +12,37 @@ const features = [
    },
    {
       name: "Control de Presupuesto",
-      icon: <Target className="h-6 w-6 text-green-500" />,
+      icon: <Target className="h-6 w-6 text-primary" />,
       description: "Establece presupuestos por categoría y mantente dentro de tus límites",
    },
    {
       name: "Reportes Inteligentes",
-      icon: <BarChart3 className="h-6 w-6 text-blue-500" />,
+      icon: <BarChart3 className="h-6 w-6 text-primary" />,
       description: "Visualiza tus patrones de gasto con gráficos y reportes detallados",
    },
    {
       name: "Notificaciones",
-      icon: <Bell className="h-6 w-6 text-yellow-500" />,
+      icon: <Bell className="h-6 w-6 text-accent-foreground" />,
       description: "Recibe alertas cuando te acerques a los límites de tu presupuesto",
    },
    {
       name: "Análisis de Tendencias",
-      icon: <TrendingUp className="h-6 w-6 text-purple-500" />,
+      icon: <TrendingUp className="h-6 w-6 text-primary" />,
       description: "Identifica patrones en tus gastos y mejora tus hábitos financieros",
    },
    {
       name: "Seguridad Avanzada",
-      icon: <Shield className="h-6 w-6 text-red-500" />,
+      icon: <Shield className="h-6 w-6 text-destructive" />,
       description: "Tus datos financieros están protegidos con autenticación segura",
    },
    {
       name: "Interfaz Intuitiva",
-      icon: <Smartphone className="h-6 w-6 text-indigo-500" />,
+      icon: <Smartphone className="h-6 w-6 text-primary" />,
       description: "Diseño moderno y responsivo que funciona en todos tus dispositivos",
    },
    {
       name: "Comparaciones",
-      icon: <PieChart className="h-6 w-6 text-pink-500" />,
+      icon: <PieChart className="h-6 w-6 text-primary" />,
       description: "Compara tus gastos entre diferentes períodos y categorías",
    },
 ]

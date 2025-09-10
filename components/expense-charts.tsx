@@ -1,8 +1,10 @@
 "use client"
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Progress } from "@/components/ui/progress"
 import { formatCurrency } from "@/lib/utils"
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts'
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, PieChart, Pie, Cell } from 'recharts'
+import { ChartContainer, ChartLegend, ChartLegendContent, ChartTooltip, ChartTooltipContent, type ChartConfig } from "@/components/ui/chart"
 
 interface ExpenseChartsProps {
   categoryData: Array<{
@@ -12,11 +14,6 @@ interface ExpenseChartsProps {
     count: number
   }>
 }
-
-const COLORS = [
-  '#0088FE', '#00C49F', '#FFBB28', '#FF8042', 
-  '#8884D8', '#82CA9D', '#FFC658', '#FF7C7C'
-]
 
 export function ExpenseCharts({ categoryData }: ExpenseChartsProps) {
   if (!categoryData || categoryData.length === 0) {
@@ -39,8 +36,17 @@ export function ExpenseCharts({ categoryData }: ExpenseChartsProps) {
   const pieData = categoryData.map((item, index) => ({
     name: item.category,
     value: item.actual || item.estimated,
-    color: COLORS[index % COLORS.length]
+    // el color real lo tomamos de las CSS vars en los <Cell/>
+    color: `var(--color-chart-${(index % 5) + 1})`
   }))
+
+  const barConfig: ChartConfig = {
+    estimated: { label: "Estimado", color: "var(--color-chart-1)" },
+    actual: { label: "Real", color: "var(--color-chart-2)" },
+  }
+
+  // Ordenamos por gasto real (desc) para destacar las categorías más relevantes
+  const sortedCategoryData = [...categoryData].sort((a, b) => b.actual - a.actual)
 
   return (
     <div className="grid gap-6 lg:grid-cols-2">
@@ -51,28 +57,38 @@ export function ExpenseCharts({ categoryData }: ExpenseChartsProps) {
           <CardDescription>Compara los gastos planificados vs reales por categoría</CardDescription>
         </CardHeader>
         <CardContent>
-          <ResponsiveContainer width="100%" height={300}>
+          <ChartContainer config={barConfig} className="min-h-[300px]">
             <BarChart data={categoryData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis 
-                dataKey="category" 
+              <XAxis
+                dataKey="category"
                 tick={{ fontSize: 12 }}
                 angle={-45}
                 textAnchor="end"
                 height={80}
               />
               <YAxis tick={{ fontSize: 12 }} />
-              <Tooltip 
-                formatter={(value: number, name: string) => [
-                  `${formatCurrency(value)}`, 
-                  name === 'estimated' ? 'Estimado' : 'Real'
-                ]}
-                labelFormatter={(label) => `Categoría: ${label}`}
+              <ChartTooltip
+                cursor={{ fill: "hsl(var(--muted))", opacity: 0.3 }}
+                content={
+                  <ChartTooltipContent
+                    labelFormatter={(label?: unknown) => `Categoría: ${String(label ?? "")}`}
+                    formatter={(value?: unknown, name?: unknown) => (
+                      <div className="flex items-center gap-2">
+                        <span className="text-muted-foreground">
+                          {name === 'estimated' ? 'Estimado' : name === 'actual' ? 'Real' : String(name ?? '')}
+                        </span>
+                        <span className="font-mono">{typeof value === 'number' ? formatCurrency(value) : String(value ?? '')}</span>
+                      </div>
+                    )}
+                  />
+                }
               />
-              <Bar dataKey="estimated" fill="#8884d8" name="estimated" />
-              <Bar dataKey="actual" fill="#82ca9d" name="actual" />
+              <Bar dataKey="estimated" fill="var(--color-estimated)" name="estimated" />
+              <Bar dataKey="actual" fill="var(--color-actual)" name="actual" />
+              <ChartLegend content={<ChartLegendContent />} />
             </BarChart>
-          </ResponsiveContainer>
+          </ChartContainer>
         </CardContent>
       </Card>
 
@@ -83,7 +99,7 @@ export function ExpenseCharts({ categoryData }: ExpenseChartsProps) {
           <CardDescription>Desglose de gastos por categoría</CardDescription>
         </CardHeader>
         <CardContent>
-          <ResponsiveContainer width="100%" height={300}>
+          <ChartContainer config={{}} className="min-h-[300px]">
             <PieChart>
               <Pie
                 data={pieData}
@@ -92,46 +108,81 @@ export function ExpenseCharts({ categoryData }: ExpenseChartsProps) {
                 labelLine={false}
                 label={(props: { name?: string; percent?: number }) => `${props.name} ${((props.percent ?? 0) * 100).toFixed(0)}%`}
                 outerRadius={80}
-                fill="#8884d8"
                 dataKey="value"
               >
                 {pieData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  <Cell key={`cell-${index}`} fill={`var(--color-chart-${(index % 5) + 1})`} />
                 ))}
               </Pie>
-              <Tooltip formatter={(value: number) => [`${formatCurrency(value)}`, 'Monto']} />
+              <ChartTooltip
+                content={
+                  <ChartTooltipContent
+                    formatter={(value?: unknown) => (
+                      <span className="font-mono">{typeof value === 'number' ? formatCurrency(value) : String(value ?? '')}</span>
+                    )}
+                  />
+                }
+              />
             </PieChart>
-          </ResponsiveContainer>
+          </ChartContainer>
         </CardContent>
       </Card>
 
       {/* Summary Stats */}
       <Card className="lg:col-span-2">
         <CardHeader>
-          <CardTitle>Resumen por Categoría</CardTitle>
-          <CardDescription>Desglose detallado por categoría</CardDescription>
+          <CardTitle>Resumen por categoría</CardTitle>
+          <CardDescription>Uso vs estimado y detalle por categoría</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-            {categoryData.map((item, index) => (
-              <div 
-                key={item.category}
-                className="flex items-center gap-3 p-3 rounded-lg border"
-              >
-                <div 
-                  className="w-4 h-4 rounded-full flex-shrink-0"
-                  style={{ backgroundColor: COLORS[index % COLORS.length] }}
-                />
-                <div className="flex-1 min-w-0">
-                  <p className="font-medium text-sm truncate">{item.category}</p>
-                  <div className="text-xs text-muted-foreground space-y-1">
-                    <p>Est: {formatCurrency(item.estimated)}</p>
-                    <p>Actual: {formatCurrency(item.actual)}</p>
-                    <p>{item.count} gasto{item.count !== 1 ? 's' : ''}</p>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {sortedCategoryData.map((item, index) => {
+              const hasEstimate = item.estimated > 0
+              const rawPct = hasEstimate ? (item.actual / item.estimated) * 100 : 0
+              const pct = Math.min(100, Math.max(0, rawPct))
+              const isOver = hasEstimate ? item.actual > item.estimated : item.actual > 0
+              const delta = hasEstimate ? Math.abs(item.actual - item.estimated) : item.actual
+
+              return (
+                <div
+                  key={item.category}
+                  className={`rounded-lg border p-4 transition-colors ${isOver ? 'bg-muted/40' : 'hover:bg-muted/30'}`}
+                >
+                  <div className="flex items-center justify-between gap-3">
+                    <div className="flex items-center gap-3 min-w-0">
+                      <div
+                        className="w-3.5 h-3.5 rounded-full flex-shrink-0"
+                        style={{ backgroundColor: `var(--color-chart-${(index % 5) + 1})` }}
+                      />
+                      <p className="font-medium text-sm truncate">{item.category}</p>
+                    </div>
+                    <span className={`text-xs px-2 py-0.5 rounded-full border ${isOver ? 'text-destructive border-border' : 'text-foreground/80 border-border'}`}>
+                      {hasEstimate ? `${rawPct.toFixed(0)}%` : '—'}
+                    </span>
+                  </div>
+
+                  <div className="mt-3">
+                    <Progress value={pct} />
+                    <div className="mt-2 text-xs text-muted-foreground flex flex-col gap-x-4 gap-y-1">
+                      <span>
+                        Estimado: <strong className="text-foreground">{formatCurrency(item.estimated)}</strong>
+                      </span>
+                      <span>
+                        Real: <strong className="text-foreground">{formatCurrency(item.actual)}</strong>
+                      </span>
+                      <div className="flex items-center gap-2">
+                        <span className={isOver ? 'text-destructive' : 'text-foreground'}>
+                        {isOver ? `Excedido: ${formatCurrency(delta)}` : `Restante: ${formatCurrency(delta)}`}
+                        </span>
+                        <span className="ms-auto">
+                          {item.count} gasto{item.count !== 1 ? 's' : ''}
+                        </span>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              )
+            })}
           </div>
         </CardContent>
       </Card>

@@ -92,15 +92,15 @@ export function NotificationsPanel() {
     switch (type) {
       case "BUDGET_EXCEEDED":
       case "BUDGET_WARNING":
-        return <AlertTriangle className="h-4 w-4 text-orange-600" />
+        return <AlertTriangle className="h-4 w-4 text-accent-foreground" />
       case "PAYMENT_REMINDER":
-        return <DollarSign className="h-4 w-4 text-blue-600" />
+        return <DollarSign className="h-4 w-4 text-primary" />
       case "MONTHLY_SUMMARY":
-        return <Info className="h-4 w-4 text-purple-600" />
+        return <Info className="h-4 w-4 text-muted-foreground" />
       case "SAVINGS_MILESTONE":
-        return <CheckCircle className="h-4 w-4 text-green-600" />
+        return <CheckCircle className="h-4 w-4 text-primary" />
       case "BUDGET_AVAILABLE":
-        return <DollarSign className="h-4 w-4 text-green-600" />
+        return <DollarSign className="h-4 w-4 text-primary" />
       default:
         return <Bell className="h-4 w-4 text-gray-600" />
     }
@@ -109,15 +109,15 @@ export function NotificationsPanel() {
   function getPriorityColor(priority: string) {
     switch (priority) {
       case "URGENT":
-        return "bg-red-100 border-red-200"
+        return "bg-destructive/10 border-destructive/30"
       case "HIGH":
-        return "bg-orange-100 border-orange-200"
+        return "bg-accent/10 border-accent/30"
       case "MEDIUM":
-        return "bg-yellow-100 border-yellow-200"
+        return "bg-muted border-border"
       case "LOW":
-        return "bg-blue-100 border-blue-200"
+        return "bg-muted border-border"
       default:
-        return "bg-gray-100 border-gray-200"
+        return "bg-muted border-border"
     }
   }
 
@@ -217,7 +217,7 @@ export function NotificationsPanel() {
                   </div>
                 </CardHeader>
                 <CardContent className="pt-0">
-                  <p className="text-sm text-gray-700 mb-3">
+                  <p className="text-sm text-muted-foreground mb-3">
                     {notification.message}
                   </p>
                   {notification.actionUrl && notification.actionLabel && (

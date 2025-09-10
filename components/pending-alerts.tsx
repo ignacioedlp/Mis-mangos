@@ -61,13 +61,13 @@ export function PendingAlerts() {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Clock className="h-5 w-5 text-green-600" />
+            <Clock className="h-5 w-5 text-primary" />
             Gastos Pendientes
           </CardTitle>
           <CardDescription>¡Todos los gastos están actualizados!</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="text-sm text-green-600">No hay gastos pendientes para este mes.</div>
+          <div className="text-sm text-muted-foreground">No hay gastos pendientes para este mes.</div>
         </CardContent>
       </Card>
     )
@@ -77,7 +77,7 @@ export function PendingAlerts() {
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <AlertTriangle className="h-5 w-5 text-orange-600" />
+          <AlertTriangle className="h-5 w-5 text-accent-foreground" />
           Gastos Pendientes
           <Badge variant="destructive">{pendingItems.length}</Badge>
         </CardTitle>
@@ -88,7 +88,7 @@ export function PendingAlerts() {
       <CardContent>
         <div className="space-y-3">
           {pendingItems.map((item) => (
-            <div key={item.id} className="flex items-center justify-between p-3 rounded-lg border border-orange-800 bg-orange-950/20">
+            <div key={item.id} className="flex items-center justify-between p-3 rounded-lg border border-accent/40 bg-accent/10">
               <div className="flex flex-col">
                 <span className="font-medium text-sm">{item.name}</span>
                 <span className="text-xs text-muted-foreground">

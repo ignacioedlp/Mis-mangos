@@ -33,10 +33,10 @@ export function ExpensesTable({
   emptyIcon 
 }: ExpensesTableProps) {
   const frequencyColors = {
-    WEEKLY: "bg-blue-100 text-blue-800",
-    MONTHLY: "bg-green-100 text-green-800", 
-    ANNUAL: "bg-purple-100 text-purple-800",
-    ONE_TIME: "bg-orange-100 text-orange-800"
+    WEEKLY: "bg-muted text-foreground",
+    MONTHLY: "bg-primary/10 text-primary", 
+    ANNUAL: "bg-accent/10 text-accent-foreground",
+    ONE_TIME: "bg-muted text-foreground"
   }
 
   // Función para obtener el valor de ordenamiento
@@ -54,6 +54,19 @@ export function ExpensesTable({
         return ''
     }
   }, [])
+
+  const getStatusName = (expense: ExpenseWithRelations) => {
+    switch (expense.frequency) {
+      case 'WEEKLY':
+        return 'Semanal'
+      case 'MONTHLY':
+        return 'Mensual'
+      case 'ANNUAL':
+        return 'Anual'
+      case 'ONE_TIME':
+        return 'Único'
+    }
+  }
 
   const { sortedData, sortConfig, requestSort } = useSortableData(data, getSortValue)
 
@@ -133,7 +146,7 @@ export function ExpensesTable({
                 variant="secondary" 
                 className={frequencyColors[expense.frequency as keyof typeof frequencyColors]}
               >
-                {expense.frequency === 'ONE_TIME' ? 'único' : expense.frequency.toLowerCase()}
+                {getStatusName(expense)}
               </Badge>
             </TableCell>
             <TableCell>

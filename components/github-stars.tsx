@@ -26,7 +26,7 @@ export function GithubStars() {
          className="inline-flex items-center gap-1 px-3 py-1.5 text-sm rounded-full border bg-muted text-muted-foreground hover:bg-muted/70 transition"
          title="GitHub Stars for devAaus/better-auth"
       >
-         <Star className="w-4 h-4 text-yellow-500" />
+         <Star className="w-4 h-4 text-accent-foreground" />
          {stars !== null ? (
             <span className="font-medium">{stars}</span>
          ) : (

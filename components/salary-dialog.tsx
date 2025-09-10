@@ -47,7 +47,7 @@ export function SalaryDialog({ year, month, currentSalary }: SalaryDialogProps) 
       <DialogTrigger asChild>
         <Button variant="outline" size="sm">
           <DollarSign className="h-4 w-4 mr-2" />
-          {currentSalary ? `Salary: ${formatCurrency(currentSalary)}` : "Set Salary"}
+          {currentSalary ? `Sueldo: ${formatCurrency(currentSalary)}` : "Establecer Sueldo"}
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
@@ -59,7 +59,7 @@ export function SalaryDialog({ year, month, currentSalary }: SalaryDialogProps) 
         </DialogHeader>
         <form action={handleSubmit} className="space-y-4">
           <div className="grid gap-2">
-            <Label htmlFor="salary-amount">Salario Mensual ($)</Label>
+            <Label htmlFor="salary-amount">Sueldo Mensual ($)</Label>
             <Input 
               id="salary-amount" 
               name="amount" 
@@ -75,7 +75,7 @@ export function SalaryDialog({ year, month, currentSalary }: SalaryDialogProps) 
               Cancelar
             </Button>
             <Button type="submit" disabled={loading}>
-              {loading ? "Guardando..." : "Guardar Salario"}
+              {loading ? "Guardando..." : "Guardar Sueldo"}
             </Button>
           </div>
         </form>

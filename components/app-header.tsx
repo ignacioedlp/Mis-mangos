@@ -3,6 +3,7 @@ import { SidebarTrigger } from "@/components/ui/sidebar"
 import type { User } from "@/lib/types"
 import { Separator } from "./ui/separator"
 import { NotificationsPanel } from "./notifications-panel"
+import { ThemeToggle } from "./theme-toggle"
 
 type UserProps = {
    user: User | null
@@ -10,7 +11,7 @@ type UserProps = {
 
 export default function AppHeader({ user }: UserProps) {
    return (
-      <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b px-6 bg-background">
+      <header className="sticky top-0 z-30 flex h-16 rounded-tr-xl rounded-tl-xl  items-center gap-4 border-b px-6 bg-background">
          <SidebarTrigger />
          <Separator
             orientation="vertical"
@@ -20,6 +21,7 @@ export default function AppHeader({ user }: UserProps) {
             <h1 className="text-xl font-semibold">Bienvenido, {user?.name} </h1>
             <div className="flex items-center gap-4">
                <NotificationsPanel />
+               <ThemeToggle />
             </div>
          </div>
       </header>

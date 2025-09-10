@@ -3,9 +3,11 @@
 import * as React from "react"
 import { Table, TableBody, TableCell, TableHeader, TableRow } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
-import { FileText, BarChart3, TrendingUp, PieChart, Calendar } from "lucide-react"
+import { FileText, BarChart3, TrendingUp, PieChart, Calendar, CheckCircle, AlertTriangle, Clock, Loader2 } from "lucide-react"
 import { SortableTableHead, useSortableData } from "@/components/ui/sortable-table-client"
 import { ReportActions } from "@/components/table-actions/report-actions"
+import { format } from "date-fns"
+import { es } from "date-fns/locale"
 
 // Tipo para los reportes
 type ReportData = {
@@ -31,33 +33,99 @@ export function ReportsTable({
   emptyMessage = "No tienes reportes generados aún",
   emptyIcon 
 }: ReportsTableProps) {
+  function getTypeLabel(type: string) {
+    switch (type) {
+      case "MONTHLY_SUMMARY":
+        return "Resumen mensual"
+      case "BUDGET_ANALYSIS":
+        return "Análisis de presupuesto"
+      case "SPENDING_TRENDS":
+        return "Tendencias de gasto"
+      case "CATEGORY_BREAKDOWN":
+        return "Por categoría"
+      default:
+        return type.replaceAll("_", " ").toLowerCase()
+    }
+  }
+
   function getReportIcon(type: string) {
     switch (type) {
       case "MONTHLY_SUMMARY":
-        return <Calendar className="h-4 w-4 text-blue-600" />
+        return <Calendar className="h-4 w-4 text-primary" />
       case "BUDGET_ANALYSIS":
-        return <PieChart className="h-4 w-4 text-green-600" />
+        return <PieChart className="h-4 w-4 text-primary" />
       case "SPENDING_TRENDS":
-        return <TrendingUp className="h-4 w-4 text-purple-600" />
+        return <TrendingUp className="h-4 w-4 text-accent-foreground" />
       case "CATEGORY_BREAKDOWN":
-        return <BarChart3 className="h-4 w-4 text-orange-600" />
+        return <BarChart3 className="h-4 w-4 text-accent-foreground" />
       default:
-        return <FileText className="h-4 w-4 text-gray-600" />
+        return <FileText className="h-4 w-4 text-muted-foreground" />
     }
   }
 
   function getStatusColor(status: string) {
     switch (status) {
       case "COMPLETED":
-        return "bg-green-100 text-green-800"
+        return "bg-primary/10 text-primary"
       case "GENERATING":
-        return "bg-yellow-100 text-yellow-800"
+        return "bg-accent/10 text-accent-foreground"
       case "PENDING":
-        return "bg-blue-100 text-blue-800"
+        return "bg-muted text-foreground"
       case "FAILED":
-        return "bg-red-100 text-red-800"
+        return "bg-destructive/10 text-destructive"
       default:
-        return "bg-gray-100 text-gray-800"
+        return "bg-muted text-foreground"
+    }
+  }
+
+  function getStatusBadge(status: string) {
+    const base = `inline-flex items-center gap-1.5 ${getStatusColor(status)} capitalize` as const
+    switch (status) {
+      case "COMPLETED":
+        return (
+          <Badge className={`${base}`}>
+            <CheckCircle className="h-3.5 w-3.5" /> Completado
+          </Badge>
+        )
+      case "GENERATING":
+        return (
+          <Badge className={`${base}`}>
+            <Loader2 className="h-3.5 w-3.5 animate-spin" /> Generando
+          </Badge>
+        )
+      case "PENDING":
+        return (
+          <Badge className={`${base}`}>
+            <Clock className="h-3.5 w-3.5" /> Pendiente
+          </Badge>
+        )
+      case "FAILED":
+        return (
+          <Badge className={`${base}`}>
+            <AlertTriangle className="h-3.5 w-3.5" /> Fallido
+          </Badge>
+        )
+      default:
+        return <Badge className={`${base}`}>{status.toLowerCase()}</Badge>
+    }
+  }
+
+  function formatPeriod(startDate: Date, endDate: Date) {
+    try {
+      const from = format(new Date(startDate), "MMM yyyy", { locale: es })
+      const to = format(new Date(endDate), "MMM yyyy", { locale: es })
+      return `${from} — ${to}`
+    } catch {
+      return `${new Date(startDate).toLocaleDateString('es-AR')} - ${new Date(endDate).toLocaleDateString('es-AR')}`
+    }
+  }
+
+  function formatDate(d: Date | null) {
+    if (!d) return "-"
+    try {
+      return format(new Date(d), "dd MMM yyyy, HH:mm", { locale: es })
+    } catch {
+      return new Date(d).toLocaleDateString('es-AR')
     }
   }
 
@@ -102,6 +170,7 @@ export function ReportsTable({
             sortKey="title"
             currentSort={sortConfig}
             onSort={requestSort}
+            className="min-w-[260px]"
           >
             Reporte
           </SortableTableHead>
@@ -109,6 +178,7 @@ export function ReportsTable({
             sortKey="type"
             currentSort={sortConfig}
             onSort={requestSort}
+            className="w-[160px]"
           >
             Tipo
           </SortableTableHead>
@@ -116,6 +186,7 @@ export function ReportsTable({
             sortKey="period"
             currentSort={sortConfig}
             onSort={requestSort}
+            className="w-[220px]"
           >
             Periodo
           </SortableTableHead>
@@ -123,6 +194,7 @@ export function ReportsTable({
             sortKey="status"
             currentSort={sortConfig}
             onSort={requestSort}
+            className="w-[160px]"
           >
             Estado
           </SortableTableHead>
@@ -130,6 +202,7 @@ export function ReportsTable({
             sortKey="generatedAt"
             currentSort={sortConfig}
             onSort={requestSort}
+            className="w-[200px]"
           >
             Generado el
           </SortableTableHead>
@@ -137,6 +210,7 @@ export function ReportsTable({
             sortKey="downloadCount"
             currentSort={sortConfig}
             onSort={requestSort}
+            className="w-[120px] text-right"
           >
             Descargas
           </SortableTableHead>
@@ -153,7 +227,7 @@ export function ReportsTable({
       </TableHeader>
       <TableBody>
         {sortedData.map((report) => (
-          <TableRow key={report.id}>
+          <TableRow key={report.id} className="hover:bg-muted/50">
             <TableCell>
               <div className="flex items-center gap-3">
                 {getReportIcon(report.type)}
@@ -168,32 +242,22 @@ export function ReportsTable({
               </div>
             </TableCell>
             <TableCell>
-              <Badge variant="outline">
-                {report.type.replace('_', ' ').toLowerCase()}
+              <Badge variant="outline" className="text-xs px-2 py-0.5">
+                {getTypeLabel(report.type)}
               </Badge>
             </TableCell>
             <TableCell>
-              <div className="text-sm">
-                {new Date(report.startDate).toLocaleDateString('es-AR')} - 
-                {new Date(report.endDate).toLocaleDateString('es-AR')}
-              </div>
+              <div className="text-sm">{formatPeriod(report.startDate, report.endDate)}</div>
             </TableCell>
             <TableCell>
-              <Badge className={getStatusColor(report.status)}>
-                {report.status.toLowerCase()}
-              </Badge>
+              {getStatusBadge(report.status)}
             </TableCell>
             <TableCell>
-              <div className="text-sm">
-                {report.generatedAt 
-                  ? new Date(report.generatedAt).toLocaleDateString('es-AR')
-                  : '-'
-                }
-              </div>
+              <div className="text-sm">{formatDate(report.generatedAt)}</div>
             </TableCell>
             <TableCell>
-              <div className="text-sm">
-                {report.downloadCount} times
+              <div className="text-sm text-right font-mono tabular-nums">
+                {report.downloadCount}
               </div>
             </TableCell>
             <TableCell>

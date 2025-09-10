@@ -7,107 +7,67 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { DollarSign, Calendar, TrendingUp, TrendingDown } from "lucide-react";
+// Iconos se gestionan dentro de StatCard para evitar pasar funciones a componentes cliente
 import { ExpenseActionButtons } from "@/components/expense-action-buttons";
 import { BudgetAlerts } from "@/components/budget-alerts";
 import { formatCurrency } from "@/lib/utils";
+import { DashboardCharts } from "@/components/dashboard-charts";
+import { DashboardStatsClient } from "@/components/dashboard-stats";
 
-export default function DashboardPage() {
+export default async function DashboardPage() {
+  const data = await getMonthlyDashboard();
+  const monthName = new Date(data.year, data.month - 1).toLocaleString(
+    "default",
+    { month: "long", year: "numeric" }
+  );
   return (
-    <div className="flex flex-col gap-6 w-full">
-      <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-8 w-full rounded-xl">
+      <header className="flex flex-col gap-2">
         <h2 className="text-3xl font-bold tracking-tight">Panel Mensual</h2>
-        <p className="text-muted-foreground">
-          Realiza un seguimiento de tus gastos y gestiona tu presupuesto mensual
+        <p className="text-muted-foreground text-sm md:text-base">
+          Seguimiento rápido de tus gastos y progreso de pagos para {monthName}
         </p>
-      </div>
+      </header>
 
       <BudgetAlerts />
 
-      <DashboardStats />
+      <DashboardStatsClient
+        monthName={monthName}
+        totalEstimated={data.totalEstimated}
+        totalPaid={data.totalPaid}
+        totalPending={data.totalPending}
+        itemCount={data.items.length}
+        paidCount={data.items.filter(i=>i.isPaid).length}
+        remainingCount={data.items.filter(i=>!i.isPaid && !i.isSkipped).length}
+  skippedCount={data.items.filter(i=>i.isSkipped).length}
+      />
 
-      <div className="grid gap-6">
-        <DashboardList />
-      </div>
+      {/* Sanitizamos items para evitar pasar instancias Date a un componente cliente */}
+      <DashboardCharts
+        items={data.items.map(it => ({
+          expenseId: it.expenseId,
+            name: it.name,
+            categoryName: it.categoryName,
+            subcategoryName: it.subcategoryName,
+            estimatedAmount: it.estimatedAmount,
+            isPaid: it.isPaid,
+            isSkipped: it.isSkipped,
+        }))}
+      />
+
+      <DashboardList data={data} monthName={monthName} />
     </div>
   );
 }
 
-async function DashboardStats() {
-  const data = await getMonthlyDashboard();
-  const monthName = new Date(data.year, data.month - 1).toLocaleString(
-    "default",
-    { month: "long", year: "numeric" }
-  );
 
-  return (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Total Estimado</CardTitle>
-          <DollarSign className="h-4 w-4 text-muted-foreground" />
-        </CardHeader>
-        <CardContent>
-          <div className="text-2xl font-bold">
-            {formatCurrency(data.totalEstimated)}
-          </div>
-          <p className="text-xs text-muted-foreground">{monthName}</p>
-        </CardContent>
-      </Card>
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Total Pagado</CardTitle>
-          <TrendingDown className="h-4 w-4 text-green-600" />
-        </CardHeader>
-        <CardContent>
-          <div className="text-2xl font-bold text-green-600">
-            {formatCurrency(data.totalPaid)}
-          </div>
-          <p className="text-xs text-muted-foreground">
-            {data.totalEstimated > 0
-              ? ((data.totalPaid / data.totalEstimated) * 100).toFixed(1)
-              : 0}
-            % completado
-          </p>
-        </CardContent>
-      </Card>
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Pendiente</CardTitle>
-          <TrendingUp className="h-4 w-4 text-orange-600" />
-        </CardHeader>
-        <CardContent>
-          <div className="text-2xl font-bold text-orange-600">
-            {formatCurrency(data.totalPending)}
-          </div>
-          <p className="text-xs text-muted-foreground">
-            {data.items.filter((i) => !i.isPaid).length} items restantes
-          </p>
-        </CardContent>
-      </Card>
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Progreso</CardTitle>
-          <Calendar className="h-4 w-4 text-muted-foreground" />
-        </CardHeader>
-        <CardContent>
-          <div className="text-2xl font-bold">
-            {data.items.filter((i) => i.isPaid).length}/{data.items.length}
-          </div>
-          <p className="text-xs text-muted-foreground">gastos completados</p>
-        </CardContent>
-      </Card>
-    </div>
-  );
-}
-
-async function DashboardList() {
-  const data = await getMonthlyDashboard();
-  const monthName = new Date(data.year, data.month - 1).toLocaleString(
-    "default",
-    { month: "long", year: "numeric" }
-  );
-
+function DashboardList({
+  data,
+  monthName,
+}: {
+  data: Awaited<ReturnType<typeof getMonthlyDashboard>>;
+  monthName: string;
+}) {
   return (
     <Card>
       <CardHeader>
@@ -130,41 +90,21 @@ async function DashboardList() {
             {data.items.map((item) => (
               <div
                 key={item.expenseId}
-                className="flex items-center justify-between p-3 rounded-lg border hover:bg-muted/50 transition-colors"
+                className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-3 rounded-lg border bg-card/40 backdrop-blur-sm hover:bg-muted/40 transition-colors"
               >
-                <div className="flex flex-col space-y-1">
-                  <div className="flex items-center gap-2">
-                    <span className="font-medium">{item.name}</span>
+                <div className="flex flex-col space-y-1 min-w-0">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="font-medium leading-tight truncate max-w-[70vw] sm:max-w-[40vw]">{item.name}</span>
                     {item.isPaid && (
-                      <Badge variant="secondary" className="text-xs">
-                        Pagado
-                      </Badge>
-                    )}
-                    {item.isSkipped && (
-                      <Badge
-                        variant="outline"
-                        className="text-xs text-orange-600"
-                      >
-                        Saltado
-                      </Badge>
+                      <Badge variant="secondary" className="text-xs">Pagado</Badge>
                     )}
                   </div>
                   <span className="text-xs text-muted-foreground">
                     {item.categoryName} / {item.subcategoryName}
                   </span>
-                  {item.paidAt && (
-                    <span className="text-xs text-green-600">
-                      Pagado el {new Date(item.paidAt).toLocaleDateString()}
-                    </span>
-                  )}
-                  {item.skippedAt && (
-                    <span className="text-xs text-orange-600">
-                      Saltado el {new Date(item.skippedAt).toLocaleDateString()}
-                    </span>
-                  )}
                 </div>
-                <div className="flex items-center gap-3">
-                  <span className="text-sm font-medium">
+                <div className="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-end">
+                  <span className="text-sm font-medium tabular-nums text-foreground sm:text-right">
                     {formatCurrency(item.estimatedAmount)}
                   </span>
                   <ExpenseActionButtons

@@ -59,7 +59,7 @@ export function ExpenseActionButtons({
   if (isSkipped) {
     return (
       <div className="flex items-center gap-2">
-        <span className="text-xs text-orange-600 font-medium">Salteado</span>
+        <span className="text-xs text-accent-foreground font-medium">Salteado</span>
         <Button 
           variant="outline" 
           size="sm"
