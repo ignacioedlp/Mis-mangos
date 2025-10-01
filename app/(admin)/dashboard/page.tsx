@@ -39,7 +39,7 @@ export default async function DashboardPage() {
         itemCount={data.items.length}
         paidCount={data.items.filter(i=>i.isPaid).length}
         remainingCount={data.items.filter(i=>!i.isPaid && !i.isSkipped).length}
-  skippedCount={data.items.filter(i=>i.isSkipped).length}
+        skippedCount={data.items.filter(i=>i.isSkipped).length}
       />
 
       {/* Sanitizamos items para evitar pasar instancias Date a un componente cliente */}

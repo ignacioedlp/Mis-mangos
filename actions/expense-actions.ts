@@ -358,7 +358,10 @@ export async function getMonthlyDashboard(year?: number, month?: number) {
     where: { 
       userId, 
       active: true, 
-      deletedAt: null // Only show non-deleted expenses
+      deletedAt: null, // Only show non-deleted expenses
+      occurrences: {
+        some: { year: y, month: m } // Only expenses that have an occurrence for the month
+      }
     },
     include: {
       category: true,
@@ -402,7 +405,7 @@ export async function togglePaid(expenseId: string, year?: number, month?: numbe
   const base = getYearMonth();
   const y = year ?? base.year;
   const m = month ?? base.month;
-  
+
   // First, get or create the occurrence
   const occ = await prisma.expenseOccurrence.upsert({
     where: { expenseId_year_month: { expenseId, year: y, month: m } },
@@ -419,6 +422,13 @@ export async function togglePaid(expenseId: string, year?: number, month?: numbe
       amount: !occ.isPaid && finalAmount ? finalAmount : (occ.isPaid ? null : occ.amount),
     },
   });
+
+  if (!occ.isPaid && finalAmount !== undefined && finalAmount !== null) {
+    await prisma.expense.update({
+      where: { id: expenseId },
+      data: { estimatedAmount: finalAmount },
+    });
+  }
   revalidatePath("/dashboard");
   revalidatePath("/monthly");
   return updated;
@@ -477,7 +487,10 @@ export async function getMonthlyDetails(year: number, month: number) {
     where: { 
       userId, 
       active: true, 
-      deletedAt: null 
+      deletedAt: null,
+      occurrences: {
+        some: { year, month } // Only expenses that have an occurrence for the month
+      }
     },
     include: {
       category: true,
@@ -826,7 +839,10 @@ export async function getPendingExpenses() {
     where: { 
       userId, 
       active: true, 
-      deletedAt: null 
+      deletedAt: null,
+      occurrences: {
+        some: { year, month, isPaid: false, isSkipped: false } // Only expenses that have an occurrence for the month
+      }
     },
     include: {
       category: true,
