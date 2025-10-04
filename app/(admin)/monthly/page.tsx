@@ -1,4 +1,4 @@
-import { getMonthlyDetails, generateMonthOccurrences, getSalary, getExportData } from "@/actions/expense-actions"
+import { getMonthlyDetails, generateMonthOccurrences, getSalary, getExportData, getDailyExpensesHeatmap } from "@/actions/expense-actions"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
@@ -12,6 +12,7 @@ import { SalaryDialog } from "@/components/salary-dialog"
 import { PendingAlerts } from "@/components/pending-alerts"
 import type { ExpenseFrequency } from "@/lib/types"
 import { MonthlyExpensesTable } from "@/components/tables/monthly-expenses-table"
+import { ExpenseHeatmap } from "@/components/expense-heatmap"
 
 interface MonthlyPageProps {
   searchParams: Promise<{ year?: string; month?: string }>
@@ -22,12 +23,13 @@ export default async function MonthlyPage({ searchParams }: MonthlyPageProps) {
   const currentDate = new Date()
   const year = parseInt(params.year || currentDate.getFullYear().toString())
   const month = parseInt(params.month || (currentDate.getMonth() + 1).toString())
-  
-  const [data, salary] = await Promise.all([
+
+  const [data, salary, heatmapData] = await Promise.all([
     getMonthlyDetails(year, month),
-    getSalary(year, month)
+    getSalary(year, month),
+    getDailyExpensesHeatmap(year, month)
   ])
-  
+
   const exportData = await getExportData(year, month)
 
   // Tipado mínimo para evitar `any` en filtros
@@ -55,10 +57,10 @@ export default async function MonthlyPage({ searchParams }: MonthlyPageProps) {
           <div className="flex flex-wrap items-center gap-2">
             <MonthSelector currentYear={year} currentMonth={month} />
             <ExportDialog data={exportData} />
-            <SalaryDialog 
-              year={year} 
-              month={month} 
-              currentSalary={salary?.amount} 
+            <SalaryDialog
+              year={year}
+              month={month}
+              currentSalary={salary?.amount}
             />
           </div>
         </div>
@@ -165,7 +167,7 @@ export default async function MonthlyPage({ searchParams }: MonthlyPageProps) {
               {salary ? formatCurrency(salary.amount - data.totalActual) : '-'}
             </div>
             <p className="text-xs text-muted-foreground">
-              {salary 
+              {salary
                 ? `${(((salary.amount - data.totalActual) / salary.amount) * 100).toFixed(1)}% ahorrado`
                 : 'Establecé un salario para ver ahorros'
               }
@@ -187,12 +189,15 @@ export default async function MonthlyPage({ searchParams }: MonthlyPageProps) {
       {/* Charts */}
       <ExpenseCharts categoryData={data.categoryData} />
 
-  {/* Detalle de gastos */}
+      {/* Heatmap Calendar */}
+      <ExpenseHeatmap data={heatmapData} year={year} month={month} />
+
+      {/* Detalle de gastos */}
       <Card>
         <CardHeader>
           <CardTitle>Detalle de Gastos</CardTitle>
           <CardDescription>
-    Lista completa de gastos para {data.monthName}
+            Lista completa de gastos para {data.monthName}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -200,7 +205,7 @@ export default async function MonthlyPage({ searchParams }: MonthlyPageProps) {
             data={data.items}
             year={year}
             month={month}
-    emptyMessage="No se encontraron gastos. Agregá gastos para comenzar."
+            emptyMessage="No se encontraron gastos. Agregá gastos para comenzar."
           />
         </CardContent>
       </Card>

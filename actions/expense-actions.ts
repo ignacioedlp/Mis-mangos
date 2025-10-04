@@ -1,4 +1,4 @@
-"use server"
+"use server";
 
 import prisma from "@/lib/prisma";
 import { z } from "zod";
@@ -39,42 +39,42 @@ async function requireUserId() {
 // Helper functions for cascade delete information
 export async function getCategoryDeletionInfo(categoryId: string) {
   await requireUserId();
-  
+
   const [subcategories, expenses] = await Promise.all([
     prisma.subcategory.findMany({
       where: { categoryId },
-      select: { id: true, name: true }
+      select: { id: true, name: true },
     }),
     prisma.expense.findMany({
-      where: { 
+      where: {
         categoryId,
-        deletedAt: null
+        deletedAt: null,
       },
-      select: { id: true, name: true }
-    })
+      select: { id: true, name: true },
+    }),
   ]);
-  
+
   return {
     subcategories,
     expenses,
-    totalItems: subcategories.length + expenses.length
+    totalItems: subcategories.length + expenses.length,
   };
 }
 
 export async function getSubcategoryDeletionInfo(subcategoryId: string) {
   await requireUserId();
-  
+
   const expenses = await prisma.expense.findMany({
-    where: { 
+    where: {
       subcategoryId,
-      deletedAt: null
+      deletedAt: null,
     },
-    select: { id: true, name: true }
+    select: { id: true, name: true },
   });
-  
+
   return {
     expenses,
-    totalItems: expenses.length
+    totalItems: expenses.length,
   };
 }
 
@@ -89,15 +89,17 @@ export async function createCategory(input: unknown) {
 
 export async function listCategories() {
   const userId = await requireUserId();
-  const categories = await prisma.category.findMany({ 
-    where: { userId }, 
-    orderBy: { name: "asc" } 
+  const categories = await prisma.category.findMany({
+    where: { userId },
+    orderBy: { name: "asc" },
   });
-  
+
   // Serialize Decimal to number for client components
-  return categories.map(category => ({
+  return categories.map((category) => ({
     ...category,
-    budgetPercentage: category.budgetPercentage ? Number(category.budgetPercentage) : null
+    budgetPercentage: category.budgetPercentage
+      ? Number(category.budgetPercentage)
+      : null,
   }));
 }
 
@@ -107,50 +109,60 @@ export async function updateCategory(id: string, input: unknown) {
   const result = await prisma.category.update({ where: { id, userId }, data });
   revalidatePath("/categories");
   revalidatePath("/expenses");
-  
+
   // Serialize Decimal to number for client components
   return {
     ...result,
-    budgetPercentage: result.budgetPercentage ? Number(result.budgetPercentage) : null
+    budgetPercentage: result.budgetPercentage
+      ? Number(result.budgetPercentage)
+      : null,
   };
 }
 
 export async function deleteCategory(id: string) {
   const userId = await requireUserId();
-  
+
   // Con borrado en cascada habilitado, primero informamos al usuario qué se eliminará
   const [subcategoriesInCategory, expensesUsingCategory] = await Promise.all([
     prisma.subcategory.findMany({
       where: { categoryId: id },
-      select: { id: true, name: true }
+      select: { id: true, name: true },
     }),
     prisma.expense.findMany({
-      where: { 
+      where: {
         categoryId: id,
-        deletedAt: null // Solo considerar gastos no eliminados
+        deletedAt: null, // Solo considerar gastos no eliminados
       },
-      select: { 
-        id: true, 
-        name: true 
-      }
-    })
+      select: {
+        id: true,
+        name: true,
+      },
+    }),
   ]);
-  
+
   // Informar al usuario sobre el impacto de la eliminación
   const warnings = [];
   if (subcategoriesInCategory.length > 0) {
-    const subcategoryNames = subcategoriesInCategory.map(s => s.name).join(", ");
-    warnings.push(`${subcategoriesInCategory.length} subcategoría(s): ${subcategoryNames}`);
+    const subcategoryNames = subcategoriesInCategory
+      .map((s) => s.name)
+      .join(", ");
+    warnings.push(
+      `${subcategoriesInCategory.length} subcategoría(s): ${subcategoryNames}`
+    );
   }
   if (expensesUsingCategory.length > 0) {
-    const expenseNames = expensesUsingCategory.map(e => e.name).join(", ");
+    const expenseNames = expensesUsingCategory.map((e) => e.name).join(", ");
     warnings.push(`${expensesUsingCategory.length} gasto(s): ${expenseNames}`);
   }
-  
+
   if (warnings.length > 0) {
-    console.warn(`⚠️  ELIMINACIÓN EN CASCADA: Al eliminar esta categoría también se eliminarán: ${warnings.join(" y ")}`);
+    console.warn(
+      `⚠️  ELIMINACIÓN EN CASCADA: Al eliminar esta categoría también se eliminarán: ${warnings.join(
+        " y "
+      )}`
+    );
   }
-  
+
   // Proceder con la eliminación en cascada
   const result = await prisma.category.delete({ where: { id, userId } });
   revalidatePath("/categories");
@@ -189,25 +201,27 @@ export async function updateSubcategory(id: string, input: unknown) {
 
 export async function deleteSubcategory(id: string) {
   await requireUserId();
-  
+
   // Con borrado en cascada habilitado, primero informamos al usuario qué se eliminará
   const expensesUsingSubcategory = await prisma.expense.findMany({
-    where: { 
+    where: {
       subcategoryId: id,
-      deletedAt: null // Solo considerar gastos no eliminados
+      deletedAt: null, // Solo considerar gastos no eliminados
     },
-    select: { 
-      id: true, 
-      name: true 
-    }
+    select: {
+      id: true,
+      name: true,
+    },
   });
-  
+
   // Informar al usuario sobre el impacto de la eliminación
   if (expensesUsingSubcategory.length > 0) {
-    const expenseNames = expensesUsingSubcategory.map(e => e.name).join(", ");
-    console.warn(`⚠️  ELIMINACIÓN EN CASCADA: Al eliminar esta subcategoría también se eliminarán ${expensesUsingSubcategory.length} gasto(s): ${expenseNames}`);
+    const expenseNames = expensesUsingSubcategory.map((e) => e.name).join(", ");
+    console.warn(
+      `⚠️  ELIMINACIÓN EN CASCADA: Al eliminar esta subcategoría también se eliminarán ${expensesUsingSubcategory.length} gasto(s): ${expenseNames}`
+    );
   }
-  
+
   // Proceder con la eliminación en cascada
   const result = await prisma.subcategory.delete({ where: { id } });
   revalidatePath("/categories");
@@ -225,7 +239,7 @@ export async function createExpense(input: unknown) {
     data: { ...data, userId },
   });
   const { year, month } = getYearMonth();
-  
+
   // For ONE_TIME expenses, create occurrence only for current month
   // For recurring expenses, create occurrence for current month as before
   await prisma.expenseOccurrence.upsert({
@@ -233,7 +247,7 @@ export async function createExpense(input: unknown) {
     update: {},
     create: { expenseId: created.id, year, month },
   });
-  
+
   revalidatePath("/expenses");
   revalidatePath("/dashboard");
   return created;
@@ -242,23 +256,25 @@ export async function createExpense(input: unknown) {
 export async function listExpenses() {
   const userId = await requireUserId();
   const expenses = await prisma.expense.findMany({
-    where: { 
-      userId, 
-      active: true, 
-      deletedAt: null // Only show non-deleted expenses
+    where: {
+      userId,
+      active: true,
+      deletedAt: null, // Only show non-deleted expenses
     },
     include: { category: true, subcategory: true },
     orderBy: { name: "asc" },
   });
-  
+
   // Serialize Decimal to number for client components
-  return expenses.map(expense => ({
+  return expenses.map((expense) => ({
     ...expense,
     estimatedAmount: Number(expense.estimatedAmount),
     category: {
       ...expense.category,
-      budgetPercentage: expense.category.budgetPercentage ? Number(expense.category.budgetPercentage) : null
-    }
+      budgetPercentage: expense.category.budgetPercentage
+        ? Number(expense.category.budgetPercentage)
+        : null,
+    },
   }));
 }
 
@@ -274,9 +290,9 @@ export async function updateExpense(id: string, input: unknown) {
 export async function deleteExpense(id: string) {
   const userId = await requireUserId();
   // Soft delete: set deletedAt timestamp instead of physically deleting
-  const result = await prisma.expense.update({ 
-    where: { id, userId }, 
-    data: { deletedAt: new Date() }
+  const result = await prisma.expense.update({
+    where: { id, userId },
+    data: { deletedAt: new Date() },
   });
   revalidatePath("/expenses");
   revalidatePath("/dashboard");
@@ -286,9 +302,9 @@ export async function deleteExpense(id: string) {
 export async function restoreExpense(id: string) {
   const userId = await requireUserId();
   // Restore soft-deleted expense by setting deletedAt to null
-  const result = await prisma.expense.update({ 
-    where: { id, userId }, 
-    data: { deletedAt: null }
+  const result = await prisma.expense.update({
+    where: { id, userId },
+    data: { deletedAt: null },
   });
   revalidatePath("/expenses");
   revalidatePath("/dashboard");
@@ -298,32 +314,38 @@ export async function restoreExpense(id: string) {
 export async function listDeletedExpenses() {
   const userId = await requireUserId();
   const expenses = await prisma.expense.findMany({
-    where: { 
-      userId, 
-      deletedAt: { not: null } // Only show soft-deleted expenses
+    where: {
+      userId,
+      deletedAt: { not: null }, // Only show soft-deleted expenses
     },
     include: { category: true, subcategory: true },
     orderBy: { deletedAt: "desc" }, // Most recently deleted first
   });
-  
+
   // Serialize Decimal to number for client components
-  return expenses.map(expense => ({
+  return expenses.map((expense) => ({
     ...expense,
     estimatedAmount: Number(expense.estimatedAmount),
     category: {
       ...expense.category,
-      budgetPercentage: expense.category.budgetPercentage ? Number(expense.category.budgetPercentage) : null
-    }
+      budgetPercentage: expense.category.budgetPercentage
+        ? Number(expense.category.budgetPercentage)
+        : null,
+    },
   }));
 }
 
 // Skip/Unskip occurrence functions
-export async function skipOccurrence(expenseId: string, year?: number, month?: number) {
+export async function skipOccurrence(
+  expenseId: string,
+  year?: number,
+  month?: number
+) {
   await requireUserId();
   const base = getYearMonth();
   const y = year ?? base.year;
   const m = month ?? base.month;
-  
+
   // First, get or create the occurrence
   const occ = await prisma.expenseOccurrence.upsert({
     where: { expenseId_year_month: { expenseId, year: y, month: m } },
@@ -355,13 +377,13 @@ export async function getMonthlyDashboard(year?: number, month?: number) {
   const m = month ?? base.month;
 
   const expenses = await prisma.expense.findMany({
-    where: { 
-      userId, 
-      active: true, 
+    where: {
+      userId,
+      active: true,
       deletedAt: null, // Only show non-deleted expenses
       occurrences: {
-        some: { year: y, month: m } // Only expenses that have an occurrence for the month
-      }
+        some: { year: y, month: m }, // Only expenses that have an occurrence for the month
+      },
     },
     include: {
       category: true,
@@ -392,15 +414,25 @@ export async function getMonthlyDashboard(year?: number, month?: number) {
   });
 
   // Filter out skipped items for calculations
-  const activeItems = items.filter(item => !item.isSkipped);
-  const totalEstimated = activeItems.reduce((s, it) => s + it.estimatedAmount, 0);
-  const totalPaid = activeItems.filter((i) => i.isPaid).reduce((s, it) => s + it.estimatedAmount, 0);
+  const activeItems = items.filter((item) => !item.isSkipped);
+  const totalEstimated = activeItems.reduce(
+    (s, it) => s + it.estimatedAmount,
+    0
+  );
+  const totalPaid = activeItems
+    .filter((i) => i.isPaid)
+    .reduce((s, it) => s + it.estimatedAmount, 0);
   const totalPending = totalEstimated - totalPaid;
 
   return { year: y, month: m, totalEstimated, totalPaid, totalPending, items };
 }
 
-export async function togglePaid(expenseId: string, year?: number, month?: number, finalAmount?: number) {
+export async function togglePaid(
+  expenseId: string,
+  year?: number,
+  month?: number,
+  finalAmount?: number
+) {
   await requireUserId();
   const base = getYearMonth();
   const y = year ?? base.year;
@@ -419,7 +451,12 @@ export async function togglePaid(expenseId: string, year?: number, month?: numbe
     data: {
       isPaid: !occ.isPaid,
       paidAt: !occ.isPaid ? new Date() : null,
-      amount: !occ.isPaid && finalAmount ? finalAmount : (occ.isPaid ? null : occ.amount),
+      amount:
+        !occ.isPaid && finalAmount
+          ? finalAmount
+          : occ.isPaid
+          ? null
+          : occ.amount,
     },
   });
 
@@ -437,43 +474,43 @@ export async function togglePaid(expenseId: string, year?: number, month?: numbe
 // Generate occurrences for a specific month
 export async function generateMonthOccurrences(year: number, month: number) {
   const userId = await requireUserId();
-  
+
   // Get all active expenses for the user (excluding soft-deleted ones)
   // Exclude ONE_TIME expenses as they should only exist in their original month
   const expenses = await prisma.expense.findMany({
-    where: { 
-      userId, 
-      active: true, 
+    where: {
+      userId,
+      active: true,
       deletedAt: null,
-      frequency: { not: "ONE_TIME" } // Don't generate occurrences for one-time expenses
-    }
+      frequency: { not: "ONE_TIME" }, // Don't generate occurrences for one-time expenses
+    },
   });
-  
+
   // Generate occurrences for each recurring expense
   const occurrences = [];
   for (const expense of expenses) {
     const existing = await prisma.expenseOccurrence.findUnique({
-      where: { 
-        expenseId_year_month: { 
-          expenseId: expense.id, 
-          year, 
-          month 
-        } 
-      }
+      where: {
+        expenseId_year_month: {
+          expenseId: expense.id,
+          year,
+          month,
+        },
+      },
     });
-    
+
     if (!existing) {
       const occurrence = await prisma.expenseOccurrence.create({
         data: {
           expenseId: expense.id,
           year,
-          month
-        }
+          month,
+        },
       });
       occurrences.push(occurrence);
     }
   }
-  
+
   revalidatePath("/monthly");
   revalidatePath("/dashboard");
   return occurrences;
@@ -482,23 +519,23 @@ export async function generateMonthOccurrences(year: number, month: number) {
 // Get detailed monthly view with charts data
 export async function getMonthlyDetails(year: number, month: number) {
   const userId = await requireUserId();
-  
+
   const expenses = await prisma.expense.findMany({
-    where: { 
-      userId, 
-      active: true, 
+    where: {
+      userId,
+      active: true,
       deletedAt: null,
       occurrences: {
-        some: { year, month } // Only expenses that have an occurrence for the month
-      }
+        some: { year, month }, // Only expenses that have an occurrence for the month
+      },
     },
     include: {
       category: true,
       subcategory: true,
       occurrences: {
-        where: { year, month }
-      }
-    }
+        where: { year, month },
+      },
+    },
   });
 
   const items = expenses.map((e) => {
@@ -520,13 +557,16 @@ export async function getMonthlyDetails(year: number, month: number) {
   });
 
   // Calculate totals (excluding skipped items)
-  const activeItems = items.filter(item => !item.isSkipped);
-  const totalEstimated = activeItems.reduce((s, it) => s + it.estimatedAmount, 0);
+  const activeItems = items.filter((item) => !item.isSkipped);
+  const totalEstimated = activeItems.reduce(
+    (s, it) => s + it.estimatedAmount,
+    0
+  );
   const totalActual = activeItems
-    .filter(i => i.isPaid && i.actualAmount)
+    .filter((i) => i.isPaid && i.actualAmount)
     .reduce((s, it) => s + (it.actualAmount || it.estimatedAmount), 0);
-  const totalPaid = activeItems.filter(i => i.isPaid).length;
-  const totalPending = activeItems.filter(i => !i.isPaid).length;
+  const totalPaid = activeItems.filter((i) => i.isPaid).length;
+  const totalPending = activeItems.filter((i) => !i.isPaid).length;
 
   // Group by category for charts (excluding skipped items)
   const byCategory = activeItems.reduce((acc, item) => {
@@ -536,11 +576,12 @@ export async function getMonthlyDetails(year: number, month: number) {
         category: key,
         estimated: 0,
         actual: 0,
-        count: 0
+        count: 0,
       };
     }
     acc[key].estimated += item.estimatedAmount;
-    acc[key].actual += item.actualAmount || (item.isPaid ? item.estimatedAmount : 0);
+    acc[key].actual +=
+      item.actualAmount || (item.isPaid ? item.estimatedAmount : 0);
     acc[key].count += 1;
     return acc;
   }, {} as Record<string, any>);
@@ -556,7 +597,10 @@ export async function getMonthlyDetails(year: number, month: number) {
     totalPending,
     items,
     categoryData,
-    monthName: new Date(year, month - 1).toLocaleString('default', { month: 'long', year: 'numeric' })
+    monthName: new Date(year, month - 1).toLocaleString("default", {
+      month: "long",
+      year: "numeric",
+    }),
   };
 }
 
@@ -570,79 +614,90 @@ const salarySchema = z.object({
 export async function setSalary(input: unknown) {
   const userId = await requireUserId();
   const data = salarySchema.parse(input);
-  
+
   const result = await prisma.salary.upsert({
-    where: { 
-      userId_year_month: { 
-        userId, 
-        year: data.year, 
-        month: data.month 
-      } 
+    where: {
+      userId_year_month: {
+        userId,
+        year: data.year,
+        month: data.month,
+      },
     },
     update: { amount: data.amount },
     create: { ...data, userId },
   });
-  
+
   revalidatePath("/monthly");
   revalidatePath("/dashboard");
-  
+
   // Serialize Decimal to number for client components
   return {
     ...result,
-    amount: Number(result.amount)
+    amount: Number(result.amount),
   };
 }
 
 export async function getSalary(year: number, month: number) {
   const userId = await requireUserId();
   const salary = await prisma.salary.findUnique({
-    where: { 
-      userId_year_month: { userId, year, month } 
-    }
+    where: {
+      userId_year_month: { userId, year, month },
+    },
   });
-  
+
   // Serialize Decimal to number for client components
   if (salary) {
     return {
       ...salary,
-      amount: Number(salary.amount)
+      amount: Number(salary.amount),
     };
   }
-  
+
   return null;
 }
 
 // Comparison between months/years
-export async function getComparison(startYear: number, startMonth: number, endYear: number, endMonth: number) {
+export async function getComparison(
+  startYear: number,
+  startMonth: number,
+  endYear: number,
+  endMonth: number
+) {
   const userId = await requireUserId();
-  
+
   const periods = [];
   let currentYear = startYear;
   let currentMonth = startMonth;
-  
-  while (currentYear < endYear || (currentYear === endYear && currentMonth <= endMonth)) {
+
+  while (
+    currentYear < endYear ||
+    (currentYear === endYear && currentMonth <= endMonth)
+  ) {
     periods.push({ year: currentYear, month: currentMonth });
-    
+
     currentMonth++;
     if (currentMonth > 12) {
       currentMonth = 1;
       currentYear++;
     }
   }
-  
+
   const comparisonData = [];
-  
+
   for (const period of periods) {
     const data = await getMonthlyDetails(period.year, period.month);
     const salary = await getSalary(period.year, period.month);
-    
+
     comparisonData.push({
       ...data,
       salary: salary ? Number(salary.amount) : 0,
-      savingsRate: salary ? ((Number(salary.amount) - data.totalActual) / Number(salary.amount)) * 100 : 0
+      savingsRate: salary
+        ? ((Number(salary.amount) - data.totalActual) / Number(salary.amount)) *
+          100
+        : 0,
     });
   }
-  
+
   return comparisonData;
 }
 
@@ -651,7 +706,7 @@ export async function getExportData(year: number, month: number) {
   const userId = await requireUserId();
   const data = await getMonthlyDetails(year, month);
   const salary = await getSalary(year, month);
-  
+
   return {
     ...data,
     salary: salary ? Number(salary.amount) : 0,
@@ -677,7 +732,7 @@ export async function getBudgetAnalysis(year?: number, month?: number) {
       monthlyIncome: 0,
       categories: [],
       totalBudgetPercentage: 0,
-      hasUnassignedIncome: false
+      hasUnassignedIncome: false,
     };
   }
 
@@ -686,7 +741,7 @@ export async function getBudgetAnalysis(year?: number, month?: number) {
     where: { userId },
     include: {
       expenses: {
-        where: { 
+        where: {
           deletedAt: null,
           active: true,
           // Include expenses (recurring and ONE_TIME) that have a PAID occurrence in the target month
@@ -695,23 +750,25 @@ export async function getBudgetAnalysis(year?: number, month?: number) {
               year: y,
               month: m,
               isPaid: true,
-              isSkipped: false
-            }
-          }
+              isSkipped: false,
+            },
+          },
         },
         include: {
           occurrences: {
-            where: { year: y, month: m, isPaid: true, isSkipped: false }
-          }
-        }
-      }
-    }
+            where: { year: y, month: m, isPaid: true, isSkipped: false },
+          },
+        },
+      },
+    },
   });
 
-  const categoryAnalysis = categories.map(category => {
-    const budgetPercentage = category.budgetPercentage ? Number(category.budgetPercentage) : 0;
+  const categoryAnalysis = categories.map((category) => {
+    const budgetPercentage = category.budgetPercentage
+      ? Number(category.budgetPercentage)
+      : 0;
     const budgetAmount = (monthlyIncome * budgetPercentage) / 100;
-    
+
     // Calculate actual spending for this category
     let actualSpent = 0;
     let oneTimeSpent = 0;
@@ -730,7 +787,8 @@ export async function getBudgetAnalysis(year?: number, month?: number) {
     const recurringSpent = actualSpent - oneTimeSpent;
 
     const remaining = budgetAmount - actualSpent;
-    const usagePercentage = budgetAmount > 0 ? (actualSpent / budgetAmount) * 100 : 0;
+    const usagePercentage =
+      budgetAmount > 0 ? (actualSpent / budgetAmount) * 100 : 0;
     const isOverBudget = actualSpent > budgetAmount;
 
     return {
@@ -745,13 +803,16 @@ export async function getBudgetAnalysis(year?: number, month?: number) {
       remaining,
       usagePercentage,
       isOverBudget,
-      expenseCount: category.expenses.length
+      expenseCount: category.expenses.length,
     };
   });
 
-  const totalBudgetPercentage = categoryAnalysis.reduce((sum, cat) => sum + cat.budgetPercentage, 0);
+  const totalBudgetPercentage = categoryAnalysis.reduce(
+    (sum, cat) => sum + cat.budgetPercentage,
+    0
+  );
   const hasUnassignedIncome = totalBudgetPercentage < 100;
-  
+
   // Calculate total savings (money not used from budgets)
   const totalSavings = categoryAnalysis.reduce((sum, cat) => {
     // Only count positive remaining amounts as savings (don't subtract overspends)
@@ -765,12 +826,18 @@ export async function getBudgetAnalysis(year?: number, month?: number) {
     categories: categoryAnalysis,
     totalBudgetPercentage,
     hasUnassignedIncome,
-    unassignedAmount: hasUnassignedIncome ? (monthlyIncome * (100 - totalBudgetPercentage)) / 100 : 0,
-    totalSavings
+    unassignedAmount: hasUnassignedIncome
+      ? (monthlyIncome * (100 - totalBudgetPercentage)) / 100
+      : 0,
+    totalSavings,
   };
 }
 
-export async function getCategoryBudgetStatus(categoryId: string, year?: number, month?: number) {
+export async function getCategoryBudgetStatus(
+  categoryId: string,
+  year?: number,
+  month?: number
+) {
   const userId = await requireUserId();
   const base = getYearMonth();
   const y = year ?? base.year;
@@ -780,21 +847,21 @@ export async function getCategoryBudgetStatus(categoryId: string, year?: number,
     where: { id: categoryId, userId },
     include: {
       expenses: {
-        where: { 
+        where: {
           deletedAt: null,
           active: true,
           // Include both recurring and ONE_TIME expenses if they have a PAID occurrence in month
           occurrences: {
-            some: { year: y, month: m, isPaid: true, isSkipped: false }
-          }
+            some: { year: y, month: m, isPaid: true, isSkipped: false },
+          },
         },
         include: {
           occurrences: {
-            where: { year: y, month: m, isPaid: true, isSkipped: false }
-          }
-        }
-      }
-    }
+            where: { year: y, month: m, isPaid: true, isSkipped: false },
+          },
+        },
+      },
+    },
   });
 
   if (!category) {
@@ -803,7 +870,9 @@ export async function getCategoryBudgetStatus(categoryId: string, year?: number,
 
   const salary = await getSalary(y, m);
   const monthlyIncome = salary ? Number(salary.amount) : 0;
-  const budgetPercentage = category.budgetPercentage ? Number(category.budgetPercentage) : 0;
+  const budgetPercentage = category.budgetPercentage
+    ? Number(category.budgetPercentage)
+    : 0;
   const budgetAmount = (monthlyIncome * budgetPercentage) / 100;
 
   const actualSpent = category.expenses.reduce((total, expense) => {
@@ -815,7 +884,8 @@ export async function getCategoryBudgetStatus(categoryId: string, year?: number,
   }, 0);
 
   const remaining = budgetAmount - actualSpent;
-  const usagePercentage = budgetAmount > 0 ? (actualSpent / budgetAmount) * 100 : 0;
+  const usagePercentage =
+    budgetAmount > 0 ? (actualSpent / budgetAmount) * 100 : 0;
 
   return {
     categoryId: category.id,
@@ -826,7 +896,7 @@ export async function getCategoryBudgetStatus(categoryId: string, year?: number,
     remaining,
     usagePercentage,
     isOverBudget: actualSpent > budgetAmount,
-    monthlyIncome
+    monthlyIncome,
   };
 }
 
@@ -834,42 +904,88 @@ export async function getCategoryBudgetStatus(categoryId: string, year?: number,
 export async function getPendingExpenses() {
   const userId = await requireUserId();
   const { year, month } = getYearMonth();
-  
+
   const expenses = await prisma.expense.findMany({
-    where: { 
-      userId, 
-      active: true, 
+    where: {
+      userId,
+      active: true,
       deletedAt: null,
       occurrences: {
-        some: { year, month, isPaid: false, isSkipped: false } // Only expenses that have an occurrence for the month
-      }
+        some: { year, month, isPaid: false, isSkipped: false }, // Only expenses that have an occurrence for the month
+      },
     },
     include: {
       category: true,
       subcategory: true,
       occurrences: {
-        where: { 
-          year, 
-          month, 
+        where: {
+          year,
+          month,
           isPaid: false,
-          isSkipped: false // Exclude skipped occurrences from pending
-        }
-      }
-    }
+          isSkipped: false, // Exclude skipped occurrences from pending
+        },
+      },
+    },
   });
-  
+
   const pendingItems = expenses
-    .filter(e => e.occurrences.length > 0)
-    .map(e => ({
+    .filter((e) => e.occurrences.length > 0)
+    .map((e) => ({
       id: e.id,
       name: e.name,
       categoryName: e.category.name,
       subcategoryName: e.subcategory.name,
       estimatedAmount: Number(e.estimatedAmount),
-      daysOverdue: Math.floor((new Date().getTime() - new Date(year, month - 1, 1).getTime()) / (1000 * 60 * 60 * 24))
+      daysOverdue: Math.floor(
+        (new Date().getTime() - new Date(year, month - 1, 1).getTime()) /
+          (1000 * 60 * 60 * 24)
+      ),
     }));
-  
+
   return pendingItems;
 }
 
+// Get daily expenses data for heatmap
+export async function getDailyExpensesHeatmap(year: number, month: number) {
+  const userId = await requireUserId();
 
+  // Get all paid occurrences for the month with their paid dates
+  const occurrences = await prisma.expenseOccurrence.findMany({
+    where: {
+      expense: {
+        userId,
+        active: true,
+        deletedAt: null,
+      },
+      year,
+      month,
+      isPaid: true,
+      paidAt: { not: null },
+    },
+    include: {
+      expense: true,
+    },
+  });
+
+  // Group by day and sum amounts
+  const dailyData: Record<number, number> = {};
+  
+  occurrences.forEach((occ) => {
+    if (occ.paidAt) {
+      const day = occ.paidAt.getDate();
+      const amount = occ.amount ? Number(occ.amount) : Number(occ.expense.estimatedAmount);
+      dailyData[day] = (dailyData[day] || 0) + amount;
+    }
+  });
+
+  // Get the number of days in the month
+  const daysInMonth = new Date(year, month, 0).getDate();
+  
+  // Fill in missing days with 0
+  const result = Array.from({ length: daysInMonth }, (_, i) => ({
+    day: i + 1,
+    amount: dailyData[i + 1] || 0,
+  }));
+
+  return result;
+}
