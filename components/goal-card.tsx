@@ -91,7 +91,7 @@ export function GoalCard({ goal, onEdit, onUpdate }: GoalCardProps) {
       await deleteGoal(goal.id);
       toast.success("Objetivo eliminado exitosamente");
       onUpdate();
-    } catch (error) {
+    } catch {
       toast.error("Error al eliminar el objetivo");
     } finally {
       setIsProcessing(false);
@@ -105,7 +105,7 @@ export function GoalCard({ goal, onEdit, onUpdate }: GoalCardProps) {
       await updateGoalStatus(goal.id, newStatus);
       toast.success(`Objetivo marcado como ${statusLabels[newStatus].toLowerCase()}`);
       onUpdate();
-    } catch (error) {
+    } catch {
       toast.error("Error al actualizar el estado");
     } finally {
       setIsProcessing(false);
@@ -128,7 +128,7 @@ export function GoalCard({ goal, onEdit, onUpdate }: GoalCardProps) {
       setAmount("");
       setShowAmountDialog(false);
       onUpdate();
-    } catch (error) {
+    } catch {
       toast.error("Error al actualizar el monto");
     } finally {
       setIsProcessing(false);

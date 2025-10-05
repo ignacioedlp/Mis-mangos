@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Plus, Target, TrendingUp, CheckCircle, Pause } from "lucide-react";
+import { Plus, Target } from "lucide-react";
 import { GoalDialog } from "@/components/goal-dialog";
 import { GoalCard } from "@/components/goal-card";
 import { StatCard } from "@/components/stat-card";
@@ -20,6 +20,7 @@ import {
 export default function GoalsPage() {
   const [goals, setGoals] = useState<GoalDTO[]>([]);
   const [categories, setCategories] = useState<CategoryDTO[]>([]);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [summary, setSummary] = useState<any>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedGoal, setSelectedGoal] = useState<GoalDTO | null>(null);
@@ -37,7 +38,7 @@ export default function GoalsPage() {
       setGoals(goalsData);
       setCategories(categoriesData);
       setSummary(summaryData);
-    } catch (error) {
+    } catch {
       toast.error("Error al cargar los datos");
     } finally {
       setIsLoading(false);
@@ -66,10 +67,10 @@ export default function GoalsPage() {
   const completedGoals = goals.filter(g => g.status === "COMPLETED");
   const pausedGoals = goals.filter(g => g.status === "PAUSED");
 
-  const displayGoals = activeTab === "all" ? goals : 
-                       activeTab === "active" ? activeGoals :
-                       activeTab === "completed" ? completedGoals :
-                       pausedGoals;
+  const displayGoals = activeTab === "all" ? goals :
+    activeTab === "active" ? activeGoals :
+      activeTab === "completed" ? completedGoals :
+        pausedGoals;
 
   if (isLoading) {
     return (
@@ -149,7 +150,7 @@ export default function GoalsPage() {
             <div className="text-center py-12 border-2 border-dashed rounded-lg">
               <Target className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
               <h3 className="text-lg font-semibold mb-2">
-                {activeTab === "all" 
+                {activeTab === "all"
                   ? "No tienes objetivos aún"
                   : `No tienes objetivos ${activeTab === "active" ? "activos" : activeTab === "completed" ? "completados" : "pausados"}`
                 }
