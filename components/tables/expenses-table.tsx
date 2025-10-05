@@ -5,6 +5,7 @@ import { Table, TableBody, TableCell, TableHeader, TableRow } from "@/components
 import { Badge } from "@/components/ui/badge"
 import { SortableTableHead, useSortableData } from "@/components/ui/sortable-table-client"
 import { ExpenseDeleteButton } from "@/components/table-actions/expense-delete-button"
+import { DuplicateExpenseButton } from "@/components/duplicate-expense-button"
 import { formatCurrency } from "@/lib/utils"
 
 // Tipo para los gastos con relaciones incluidas
@@ -150,7 +151,13 @@ export function ExpensesTable({
               </Badge>
             </TableCell>
             <TableCell>
-              <ExpenseDeleteButton expenseId={expense.id} />
+              <div className="flex items-center gap-1">
+                <DuplicateExpenseButton 
+                  expenseId={expense.id} 
+                  expenseName={expense.name}
+                />
+                <ExpenseDeleteButton expenseId={expense.id} />
+              </div>
             </TableCell>
           </TableRow>
         ))}

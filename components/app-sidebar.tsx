@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { LayoutDashboard, FolderOpen, DollarSign, Calendar, TrendingUp, PieChart, FileText } from "lucide-react"
+import { LayoutDashboard, FolderOpen, DollarSign, Calendar, TrendingUp, PieChart, FileText, Target } from "lucide-react"
 import {
    Sidebar,
    SidebarContent,
@@ -49,6 +49,12 @@ export default function AppSidebar({ ...props }: React.ComponentProps<typeof Sid
          icon: PieChart,
          label: "Presupuesto",
          isActive: pathname.startsWith("/budget")
+      },
+      {
+         href: "/goals",
+         icon: Target,
+         label: "Objetivos",
+         isActive: pathname.startsWith("/goals")
       },
       {
          href: "/reports",

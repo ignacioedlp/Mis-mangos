@@ -108,3 +108,26 @@ export interface CategoryBudgetStatusDTO {
    isOverBudget: boolean;
    monthlyIncome: number;
 }
+
+// Goal types
+export type GoalType = "SAVINGS" | "DEBT_PAYMENT" | "EXPENSE_REDUCTION" | "CUSTOM";
+export type GoalStatus = "ACTIVE" | "COMPLETED" | "CANCELLED" | "PAUSED";
+
+export interface GoalDTO {
+   id: string;
+   name: string;
+   description?: string | null;
+   type: GoalType;
+   status: GoalStatus;
+   targetAmount: number;
+   currentAmount: number;
+   categoryId?: string | null;
+   categoryName?: string | null;
+   startDate: Date;
+   targetDate?: Date | null;
+   completedAt?: Date | null;
+   progress: number; // Percentage (0-100)
+   remainingAmount: number;
+   createdAt: Date;
+   updatedAt: Date;
+}

@@ -989,3 +989,85 @@ export async function getDailyExpensesHeatmap(year: number, month: number) {
 
   return result;
 }
+
+/**
+ * Duplicate an existing expense to create a new occurrence for the current month.
+ * This is useful for ONE_TIME expenses that need to be recreated.
+ * For recurring expenses, it will also create a new occurrence if it doesn't exist.
+ * 
+ * @param expenseId - The ID of the expense to duplicate
+ * @param targetYear - Optional target year (defaults to current year)
+ * @param targetMonth - Optional target month (defaults to current month)
+ */
+export async function duplicateExpenseOccurrence(
+  expenseId: string,
+  targetYear?: number,
+  targetMonth?: number
+) {
+  const userId = await requireUserId();
+  
+  // Verify the expense exists and belongs to the user
+  const expense = await prisma.expense.findFirst({
+    where: {
+      id: expenseId,
+      userId,
+      deletedAt: null,
+    },
+  });
+  
+  if (!expense) {
+    throw new Error("Expense not found or access denied");
+  }
+  
+  // Get target month/year or use current
+  const base = getYearMonth();
+  const year = targetYear ?? base.year;
+  const month = targetMonth ?? base.month;
+  
+  // Check if occurrence already exists
+  const existingOccurrence = await prisma.expenseOccurrence.findUnique({
+    where: {
+      expenseId_year_month: {
+        expenseId: expense.id,
+        year,
+        month,
+      },
+    },
+  });
+  
+  if (existingOccurrence) {
+    throw new Error(
+      `Ya existe una ocurrencia para este gasto en ${month}/${year}. ` +
+      `Si deseas registrar un pago adicional, marca la existente como pagada primero.`
+    );
+  }
+  
+  // Create new occurrence for the target month
+  const newOccurrence = await prisma.expenseOccurrence.create({
+    data: {
+      expenseId: expense.id,
+      year,
+      month,
+      isPaid: false,
+      isSkipped: false,
+      amount: expense.estimatedAmount, // Use the estimated amount as default
+    },
+  });
+  
+  revalidatePath("/expenses");
+  revalidatePath("/monthly");
+  revalidatePath("/dashboard");
+  
+  return {
+    success: true,
+    occurrence: {
+      ...newOccurrence,
+      amount: newOccurrence.amount ? Number(newOccurrence.amount) : null,
+    },
+    expense: {
+      id: expense.id,
+      name: expense.name,
+      estimatedAmount: Number(expense.estimatedAmount),
+    },
+  };
+}
