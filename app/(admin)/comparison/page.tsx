@@ -5,6 +5,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { TrendingUp, TrendingDown, DollarSign, Percent } from "lucide-react"
 import { ComparisonSelector } from "@/components/comparison-selector"
 import { ComparisonCharts } from "@/components/comparison-charts"
+import { ExpensesByMonthChart } from "@/components/expenses-by-month-chart"
+import { ExpensesByMonthTable } from "@/components/expenses-by-month-table"
 import { formatCurrency } from '../../../lib/utils';
 
 interface ComparisonPageProps {
@@ -104,6 +106,12 @@ export default async function ComparisonPage({ searchParams }: ComparisonPagePro
 
       {/* Charts */}
       <ComparisonCharts data={comparisonData} />
+
+      {/* Expenses by Month Chart */}
+      <ExpensesByMonthChart data={comparisonData} />
+
+      {/* Expenses by Month Table */}
+      <ExpensesByMonthTable data={comparisonData} />
 
       {/* Detailed Table */}
       <Card>
