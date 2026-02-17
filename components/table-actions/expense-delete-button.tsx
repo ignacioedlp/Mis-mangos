@@ -1,7 +1,7 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { EyeOff, Trash2 } from "lucide-react"
+import { EyeOff } from "lucide-react"
 import { deleteExpense } from "@/actions/expense-actions"
 import { useTransition } from "react"
 
