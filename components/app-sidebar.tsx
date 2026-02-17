@@ -72,21 +72,29 @@ export default function AppSidebar({ ...props }: React.ComponentProps<typeof Sid
 
    return (
       <Sidebar collapsible="offcanvas" {...props}>
-         <SidebarHeader className="flex items-center">
-            <Logo />
+         <SidebarHeader className="flex items-center px-4 py-5">
+            <div className="flex items-center gap-2.5">
+               <Logo />
+               <span className="font-serif text-base font-bold tracking-tight">Mis Mangos</span>
+            </div>
          </SidebarHeader>
          <SidebarContent>
-            <SidebarMenu className="px-2 py-4">
+            <div className="px-3 py-2">
+               <span className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground/60 px-3">
+                  Navegación
+               </span>
+            </div>
+            <SidebarMenu className="px-2 space-y-0.5">
                {menuItems.map((item) => {
                   const Icon = item.icon;
                   return (
                      <SidebarMenuItem key={item.href}>
-                        <SidebarMenuButton isActive={item.isActive} size="lg">
-                           <Link href={item.href} className={`${item.isActive ? "text-foreground" : "text-primary"} flex items-center gap-3`}>
-                              <div className="flex h-9 w-9 items-center justify-center rounded-md bg-primary/10">
-                                 <Icon className="h-5 w-5" />
+                        <SidebarMenuButton isActive={item.isActive} size="lg" className="rounded-xl">
+                           <Link href={item.href} className={`${item.isActive ? "text-foreground font-semibold" : "text-muted-foreground"} flex items-center gap-3 transition-colors`}>
+                              <div className={`flex h-8 w-8 items-center justify-center rounded-lg ${item.isActive ? "bg-primary/15 text-primary" : "bg-muted text-muted-foreground"} transition-colors`}>
+                                 <Icon className="h-4 w-4" />
                               </div>
-                              <span className="text-sm font-medium">{item.label}</span>
+                              <span className="text-sm">{item.label}</span>
                            </Link>
                         </SidebarMenuButton>
                      </SidebarMenuItem>
@@ -94,7 +102,7 @@ export default function AppSidebar({ ...props }: React.ComponentProps<typeof Sid
                })}
             </SidebarMenu>
          </SidebarContent>
-         <SidebarFooter>
+         <SidebarFooter className="p-3">
             <SignOutForm />
          </SidebarFooter>
          <SidebarRail />

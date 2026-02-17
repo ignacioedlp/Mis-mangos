@@ -1,80 +1,77 @@
 import { Code, Database, Layers, Lock, Zap } from 'lucide-react'
 import React from 'react'
-import { Badge } from './ui/badge'
-import { Card } from './ui/card'
 import FadeInView from './animate-ui/fade-in-view';
-
 
 const stack = [
    {
       name: "Next.js 15",
-      icon: <Zap className="h-6 w-6 text-primary" />,
-      description: "La última versión del framework React con rendimiento y características mejoradas",
+      icon: <Zap className="h-5 w-5" />,
+      description: "Framework React con rendimiento de última generación",
    },
    {
       name: "Tailwind CSS",
-      icon: <Code className="h-6 w-6 text-primary" />,
-      description: "Framework CSS utility-first para desarrollo rápido de interfaces",
+      icon: <Code className="h-5 w-5" />,
+      description: "Framework CSS utility-first para interfaces rápidas",
    },
    {
       name: "Shadcn UI",
-      icon: <Layers className="h-6 w-6 text-primary" />,
-      description: "Componentes bellamente diseñados construidos con Radix UI y Tailwind",
+      icon: <Layers className="h-5 w-5" />,
+      description: "Componentes accesibles con Radix UI y Tailwind",
    },
    {
       name: "Better-Auth",
-      icon: <Lock className="h-6 w-6 text-primary" />,
-      description: "Sistema de autenticación avanzado con características de seguridad integradas",
+      icon: <Lock className="h-5 w-5" />,
+      description: "Autenticación avanzada con seguridad integrada",
    },
    {
       name: "Prisma",
-      icon: <Code className="h-6 w-6 text-primary" />,
-      description: "ORM de nueva generación para Node.js y TypeScript",
+      icon: <Code className="h-5 w-5" />,
+      description: "ORM de nueva generación para TypeScript",
    },
    {
       name: "PostgreSQL",
-      icon: <Database className="h-6 w-6 text-primary" />,
-      description: "Sistema de base de datos objeto-relacional potente y de código abierto",
+      icon: <Database className="h-5 w-5" />,
+      description: "Base de datos potente y de código abierto",
    },
 ]
 
 export default function TechStackSection() {
-
    return (
-      <section className="pb-20 pt-20 md:pb-32 md:pt-32 container mx-auto">
-         <FadeInView className="text-center space-y-4 pb-16 mx-auto max-w-4xl">
-            <Badge className='px-4 py-1.5 text-sm font-medium'>Tecnología</Badge>
-            <h2 className="mx-auto mt-4 text-3xl font-bold sm:text-5xl tracking-tight">
-               Construido con Tecnología Moderna
-            </h2>
-            <p className="text-xl text-muted-foreground pt-1">
-               Desarrollado con las tecnologías más avanzadas y confiables de la industria
-            </p>
-         </FadeInView>
+      <section className="relative py-24 md:py-36 overflow-hidden">
+         <div className="container mx-auto">
+            <FadeInView className="text-center space-y-3 pb-16 mx-auto max-w-2xl">
+               <span className="text-sm font-semibold uppercase tracking-widest text-primary">Stack Tecnológico</span>
+               <h2 className="font-serif text-4xl font-extrabold tracking-tight sm:text-5xl">
+                  Construido con lo mejor
+               </h2>
+               <p className="text-lg text-muted-foreground leading-relaxed pt-2">
+                  Tecnologías modernas, confiables y de alto rendimiento.
+               </p>
+            </FadeInView>
 
-         <Card className="grid divide-x divide-y overflow-hidden rounded-3xl border border-card sm:grid-cols-2 lg:grid-cols-3 lg:divide-y-0">
-            {stack.map((item, index) => (
-               <FadeInView
-                  key={index}
-                  delay={0.1 * (index + 2)}
-                  className="group relative transition-shadow duration-300 hover:z-[1] hover:shadow-2xl hover:shadow-primary"
-               >
-                  <div className="relative space-y-8 py-12 p-8">
-                     <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
-                        {item.icon}
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 max-w-4xl mx-auto">
+               {stack.map((item, index) => (
+                  <FadeInView
+                     key={index}
+                     delay={0.08 * (index + 1)}
+                  >
+                     <div className="group flex items-start gap-4 rounded-2xl border border-border/60 bg-card p-5 transition-all duration-300 hover:border-primary/30 hover:bg-accent/30">
+                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                           {item.icon}
+                        </div>
+                        <div>
+                           <h3 className="font-serif font-bold text-sm mb-0.5 group-hover:text-primary transition-colors">
+                              {item.name}
+                           </h3>
+                           <p className="text-xs text-muted-foreground leading-relaxed">
+                              {item.description}
+                           </p>
+                        </div>
                      </div>
-                     <div className="space-y-2">
-                        <h5 className="text-xl text-muted-foreground font-semibold transition group-hover:text-primary">
-                           {item.name}
-                        </h5>
-                        <p className="text-muted-foreground">
-                           {item.description}
-                        </p>
-                     </div>
-                  </div>
-               </FadeInView>
-            ))}
-         </Card>
+                  </FadeInView>
+               ))}
+            </div>
+         </div>
       </section>
    )
 }

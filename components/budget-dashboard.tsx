@@ -45,7 +45,7 @@ function BudgetDistributionBar({
 }) {
   const ordered = [...categories]
     .filter(c => c.budgetPercentage > 0)
-    .sort((a,b) => b.budgetPercentage - a.budgetPercentage);
+    .sort((a, b) => b.budgetPercentage - a.budgetPercentage);
 
   return (
     <div className="space-y-2">
@@ -82,7 +82,7 @@ function BudgetDistributionBar({
         </div>
       </div>
       <div className="flex flex-wrap gap-2 mt-1">
-        {ordered.slice(0,6).map((c, idx) => (
+        {ordered.slice(0, 6).map((c, idx) => (
           <div key={c.id} className="flex items-center gap-1 rounded px-2 py-0.5 bg-muted/60 text-xs border">
             <span className="inline-block h-3.5 w-3.5 rounded-sm" style={{ background: c.isOverBudget ? 'hsl(var(--destructive))' : `var(--color-chart-${(idx % 5) + 1})` }} />
             <span className="font-medium">{c.name}</span>
@@ -104,21 +104,25 @@ interface BudgetDashboardProps {
 
 export async function BudgetDashboard({ year, month }: BudgetDashboardProps) {
   const budgetData = (await getBudgetAnalysis(year, month)) as BudgetAnalysis
-  
+
   if (budgetData.monthlyIncome === 0) {
     return (
-      <Card>
+      <Card className="border-border/60">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <DollarSign className="h-5 w-5" />
+          <CardTitle className="flex items-center gap-2 font-serif text-lg font-bold">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
+              <DollarSign className="h-4 w-4 text-primary" />
+            </div>
             Análisis de Presupuesto
           </CardTitle>
           <CardDescription>Realiza un seguimiento de tus gastos en comparación con la asignación de tu presupuesto</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="text-center py-8 text-muted-foreground">
-            <DollarSign className="h-12 w-12 mx-auto mb-4 opacity-50" />
-            <p className="text-lg font-medium mb-2">No se encontraron datos de salario</p>
+          <div className="text-center py-12 text-muted-foreground">
+            <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-muted/60 mb-4">
+              <DollarSign className="h-7 w-7 opacity-50" />
+            </div>
+            <p className="font-serif text-lg font-bold mb-1">No se encontraron datos de salario</p>
             <p className="text-sm">Por favor, establece tu salario mensual para ver el análisis del presupuesto</p>
           </div>
         </CardContent>
@@ -126,18 +130,20 @@ export async function BudgetDashboard({ year, month }: BudgetDashboardProps) {
     )
   }
 
-  const monthName = new Date(budgetData.year, budgetData.month - 1).toLocaleString('default', { 
-    month: 'long', 
-    year: 'numeric' 
+  const monthName = new Date(budgetData.year, budgetData.month - 1).toLocaleString('default', {
+    month: 'long',
+    year: 'numeric'
   })
 
   return (
     <div className="space-y-6">
       {/* Summary Card */}
-      <Card>
+      <Card className="border-border/60">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <DollarSign className="h-5 w-5" />
+          <CardTitle className="flex items-center gap-2 font-serif text-lg font-bold">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
+              <DollarSign className="h-4 w-4 text-primary" />
+            </div>
             Resumen del Presupuesto - {monthName}
           </CardTitle>
           <CardDescription>
@@ -157,39 +163,39 @@ export async function BudgetDashboard({ year, month }: BudgetDashboardProps) {
                 <Percent className="h-4 w-4 text-muted-foreground" />
                 <span className="text-sm text-muted-foreground">Presupuesto Asignado</span>
               </div>
-              <p className="text-2xl font-bold">
+              <p className="font-serif text-2xl font-extrabold">
                 {formatPercentage(budgetData.totalBudgetPercentage)}
               </p>
             </div>
-            
+
             <div className="space-y-2">
               <div className="flex items-center gap-2">
                 <PiggyBank className="h-4 w-4 text-primary" />
                 <span className="text-sm text-muted-foreground">Total Ahorrado</span>
               </div>
-              <p className="text-2xl font-bold text-primary">
+              <p className="font-serif text-2xl font-extrabold text-primary">
                 {formatCurrency(budgetData.totalSavings || 0)}
               </p>
             </div>
-            
+
             {budgetData.hasUnassignedIncome && (
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
                   <TrendingUp className="h-4 w-4 text-primary" />
                   <span className="text-sm text-muted-foreground">No Asignado</span>
                 </div>
-                <p className="text-2xl font-bold text-primary">
+                <p className="font-serif text-2xl font-extrabold text-primary">
                   {formatCurrency(budgetData.unassignedAmount || 0)}
                 </p>
               </div>
             )}
-            
+
             <div className="space-y-2">
               <div className="flex items-center gap-2">
                 <AlertTriangle className="h-4 w-4 text-destructive" />
                 <span className="text-sm text-muted-foreground">Sobre Presupuesto</span>
               </div>
-              <p className="text-2xl font-bold text-destructive">
+              <p className="font-serif text-2xl font-extrabold text-destructive">
                 {budgetData.categories.filter(c => c.isOverBudget).length}
               </p>
             </div>
@@ -198,14 +204,14 @@ export async function BudgetDashboard({ year, month }: BudgetDashboardProps) {
       </Card>
 
       {/* Category Breakdown */}
-  <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {(budgetData.categories as CategoryBudget[])
           .filter(category => category.budgetPercentage > 0)
           .map((category: CategoryBudget) => (
-            <Card key={category.id} className={category.isOverBudget ? "border-destructive/30" : ""}>
+            <Card key={category.id} className={category.isOverBudget ? "border-destructive/30" : "border-border/60 hover:border-primary/20 transition-all duration-300"}>
               <CardHeader className="pb-3">
                 <div className="flex items-center justify-between">
-                  <CardTitle className="text-base">{category.name}</CardTitle>
+                  <CardTitle className="text-base font-semibold">{category.name}</CardTitle>
                   {category.isOverBudget && (
                     <Badge variant="destructive" className="text-xs">
                       Sobre Presupuesto
@@ -229,8 +235,8 @@ export async function BudgetDashboard({ year, month }: BudgetDashboardProps) {
                     <span>Presupuesto</span>
                     <span>{formatCurrency(category.budgetAmount)}</span>
                   </div>
-                  <Progress 
-                    value={Math.min(category.usagePercentage, 100)} 
+                  <Progress
+                    value={Math.min(category.usagePercentage, 100)}
                     className="h-2"
                   />
                   <div className="flex justify-between text-xs text-muted-foreground">
@@ -248,7 +254,7 @@ export async function BudgetDashboard({ year, month }: BudgetDashboardProps) {
                     </span>
                   </div>
                 </div>
-                
+
                 <div className="flex items-center justify-between text-xs text-muted-foreground">
                   <span>
                     {category.expenseCount} gastos
@@ -271,9 +277,9 @@ export async function BudgetDashboard({ year, month }: BudgetDashboardProps) {
 
       {/* Categories without budget */}
       {budgetData.categories.filter(c => c.budgetPercentage === 0).length > 0 && (
-        <Card>
+        <Card className="border-border/60 border-dashed">
           <CardHeader>
-            <CardTitle className="text-base">Categorías Sin Presupuesto</CardTitle>
+            <CardTitle className="font-serif text-base font-bold">Categorías Sin Presupuesto</CardTitle>
             <CardDescription>
               Estas categorías no tienen un porcentaje de presupuesto asignado
             </CardDescription>

@@ -47,9 +47,9 @@ export function ExpensesByMonthChart({ data }: ExpensesByMonthChartProps) {
   // Si no hay gastos, mostrar mensaje
   if (expenseNames.length === 0) {
     return (
-      <Card>
+      <Card className="border-border/60">
         <CardHeader>
-          <CardTitle>Evolución de Gastos por Mes</CardTitle>
+          <CardTitle className="font-serif text-lg font-bold">Evolución de Gastos por Mes</CardTitle>
           <CardDescription>Gastos recurrentes a lo largo del tiempo</CardDescription>
         </CardHeader>
         <CardContent>
@@ -134,9 +134,9 @@ export function ExpensesByMonthChart({ data }: ExpensesByMonthChartProps) {
   }, {} as ChartConfig)
 
   return (
-    <Card>
+    <Card className="border-border/60">
       <CardHeader>
-        <CardTitle>Evolución de Gastos por Mes</CardTitle>
+        <CardTitle className="font-serif text-lg font-bold">Evolución de Gastos por Mes</CardTitle>
         <CardDescription>Gastos recurrentes a lo largo del tiempo (excluye gastos únicos)</CardDescription>
       </CardHeader>
       <CardContent>

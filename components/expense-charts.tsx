@@ -18,9 +18,9 @@ interface ExpenseChartsProps {
 export function ExpenseCharts({ categoryData }: ExpenseChartsProps) {
   if (!categoryData || categoryData.length === 0) {
     return (
-      <Card>
+      <Card className="border-border/60">
         <CardHeader>
-          <CardTitle>Analisis de gastos</CardTitle>
+          <CardTitle className="font-serif text-lg font-bold">Analisis de gastos</CardTitle>
           <CardDescription>No hay datos disponibles para los gráficos</CardDescription>
         </CardHeader>
         <CardContent>
@@ -93,9 +93,9 @@ export function ExpenseCharts({ categoryData }: ExpenseChartsProps) {
       </Card>
 
       {/* Pie Chart - Spending Distribution */}
-      <Card>
+      <Card className="border-border/60">
         <CardHeader>
-          <CardTitle>Distribución de Gastos</CardTitle>
+          <CardTitle className="font-serif text-lg font-bold">Distribución de Gastos</CardTitle>
           <CardDescription>Desglose de gastos por categoría</CardDescription>
         </CardHeader>
         <CardContent>
@@ -129,9 +129,9 @@ export function ExpenseCharts({ categoryData }: ExpenseChartsProps) {
       </Card>
 
       {/* Summary Stats */}
-      <Card className="lg:col-span-2">
+      <Card className="lg:col-span-2 border-border/60">
         <CardHeader>
-          <CardTitle>Resumen por categoría</CardTitle>
+          <CardTitle className="font-serif text-lg font-bold">Resumen por categoría</CardTitle>
           <CardDescription>Uso vs estimado y detalle por categoría</CardDescription>
         </CardHeader>
         <CardContent>
@@ -172,7 +172,7 @@ export function ExpenseCharts({ categoryData }: ExpenseChartsProps) {
                       </span>
                       <div className="flex items-center gap-2">
                         <span className={isOver ? 'text-destructive' : 'text-foreground'}>
-                        {isOver ? `Excedido: ${formatCurrency(delta)}` : `Restante: ${formatCurrency(delta)}`}
+                          {isOver ? `Excedido: ${formatCurrency(delta)}` : `Restante: ${formatCurrency(delta)}`}
                         </span>
                         <span className="ms-auto">
                           {item.count} gasto{item.count !== 1 ? 's' : ''}

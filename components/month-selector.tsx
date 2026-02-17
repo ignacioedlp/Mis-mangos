@@ -59,16 +59,16 @@ export function MonthSelector({ currentYear, currentMonth }: MonthSelectorProps)
       <Button variant="outline" size="sm" onClick={goToPrevMonth}>
         <ChevronLeft className="h-4 w-4" />
       </Button>
-      
+
       <div className="flex flex-col items-center min-w-[120px]">
-        <span className="font-medium">{currentMonthName}</span>
-        <span className="text-sm text-muted-foreground">{currentYear}</span>
+        <span className="font-serif font-bold">{currentMonthName}</span>
+        <span className="text-xs text-muted-foreground">{currentYear}</span>
       </div>
-      
+
       <Button variant="outline" size="sm" onClick={goToNextMonth}>
         <ChevronRight className="h-4 w-4" />
       </Button>
-      
+
       {!isCurrentMonth && (
         <Button variant="ghost" size="sm" onClick={goToCurrentMonth}>
           Hoy

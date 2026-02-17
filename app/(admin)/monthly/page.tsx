@@ -47,12 +47,12 @@ export default async function MonthlyPage({ searchParams }: MonthlyPageProps) {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div className="flex flex-col gap-3">
         <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
           <div className="space-y-1">
-            <h2 className="text-3xl font-bold tracking-tight">Vista mensual</h2>
-            <p className="text-muted-foreground">Resumen y detalle de tus gastos en {data.monthName}</p>
+            <h2 className="font-serif text-3xl font-extrabold tracking-tight">Vista mensual</h2>
+            <p className="text-muted-foreground text-sm">Resumen y detalle de tus gastos en <span className="font-medium text-foreground/70">{data.monthName}</span></p>
           </div>
           <div className="flex flex-wrap items-center gap-2">
             <MonthSelector currentYear={year} currentMonth={month} />
@@ -67,9 +67,9 @@ export default async function MonthlyPage({ searchParams }: MonthlyPageProps) {
       </div>
 
       {/* Resumen con progreso */}
-      <Card>
+      <Card className="border-border/60">
         <CardHeader className="pb-3">
-          <CardTitle>Resumen</CardTitle>
+          <CardTitle className="font-serif text-lg font-bold">Resumen</CardTitle>
           <CardDescription>
             {activeCount > 0 ? (
               <span>
@@ -118,13 +118,15 @@ export default async function MonthlyPage({ searchParams }: MonthlyPageProps) {
 
       {/* Tarjetas de métricas */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Salario Mensual</CardTitle>
-            <DollarSign className="h-4 w-4 text-primary" />
+        <Card className="border-border/60 hover:border-primary/20 transition-all duration-300 hover:shadow-md">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
+            <CardTitle className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Salario Mensual</CardTitle>
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-500/10">
+              <DollarSign className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+            </div>
           </CardHeader>
           <CardContent>
-            <div className="text-xl font-bold text-primary">
+            <div className="font-serif text-xl font-extrabold text-primary">
               {salary ? formatCurrency(salary.amount) : 'No establecido'}
             </div>
             <p className="text-xs text-muted-foreground">
@@ -135,35 +137,41 @@ export default async function MonthlyPage({ searchParams }: MonthlyPageProps) {
             </p>
           </CardContent>
         </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Estimado</CardTitle>
-            <DollarSign className="h-4 w-4 text-muted-foreground" />
+        <Card className="border-border/60 hover:border-primary/20 transition-all duration-300 hover:shadow-md">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
+            <CardTitle className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Total Estimado</CardTitle>
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-muted">
+              <DollarSign className="h-4 w-4 text-muted-foreground" />
+            </div>
           </CardHeader>
           <CardContent>
-            <div className="text-xl font-bold">{formatCurrency(data.totalEstimated)}</div>
+            <div className="font-serif text-xl font-extrabold">{formatCurrency(data.totalEstimated)}</div>
             <p className="text-xs text-muted-foreground">{data.monthName}</p>
           </CardContent>
         </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Real</CardTitle>
-            <TrendingDown className="h-4 w-4 text-destructive" />
+        <Card className="border-border/60 hover:border-primary/20 transition-all duration-300 hover:shadow-md">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
+            <CardTitle className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Total Real</CardTitle>
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-destructive/10">
+              <TrendingDown className="h-4 w-4 text-destructive" />
+            </div>
           </CardHeader>
           <CardContent>
-            <div className="text-xl font-bold text-destructive">{formatCurrency(data.totalActual)}</div>
+            <div className="font-serif text-xl font-extrabold text-destructive">{formatCurrency(data.totalActual)}</div>
             <p className="text-xs text-muted-foreground">
               {data.totalEstimated > 0 ? ((data.totalActual / data.totalEstimated) * 100).toFixed(1) : 0}% del estimado
             </p>
           </CardContent>
         </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Ahorros</CardTitle>
-            <TrendingUp className="h-4 w-4 text-primary" />
+        <Card className="border-border/60 hover:border-primary/20 transition-all duration-300 hover:shadow-md">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
+            <CardTitle className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Ahorros</CardTitle>
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
+              <TrendingUp className="h-4 w-4 text-primary" />
+            </div>
           </CardHeader>
           <CardContent>
-            <div className="text-xl font-bold text-primary">
+            <div className="font-serif text-xl font-extrabold text-primary">
               {salary ? formatCurrency(salary.amount - data.totalActual) : '-'}
             </div>
             <p className="text-xs text-muted-foreground">
@@ -174,13 +182,15 @@ export default async function MonthlyPage({ searchParams }: MonthlyPageProps) {
             </p>
           </CardContent>
         </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Progreso</CardTitle>
-            <BarChart3 className="h-4 w-4 text-primary" />
+        <Card className="border-border/60 hover:border-primary/20 transition-all duration-300 hover:shadow-md">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
+            <CardTitle className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Progreso</CardTitle>
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-500/10">
+              <BarChart3 className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+            </div>
           </CardHeader>
           <CardContent>
-            <div className="text-xl font-bold text-primary">{data.totalPaid}/{activeCount}</div>
+            <div className="font-serif text-xl font-extrabold text-primary">{data.totalPaid}/{activeCount}</div>
             <p className="text-xs text-muted-foreground">gastos activos pagados</p>
           </CardContent>
         </Card>
@@ -193,9 +203,9 @@ export default async function MonthlyPage({ searchParams }: MonthlyPageProps) {
       <ExpenseHeatmap data={heatmapData} year={year} month={month} />
 
       {/* Detalle de gastos */}
-      <Card>
+      <Card className="border-border/60">
         <CardHeader>
-          <CardTitle>Detalle de Gastos</CardTitle>
+          <CardTitle className="font-serif text-lg font-bold">Detalle de Gastos</CardTitle>
           <CardDescription>
             Lista completa de gastos para {data.monthName}
           </CardDescription>
@@ -214,10 +224,12 @@ export default async function MonthlyPage({ searchParams }: MonthlyPageProps) {
       <PendingAlerts />
 
       {/* Generar ocurrencias */}
-      <Card>
+      <Card className="border-border/60 border-dashed">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <CalendarDays className="h-5 w-5" />
+          <CardTitle className="flex items-center gap-2 font-serif text-lg font-bold">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
+              <CalendarDays className="h-4 w-4 text-primary" />
+            </div>
             Configuración del Mes
           </CardTitle>
           <CardDescription>

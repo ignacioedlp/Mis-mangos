@@ -53,10 +53,12 @@ export function ExpenseHeatmap({ data, year, month }: ExpenseHeatmapProps) {
     })
 
     return (
-        <Card className="w-full md:w-2xl">
+        <Card className="w-full md:w-2xl border-border/60">
             <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                    <Calendar className="h-5 w-5" />
+                <CardTitle className="flex items-center gap-2 font-serif text-lg font-bold">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
+                        <Calendar className="h-4 w-4 text-primary" />
+                    </div>
                     Calendario de Gastos
                 </CardTitle>
                 <CardDescription>

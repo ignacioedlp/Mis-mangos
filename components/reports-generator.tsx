@@ -77,9 +77,9 @@ export function ReportsGenerator() {
           break
         case "SPENDING_TRENDS":
           await generateSpendingTrendsReport(
-            parseInt(startYear), 
-            parseInt(startMonth), 
-            parseInt(endYear), 
+            parseInt(startYear),
+            parseInt(startMonth),
+            parseInt(endYear),
             parseInt(endMonth)
           )
           break
@@ -88,13 +88,13 @@ export function ReportsGenerator() {
       }
 
       toast.success("Report generated successfully!")
-      
+
       // Reset form
       setReportType("")
-      
+
       // Refresh page to show new report
       window.location.reload()
-      
+
     } catch (error) {
       console.error("Report generation error:", error)
       toast.error("Failed to generate report")
@@ -106,10 +106,12 @@ export function ReportsGenerator() {
   const selectedReportType = reportTypes.find(type => type.value === reportType)
 
   return (
-    <Card>
+    <Card className="border-border/60">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <FileText className="h-5 w-5" />
+        <CardTitle className="flex items-center gap-2 font-serif text-lg font-bold">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
+            <FileText className="h-4 w-4 text-primary" />
+          </div>
           Generador de Reportes
         </CardTitle>
         <CardDescription>
@@ -147,7 +149,7 @@ export function ReportsGenerator() {
           <div className="space-y-4 p-4 bg-muted/50 rounded-lg">
             <div className="flex items-center gap-2 mb-4">
               {selectedReportType?.icon}
-              <h4 className="font-medium">{selectedReportType?.label} Parameters</h4>
+              <h4 className="font-medium text-sm">{selectedReportType?.label} — Parámetros</h4>
             </div>
 
             {(reportType === "MONTHLY_SUMMARY" || reportType === "BUDGET_ANALYSIS") && (
@@ -257,8 +259,8 @@ export function ReportsGenerator() {
         )}
 
         {/* Generate Button */}
-        <Button 
-          onClick={handleGenerate} 
+        <Button
+          onClick={handleGenerate}
           disabled={!reportType || loading}
           className="w-full"
         >

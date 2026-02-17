@@ -36,14 +36,14 @@ export function ComparisonSelector({ startYear, startMonth, endYear, endMonth }:
     const startDate = new Date(endY, endM - months - 1, 1)
     const startY = startDate.getFullYear()
     const startM = startDate.getMonth() + 1
-    
+
     updateComparison(startY, startM, endY, endM)
   }
 
   return (
-    <Card className="w-fit">
+    <Card className="w-fit border-border/60">
       <CardHeader className="pb-3">
-        <CardTitle className="text-sm">Period Selection</CardTitle>
+        <CardTitle className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Selección de Período</CardTitle>
       </CardHeader>
       <CardContent className="space-y-3">
         <div className="text-xs text-muted-foreground">

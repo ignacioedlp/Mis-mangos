@@ -58,7 +58,7 @@ export function NotificationsPanel() {
   async function handleMarkAsRead(notificationId: string) {
     try {
       await markNotificationAsRead(notificationId)
-      setNotifications(prev => 
+      setNotifications(prev =>
         prev.map(n => n.id === notificationId ? { ...n, isRead: true } : n)
       )
       setUnreadCount(prev => Math.max(0, prev - 1))
@@ -71,17 +71,17 @@ export function NotificationsPanel() {
   async function handleArchive(notificationId: string) {
     try {
       await archiveNotification(notificationId)
-      
+
       // Find the notification before removing it
       const notificationToArchive = notifications?.find(n => n.id === notificationId)
-      
+
       setNotifications(prev => prev.filter(n => n.id !== notificationId))
-      
+
       // Update unread count only if the archived notification was unread
       if (notificationToArchive && !notificationToArchive.isRead) {
         setUnreadCount(prev => Math.max(0, prev - 1))
       }
-      
+
       toast.success("Notification archived")
     } catch {
       toast.error("Failed to archive notification")
@@ -127,8 +127,8 @@ export function NotificationsPanel() {
         <Button variant="outline" size="sm" className="relative">
           <Bell className="h-4 w-4" />
           {unreadCount > 0 && (
-            <Badge 
-              variant="destructive" 
+            <Badge
+              variant="destructive"
               className="absolute -top-2 -right-2 h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs"
             >
               {unreadCount > 99 ? "99+" : unreadCount}
@@ -138,8 +138,10 @@ export function NotificationsPanel() {
       </SheetTrigger>
       <SheetContent className="w-[400px] sm:w-[540px]">
         <SheetHeader>
-          <SheetTitle className="flex items-center gap-2">
-            <Bell className="h-5 w-5" />
+          <SheetTitle className="flex items-center gap-2 font-serif">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
+              <Bell className="h-4 w-4 text-primary" />
+            </div>
             Notificaciones
             {unreadCount > 0 && (
               <Badge variant="secondary" className="ml-auto">
@@ -158,18 +160,19 @@ export function NotificationsPanel() {
               <div className="text-sm text-muted-foreground">Cargando...</div>
             </div>
           ) : notifications && notifications?.length === 0 ? (
-            <div className="text-center py-8">
-              <Bell className="h-12 w-12 mx-auto mb-4 text-muted-foreground/50" />
-              <p className="text-muted-foreground">No hay notificaciones aún</p>
+            <div className="text-center py-12">
+              <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-muted/60 mb-4">
+                <Bell className="h-7 w-7 text-muted-foreground/50" />
+              </div>
+              <p className="font-medium text-foreground">No hay notificaciones aún</p>
               <p className="text-sm text-muted-foreground">Te notificaremos sobre actualizaciones de presupuesto y eventos financieros importantes</p>
             </div>
           ) : (
             notifications?.map((notification) => (
-              <Card 
-                key={notification.id} 
-                className={`${getPriorityColor(notification.priority)} ${
-                  !notification.isRead ? "ring-2 ring-primary/20" : ""
-                }`}
+              <Card
+                key={notification.id}
+                className={`${getPriorityColor(notification.priority)} ${!notification.isRead ? "ring-2 ring-primary/20" : ""
+                  }`}
               >
                 <CardHeader className="pb-3">
                   <div className="flex items-start justify-between">
@@ -236,9 +239,9 @@ export function NotificationsPanel() {
 
         {notifications && notifications?.length > 0 && (
           <div className="mt-4 pt-4 border-t">
-            <Button 
-              variant="outline" 
-              size="sm" 
+            <Button
+              variant="outline"
+              size="sm"
               className="w-full"
               onClick={() => {
                 // Mark all as read

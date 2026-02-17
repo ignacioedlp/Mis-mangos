@@ -1,7 +1,7 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { Trash2 } from "lucide-react"
+import { EyeOff, Trash2 } from "lucide-react"
 import { deleteExpense } from "@/actions/expense-actions"
 import { useTransition } from "react"
 
@@ -19,14 +19,14 @@ export function ExpenseDeleteButton({ expenseId }: ExpenseDeleteButtonProps) {
   }
 
   return (
-    <Button 
-      variant="ghost" 
-      size="sm" 
+    <Button
+      variant="ghost"
+      size="sm"
       onClick={handleDelete}
       disabled={isPending}
       className="h-8 w-8 p-0 text-destructive hover:text-destructive"
     >
-      <Trash2 className="h-4 w-4" />
+      <EyeOff className="h-4 w-4" />
     </Button>
   )
 }

@@ -24,12 +24,12 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { 
-  MoreVertical, 
-  Edit, 
-  Trash2, 
-  CheckCircle, 
-  PauseCircle, 
+import {
+  MoreVertical,
+  Edit,
+  Trash2,
+  CheckCircle,
+  PauseCircle,
   PlayCircle,
   XCircle,
   Target,
@@ -143,13 +143,15 @@ export function GoalCard({ goal, onEdit, onUpdate }: GoalCardProps) {
 
   return (
     <>
-      <Card>
+      <Card className="border-border/60 hover:border-primary/20 transition-all duration-300 hover:shadow-md">
         <CardHeader>
           <div className="flex items-start justify-between">
             <div className="flex-1">
-              <div className="flex items-center gap-2 mb-2">
-                <Target className="h-5 w-5 text-primary" />
-                <CardTitle className="text-xl">{goal.name}</CardTitle>
+              <div className="flex items-center gap-2.5 mb-2">
+                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10">
+                  <Target className="h-4.5 w-4.5 text-primary" />
+                </div>
+                <CardTitle className="font-serif text-xl font-bold">{goal.name}</CardTitle>
               </div>
               <div className="flex gap-2 flex-wrap">
                 <Badge className={goalTypeColors[goal.type]} variant="secondary">
@@ -232,13 +234,13 @@ export function GoalCard({ goal, onEdit, onUpdate }: GoalCardProps) {
             <div className="flex justify-between items-center text-sm">
               <div>
                 <span className="text-muted-foreground">Actual: </span>
-                <span className="font-semibold">
+                <span className="font-serif font-bold">
                   ${goal.currentAmount.toLocaleString()}
                 </span>
               </div>
               <div>
                 <span className="text-muted-foreground">Objetivo: </span>
-                <span className="font-semibold">
+                <span className="font-serif font-bold">
                   ${goal.targetAmount.toLocaleString()}
                 </span>
               </div>

@@ -1,14 +1,21 @@
 import type { Metadata } from "next";
-import { Noto_Sans_KR } from "next/font/google";
+import { DM_Sans, Bricolage_Grotesque } from "next/font/google";
 import "./globals.css";
 import NextTopLoader from "nextjs-toploader";
 import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "@/components/theme-provider";
 
-const notoSansKR = Noto_Sans_KR({
-  weight: ["300", "400", "500", "700"],
+const dmSans = DM_Sans({
+  weight: ["300", "400", "500", "600", "700"],
   subsets: ["latin"],
-  variable: "--font-noto-sans-kr",
+  variable: "--font-dm-sans",
+  display: "swap",
+});
+
+const bricolage = Bricolage_Grotesque({
+  weight: ["400", "500", "600", "700", "800"],
+  subsets: ["latin"],
+  variable: "--font-bricolage",
   display: "swap",
 });
 
@@ -75,18 +82,18 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="en"
-      className={`${notoSansKR.variable}`}
+      lang="es"
+      className={`${dmSans.variable} ${bricolage.variable}`}
       suppressHydrationWarning
     >
-      <body className={` antialiased`}>
+      <body className={`${dmSans.className} antialiased`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange
         >
-          <NextTopLoader showSpinner={false} height={6} color="#000000" />
+          <NextTopLoader showSpinner={false} height={3} color="var(--primary)" />
           <Toaster richColors position="top-right" />
           <main className="min-h-screen">{children}</main>
         </ThemeProvider>

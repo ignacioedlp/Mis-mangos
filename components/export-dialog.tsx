@@ -100,7 +100,7 @@ export function ExportDialog({ data }: ExportDialogProps) {
     setLoading(true)
     try {
       const doc = new jsPDF()
-      
+
       // Title
       doc.setFontSize(20)
       doc.text(`Reporte de Gastos - ${data.monthName}`, 20, 20)
@@ -123,7 +123,7 @@ export function ExportDialog({ data }: ExportDialogProps) {
         const savingsRate = ((data.salary - data.totalActual) / data.salary) * 100
         doc.text(`Tasa de Ahorro: ${savingsRate.toFixed(1)}%`, 20, yPos)
       }
-      
+
       yPos += 20
 
       // Expenses table
@@ -188,7 +188,7 @@ export function ExportDialog({ data }: ExportDialogProps) {
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Exportar Datos</DialogTitle>
+          <DialogTitle className="font-serif">Exportar Datos</DialogTitle>
           <DialogDescription>
             Exporta los datos de tus gastos para {data.monthName} en diferentes formatos
           </DialogDescription>

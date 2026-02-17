@@ -13,10 +13,10 @@ export default async function ReportsPage() {
   const { reports } = await ReportsData()
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col gap-2">
-        <h2 className="text-3xl font-bold tracking-tight">Reportes y Analiticas</h2>
-        <p className="text-muted-foreground">
+    <div className="space-y-8">
+      <div className="flex flex-col gap-1">
+        <h2 className="font-serif text-3xl font-extrabold tracking-tight">Reportes y Analíticas</h2>
+        <p className="text-muted-foreground text-sm">
           Genera reportes detallados y analiza tus datos financieros
         </p>
       </div>
@@ -25,10 +25,12 @@ export default async function ReportsPage() {
       <ReportsGenerator />
 
       {/* Reports List */}
-      <Card>
+      <Card className="border-border/60">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <FileText className="h-5 w-5" />
+          <CardTitle className="flex items-center gap-2 font-serif text-lg font-bold">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
+              <FileText className="h-4 w-4 text-primary" />
+            </div>
             Reportes Generados
           </CardTitle>
           <CardDescription>

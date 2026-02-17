@@ -52,9 +52,9 @@ export function DeleteConfirmationDialog({
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         {children || (
-          <Button 
-            variant="ghost" 
-            size="sm" 
+          <Button
+            variant="ghost"
+            size="sm"
             className="h-8 w-8 p-0 text-destructive hover:text-destructive"
           >
             <Trash2 className="h-4 w-4" />
@@ -63,15 +63,17 @@ export function DeleteConfirmationDialog({
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle className="flex items-center gap-2 text-destructive">
-            <AlertTriangle className="h-5 w-5" />
+          <DialogTitle className="flex items-center gap-2 text-destructive font-serif">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-destructive/10">
+              <AlertTriangle className="h-4 w-4" />
+            </div>
             {title}
           </DialogTitle>
           <DialogDescription className="text-left">
             {description}
           </DialogDescription>
         </DialogHeader>
-        
+
         <div className="py-4">
           <div className="bg-muted p-4 rounded-lg">
             <p className="font-medium text-sm">
@@ -91,15 +93,15 @@ export function DeleteConfirmationDialog({
         </div>
 
         <DialogFooter>
-          <Button 
-            variant="outline" 
+          <Button
+            variant="outline"
             onClick={() => setOpen(false)}
             disabled={isDeleting}
           >
             Cancelar
           </Button>
-          <Button 
-            variant="destructive" 
+          <Button
+            variant="destructive"
             onClick={handleConfirm}
             disabled={isDeleting || isLoading}
           >

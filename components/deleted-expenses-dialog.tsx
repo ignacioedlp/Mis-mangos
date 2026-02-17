@@ -54,17 +54,17 @@ export function DeletedExpensesDialog() {
       <DialogTrigger asChild>
         <Button variant="outline" size="sm">
           <Trash2 className="h-4 w-4 mr-2" />
-          Gastos Eliminados
+          Gastos Ocultos
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[600px] max-h-[80vh]">
         <DialogHeader>
-          <DialogTitle>Gastos Eliminados</DialogTitle>
+          <DialogTitle>Gastos Ocultos</DialogTitle>
           <DialogDescription>
-            Visualiza y restaura gastos eliminados previamente. Estos gastos fueron eliminados de forma suave y pueden ser recuperados.
+            Visualiza y restaura gastos ocultos previamente. Estos gastos fueron eliminados de forma suave y pueden ser recuperados.
           </DialogDescription>
         </DialogHeader>
-        
+
         <div className="overflow-y-auto max-h-[60vh]">
           {loading ? (
             <div className="flex justify-center py-8">
@@ -73,7 +73,7 @@ export function DeletedExpensesDialog() {
           ) : deletedExpenses.length === 0 ? (
             <div className="text-center py-8 text-muted-foreground">
               <Trash2 className="h-12 w-12 mx-auto mb-4 opacity-50" />
-              <p>No se encontraron gastos eliminados.</p>
+              <p>No se encontraron gastos ocultos.</p>
               <p className="text-sm">¡Todos tus gastos están activos!</p>
             </div>
           ) : (

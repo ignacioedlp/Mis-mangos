@@ -10,7 +10,7 @@ import { ExpensesByMonthTable } from "@/components/expenses-by-month-table"
 import { formatCurrency } from '../../../lib/utils';
 
 interface ComparisonPageProps {
-  searchParams: Promise<{ 
+  searchParams: Promise<{
     startYear?: string
     startMonth?: string
     endYear?: string
@@ -21,36 +21,36 @@ interface ComparisonPageProps {
 export default async function ComparisonPage({ searchParams }: ComparisonPageProps) {
   const params = await searchParams
   const currentDate = new Date()
-  
+
   // Default to last 6 months
   const defaultEndYear = currentDate.getFullYear()
   const defaultEndMonth = currentDate.getMonth() + 1
   const defaultStartDate = new Date(defaultEndYear, defaultEndMonth - 7, 1)
-  
+
   const startYear = parseInt(params.startYear || defaultStartDate.getFullYear().toString())
   const startMonth = parseInt(params.startMonth || (defaultStartDate.getMonth() + 1).toString())
   const endYear = parseInt(params.endYear || defaultEndYear.toString())
   const endMonth = parseInt(params.endMonth || defaultEndMonth.toString())
-  
+
   const comparisonData = await getComparison(startYear, startMonth, endYear, endMonth)
 
   const totalEstimated = comparisonData.reduce((sum, d) => sum + d.totalEstimated, 0)
   const totalActual = comparisonData.reduce((sum, d) => sum + d.totalActual, 0)
   const totalSalary = comparisonData.reduce((sum, d) => sum + d.salary, 0)
-  const avgSavingsRate = comparisonData.length > 0 
-    ? comparisonData.reduce((sum, d) => sum + d.savingsRate, 0) / comparisonData.length 
+  const avgSavingsRate = comparisonData.length > 0
+    ? comparisonData.reduce((sum, d) => sum + d.savingsRate, 0) / comparisonData.length
     : 0
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div className="flex flex-col gap-2">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
           <div>
-            <h2 className="text-3xl font-bold tracking-tight">Comparación de Gastos</h2>
-            <p className="text-muted-foreground">Compara gastos en diferentes períodos de tiempo</p>
+            <h2 className="font-serif text-3xl font-extrabold tracking-tight">Comparación de Gastos</h2>
+            <p className="text-muted-foreground text-sm">Compara gastos en diferentes períodos de tiempo</p>
           </div>
-          <ComparisonSelector 
-            startYear={startYear} 
+          <ComparisonSelector
+            startYear={startYear}
             startMonth={startMonth}
             endYear={endYear}
             endMonth={endMonth}
@@ -60,45 +60,53 @@ export default async function ComparisonPage({ searchParams }: ComparisonPagePro
 
       {/* Summary Stats */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total del Periodo Estimado</CardTitle>
-            <DollarSign className="h-4 w-4 text-muted-foreground" />
+        <Card className="border-border/60 hover:border-primary/20 transition-all duration-300 hover:shadow-md">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
+            <CardTitle className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Total del Periodo Estimado</CardTitle>
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-muted">
+              <DollarSign className="h-4 w-4 text-muted-foreground" />
+            </div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{formatCurrency(totalEstimated)}</div>
+            <div className="font-serif text-2xl font-extrabold">{formatCurrency(totalEstimated)}</div>
             <p className="text-xs text-muted-foreground">{comparisonData.length} meses</p>
           </CardContent>
         </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total del Periodo Actual</CardTitle>
-            <TrendingDown className="h-4 w-4 text-red-600" />
+        <Card className="border-border/60 hover:border-primary/20 transition-all duration-300 hover:shadow-md">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
+            <CardTitle className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Total del Periodo Actual</CardTitle>
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-destructive/10">
+              <TrendingDown className="h-4 w-4 text-destructive" />
+            </div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-red-600">{formatCurrency(totalActual)}</div>
+            <div className="font-serif text-2xl font-extrabold text-destructive">{formatCurrency(totalActual)}</div>
             <p className="text-xs text-muted-foreground">
               {totalEstimated > 0 ? ((totalActual / totalEstimated) * 100).toFixed(1) : 0}% de lo estimado
             </p>
           </CardContent>
         </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total del Salario</CardTitle>
-            <TrendingUp className="h-4 w-4 text-green-600" />
+        <Card className="border-border/60 hover:border-primary/20 transition-all duration-300 hover:shadow-md">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
+            <CardTitle className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Total del Salario</CardTitle>
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-500/10">
+              <TrendingUp className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+            </div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-600">{formatCurrency(totalSalary)}</div>
+            <div className="font-serif text-2xl font-extrabold text-emerald-600 dark:text-emerald-400">{formatCurrency(totalSalary)}</div>
             <p className="text-xs text-muted-foreground">Total de ingresos del periodo</p>
           </CardContent>
         </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Tasa de Ahorro Promedio</CardTitle>
-            <Percent className="h-4 w-4 text-blue-600" />
+        <Card className="border-border/60 hover:border-primary/20 transition-all duration-300 hover:shadow-md">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
+            <CardTitle className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Tasa de Ahorro Promedio</CardTitle>
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-500/10">
+              <Percent className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+            </div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-blue-600">{avgSavingsRate.toFixed(1)}%</div>
+            <div className="font-serif text-2xl font-extrabold text-blue-600 dark:text-blue-400">{avgSavingsRate.toFixed(1)}%</div>
             <p className="text-xs text-muted-foreground">Promedio durante el periodo</p>
           </CardContent>
         </Card>
@@ -114,9 +122,9 @@ export default async function ComparisonPage({ searchParams }: ComparisonPagePro
       <ExpensesByMonthTable data={comparisonData} />
 
       {/* Detailed Table */}
-      <Card>
+      <Card className="border-border/60">
         <CardHeader>
-          <CardTitle>Desglose Mensual</CardTitle>
+          <CardTitle className="font-serif text-lg font-bold">Desglose Mensual</CardTitle>
           <CardDescription>Comparación detallada por mes</CardDescription>
         </CardHeader>
         <CardContent>
@@ -154,14 +162,14 @@ export default async function ComparisonPage({ searchParams }: ComparisonPagePro
                     </TableCell>
                     <TableCell>
                       {data.salary > 0 ? (
-                        <span className={data.salary - data.totalActual > 0 ? 'text-green-600' : 'text-red-600'}>
+                        <span className={data.salary - data.totalActual > 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-destructive'}>
                           {formatCurrency(data.salary - data.totalActual)}
                         </span>
                       ) : '-'}
                     </TableCell>
                     <TableCell>
                       {data.salary > 0 ? (
-                        <span className={data.savingsRate > 0 ? 'text-green-600' : 'text-red-600'}>
+                        <span className={data.savingsRate > 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-destructive'}>
                           {data.savingsRate.toFixed(1)}%
                         </span>
                       ) : '-'}
@@ -172,7 +180,7 @@ export default async function ComparisonPage({ searchParams }: ComparisonPagePro
                           {data.totalPaid}/{data.items.length} pagados
                         </Badge>
                         {data.savingsRate > 20 && (
-                          <Badge variant="outline" className="text-green-600">
+                          <Badge variant="outline" className="text-emerald-600 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800">
                             Buen Ahorro
                           </Badge>
                         )}

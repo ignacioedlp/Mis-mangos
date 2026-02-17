@@ -3,7 +3,6 @@ import Footer from "@/components/footer";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { UserProvider } from "@/context/UserContext";
-import { StarsBackground } from "@/components/animate-ui/backgrounds/stars";
 
 export default async function HomeLayout({
    children,
@@ -16,9 +15,12 @@ export default async function HomeLayout({
    const user = session?.user ?? null;
    return (
       <UserProvider user={user}>
-         <div className="relative">
-            <div className="absolute inset-x-0 top-0 w-full h-[450px] sm:h[500px] md:h-[550px] lg:h-[800px] -z-10 pointer-events-none">
-               <StarsBackground className="w-full h-full" />
+         <div className="relative grain-overlay">
+            {/* Warm gradient mesh background */}
+            <div className="fixed inset-0 -z-10 pointer-events-none">
+               <div className="absolute top-0 left-1/4 w-[600px] h-[600px] rounded-full bg-primary/[0.04] blur-[120px]" />
+               <div className="absolute top-1/3 right-0 w-[500px] h-[500px] rounded-full bg-accent/30 blur-[100px]" />
+               <div className="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full bg-primary/[0.03] blur-[80px]" />
             </div>
             <Navbar />
             <main>

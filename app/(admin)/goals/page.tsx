@@ -74,24 +74,31 @@ export default function GoalsPage() {
 
   if (isLoading) {
     return (
-      <div className="container mx-auto py-8">
+      <div className="py-8">
         <div className="flex items-center justify-center h-64">
-          <p className="text-muted-foreground">Cargando objetivos...</p>
+          <div className="text-center">
+            <div className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 mb-3 animate-pulse">
+              <Target className="h-6 w-6 text-primary" />
+            </div>
+            <p className="text-muted-foreground text-sm">Cargando objetivos...</p>
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="container mx-auto py-8 space-y-6">
+    <div className="py-4 space-y-8">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
         <div>
-          <h1 className="text-3xl font-bold flex items-center gap-2">
-            <Target className="h-8 w-8 text-primary" />
+          <h1 className="font-serif text-3xl font-extrabold tracking-tight flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10">
+              <Target className="h-5 w-5 text-primary" />
+            </div>
             Mis Objetivos
           </h1>
-          <p className="text-muted-foreground mt-2">
+          <p className="text-muted-foreground text-sm mt-1">
             Define y alcanza tus metas financieras
           </p>
         </div>
@@ -147,9 +154,11 @@ export default function GoalsPage() {
 
         <TabsContent value={activeTab} className="mt-6">
           {displayGoals.length === 0 ? (
-            <div className="text-center py-12 border-2 border-dashed rounded-lg">
-              <Target className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-              <h3 className="text-lg font-semibold mb-2">
+            <div className="text-center py-16 border-2 border-dashed border-border/60 rounded-2xl">
+              <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-muted/60 mb-4">
+                <Target className="h-7 w-7 text-muted-foreground" />
+              </div>
+              <h3 className="font-serif text-lg font-bold mb-1">
                 {activeTab === "all"
                   ? "No tienes objetivos aún"
                   : `No tienes objetivos ${activeTab === "active" ? "activos" : activeTab === "completed" ? "completados" : "pausados"}`

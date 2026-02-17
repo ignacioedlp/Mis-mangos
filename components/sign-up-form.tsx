@@ -92,8 +92,8 @@ export default function SignUpForm() {
                   </FormItem>
                )}
             />
-            <Button type="submit" className="w-full">
-               Registrarse
+            <Button type="submit" className="w-full h-11 font-semibold shadow-sm shadow-primary/20">
+               Crear cuenta
             </Button>
          </form>
       </Form>

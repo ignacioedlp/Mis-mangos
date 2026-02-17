@@ -17,64 +17,63 @@ const GoogleIcon = (
 
 export default function SignInSection() {
    return (
-      <div className="flex items-center justify-center min-h-screen">
-         <div className="flex flex-1 flex-col justify-center px-4 py-10 lg:px-6">
-            <div className="sm:mx-auto sm:w-full sm:max-w-md">
-               <div className="flex items-center">
-                  <Logo />
-               </div>
-               <h3 className="mt-6 text-lg font-semibold text-foreground dark:text-foreground">
-                  Bienvenido de nuevo!
-               </h3>
-               <p className="mt-2 text-sm text-muted-foreground dark:text-muted-foreground">
-                  Aun no tienes una cuenta?{" "}
-                  <Link
-                     href="/sign-up"
-                     className="font-medium text-primary hover:text-primary/90 dark:text-primary hover:dark:text-primary/90"
-                  >
-                     Regístrate
-                  </Link>
-               </p>
-               <div className="mt-8">
-                  <Button variant="outline" className="w-full" onClick={signInWithGoogle}>
-                     <GoogleIcon className="size-4" aria-hidden={true} />
-                     Iniciar Sesión con Google
-                  </Button>
-               </div>
+      <div className="w-full max-w-md mx-auto">
+         <div className="rounded-2xl border border-border/60 bg-card/80 backdrop-blur-sm p-8 shadow-xl">
+            <div className="flex items-center gap-3 mb-8">
+               <Logo />
+               <span className="font-serif text-lg font-bold tracking-tight">Mis Mangos</span>
+            </div>
 
-               <div className="py-7">
-                  <div className="relative">
-                     <div className="absolute inset-0 flex items-center">
-                        <span className="w-full border-t"></span>
-                     </div>
-                     <div className="relative flex justify-center text-xs uppercase">
-                        <span className="bg-background px-2 text-muted-foreground">
-                           O continúa con
-                        </span>
-                     </div>
+            <h1 className="font-serif text-2xl font-extrabold tracking-tight">
+               Bienvenido de nuevo
+            </h1>
+            <p className="mt-2 text-sm text-muted-foreground">
+               ¿No tenés cuenta?{" "}
+               <Link
+                  href="/sign-up"
+                  className="font-semibold text-primary hover:text-primary/80 transition-colors"
+               >
+                  Registrate
+               </Link>
+            </p>
+
+            <div className="mt-7">
+               <Button
+                  variant="outline"
+                  className="w-full h-11 font-medium border-border/60 hover:bg-accent/50 transition-all"
+                  onClick={signInWithGoogle}
+               >
+                  <GoogleIcon className="size-4 mr-2" aria-hidden={true} />
+                  Continuar con Google
+               </Button>
+            </div>
+
+            <div className="py-6">
+               <div className="relative">
+                  <div className="absolute inset-0 flex items-center">
+                     <span className="w-full border-t border-border/60"></span>
+                  </div>
+                  <div className="relative flex justify-center text-xs">
+                     <span className="bg-card px-3 text-muted-foreground font-medium">
+                        o con tu correo
+                     </span>
                   </div>
                </div>
-               <SignInForm />
-
-               <p className="pt-3 text-sm text-muted-foreground">
-                  Al continuar, aceptas nuestros{" "}
-                  <Link
-                     href="#"
-                     className="underline underline-offset-4 hover:text-primary"
-                  >
-                     Términos de Servicio
-                  </Link>{" "}
-                  y{" "}
-                  <Link
-                     href="#"
-                     className="underline underline-offset-4 hover:text-primary"
-                  >
-                     Política de Privacidad
-                  </Link>
-                  .
-               </p>
             </div>
+
+            <SignInForm />
          </div>
+
+         <p className="pt-6 text-center text-xs text-muted-foreground max-w-sm mx-auto leading-relaxed">
+            Al continuar, aceptás nuestros{" "}
+            <Link href="#" className="text-foreground hover:text-primary transition-colors underline underline-offset-4">
+               Términos de Servicio
+            </Link>{" "}
+            y{" "}
+            <Link href="#" className="text-foreground hover:text-primary transition-colors underline underline-offset-4">
+               Política de Privacidad
+            </Link>
+         </p>
       </div>
    )
 }

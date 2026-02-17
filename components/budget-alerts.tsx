@@ -16,13 +16,13 @@ function BudgetDistributionMini({
 }) {
   const ordered = categories
     .filter(c => c.budgetPercentage > 0)
-    .sort((a,b) => b.budgetPercentage - a.budgetPercentage);
+    .sort((a, b) => b.budgetPercentage - a.budgetPercentage);
 
   // Limitar segmentos para no saturar la barra (agrupa "otros")
   const maxSegments = 8;
   let display = ordered.slice(0, maxSegments);
   if (ordered.length > maxSegments) {
-    const restPct = ordered.slice(maxSegments).reduce((s,c)=> s + c.budgetPercentage, 0);
+    const restPct = ordered.slice(maxSegments).reduce((s, c) => s + c.budgetPercentage, 0);
     display = [...display, { id: 'otros', name: 'Otros', budgetPercentage: restPct, isOverBudget: false }];
   }
 
@@ -62,7 +62,7 @@ function BudgetDistributionMini({
         </div>
       </div>
       <div className="flex flex-wrap gap-1">
-        {display.slice(0,6).map((c, idx) => (
+        {display.slice(0, 6).map((c, idx) => (
           <span key={c.id} className="flex items-center gap-1 rounded bg-muted/60 px-1.5 py-0.5 text-[10px]">
             <span
               className="inline-block h-2 w-2 rounded-[2px]"
@@ -92,27 +92,29 @@ interface BudgetAlertsProps {
 
 export async function BudgetAlerts({ year, month }: BudgetAlertsProps) {
   const budgetData = await getBudgetAnalysis(year, month)
-  
+
   if (budgetData.monthlyIncome === 0) {
     return null // Don't show alerts if no salary is set
   }
 
   const overBudgetCategories = budgetData.categories.filter(c => c.isOverBudget && c.budgetPercentage > 0)
-  const nearLimitCategories = budgetData.categories.filter(c => 
-    !c.isOverBudget && 
-    c.budgetPercentage > 0 && 
-    c.usagePercentage >= 80 && 
+  const nearLimitCategories = budgetData.categories.filter(c =>
+    !c.isOverBudget &&
+    c.budgetPercentage > 0 &&
+    c.usagePercentage >= 80 &&
     c.usagePercentage < 100
   )
-  
+
   const hasAlerts = overBudgetCategories.length > 0 || nearLimitCategories.length > 0
 
   if (!hasAlerts) {
     return (
-      <Card>
+      <Card className="border-border/60">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium flex items-center gap-2">
-            <CheckCircle className="h-4 w-4 text-primary" />
+            <div className="flex h-6 w-6 items-center justify-center rounded-md bg-emerald-500/10">
+              <CheckCircle className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
+            </div>
             Estado del Presupuesto
           </CardTitle>
         </CardHeader>
@@ -129,17 +131,19 @@ export async function BudgetAlerts({ year, month }: BudgetAlertsProps) {
     <div className="space-y-4">
       {/* Over Budget Alerts */}
       {overBudgetCategories.length > 0 && (
-        <Card>
+        <Card className="border-border/60">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium flex items-center gap-2">
-              <AlertTriangle className="h-4 w-4 text-destructive" />
+              <div className="flex h-6 w-6 items-center justify-center rounded-md bg-destructive/10">
+                <AlertTriangle className="h-3.5 w-3.5 text-destructive" />
+              </div>
               Presupuesto Excedido
-              <Badge variant="destructive">{overBudgetCategories.length}</Badge>
+              <Badge variant="destructive" className="rounded-full">{overBudgetCategories.length}</Badge>
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
             {overBudgetCategories.map((category) => (
-              <div key={category.id} className="flex items-center justify-between p-3 rounded-lg border border-destructive/30 bg-destructive/10">
+              <div key={category.id} className="flex items-center justify-between p-3.5 rounded-xl border border-destructive/20 bg-destructive/5">
                 <div className="flex flex-col">
                   <span className="font-medium text-sm">{category.name}</span>
                   <span className="text-xs text-muted-foreground">
@@ -159,17 +163,19 @@ export async function BudgetAlerts({ year, month }: BudgetAlertsProps) {
 
       {/* Near Limit Alerts */}
       {nearLimitCategories.length > 0 && (
-        <Card>
+        <Card className="border-border/60">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium flex items-center gap-2">
-        <TrendingUp className="h-4 w-4 text-accent-foreground" />
+              <div className="flex h-6 w-6 items-center justify-center rounded-md bg-amber-500/10">
+                <TrendingUp className="h-3.5 w-3.5 text-amber-600 dark:text-amber-400" />
+              </div>
               Cerca del Límite del Presupuesto
-        <Badge variant="outline" className="border-accent/50 text-accent-foreground">{nearLimitCategories.length}</Badge>
+              <Badge variant="outline" className="rounded-full border-amber-300 dark:border-amber-700 text-amber-700 dark:text-amber-400">{nearLimitCategories.length}</Badge>
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
             {nearLimitCategories.map((category) => (
-        <div key={category.id} className="flex items-center justify-between p-3 rounded-lg border border-accent/40 bg-accent/10">
+              <div key={category.id} className="flex items-center justify-between p-3.5 rounded-xl border border-amber-200/60 dark:border-amber-800/40 bg-amber-50/50 dark:bg-amber-950/20">
                 <div className="flex flex-col">
                   <span className="font-medium text-sm">{category.name}</span>
                   <span className="text-xs text-muted-foreground">
@@ -177,7 +183,7 @@ export async function BudgetAlerts({ year, month }: BudgetAlertsProps) {
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
-          <Badge variant="outline" className="text-xs border-accent/50 text-accent-foreground">
+                  <Badge variant="outline" className="text-xs rounded-full border-amber-300 dark:border-amber-700 text-amber-700 dark:text-amber-400">
                     {formatPercentage(category.usagePercentage)}
                   </Badge>
                 </div>
@@ -188,10 +194,12 @@ export async function BudgetAlerts({ year, month }: BudgetAlertsProps) {
       )}
 
       {/* Budget Summary */}
-      <Card>
+      <Card className="border-border/60">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium">Resumen del Presupuesto</CardTitle>
-          <DollarSign className="h-4 w-4 text-muted-foreground" />
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-muted">
+            <DollarSign className="h-4 w-4 text-muted-foreground" />
+          </div>
         </CardHeader>
         <CardContent>
           <div className="flex items-center justify-between mb-3">

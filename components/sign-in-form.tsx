@@ -79,7 +79,7 @@ export default function SignInForm() {
                   </FormItem>
                )}
             />
-            <Button type="submit" className="w-full">
+            <Button type="submit" className="w-full h-11 font-semibold shadow-sm shadow-primary/20">
                Iniciar Sesión
             </Button>
          </form>

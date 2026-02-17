@@ -14,9 +14,9 @@ import { useUser } from "@/context/UserContext"
 export default function ProfileCard() {
    const user = useUser();
    return (
-      <Card className="overflow-hidden">
+      <Card className="overflow-hidden border-border/60">
          <CardHeader className="relative p-0">
-            <div className="h-32 bg-gradient-to-r from-primary/20 to-primary/40"></div>
+            <div className="h-32 bg-gradient-to-r from-primary/30 via-primary/20 to-amber-400/20"></div>
             <div className="absolute -bottom-12 left-4">
                <div className="relative">
                   <Avatar className="h-24 w-24 border-4 border-background">
@@ -30,7 +30,7 @@ export default function ProfileCard() {
          </CardHeader>
          <CardContent className="pt-14">
             <div className="space-y-1">
-               <h3 className="font-semibold text-xl">
+               <h3 className="font-serif text-xl font-bold">
                   {user?.name}
                </h3>
                <p className="text-sm text-muted-foreground">

@@ -23,7 +23,7 @@ export function GithubStars() {
 
    return (
       <div
-         className="inline-flex items-center gap-1 px-3 py-1.5 text-sm rounded-full border bg-muted text-muted-foreground hover:bg-muted/70 transition"
+         className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-full border border-border/60 bg-muted/50 text-muted-foreground hover:bg-muted transition-all"
          title="GitHub Stars for devAaus/better-auth"
       >
          <Star className="w-4 h-4 text-accent-foreground" />

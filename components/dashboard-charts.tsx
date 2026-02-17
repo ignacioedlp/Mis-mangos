@@ -50,7 +50,7 @@ function useChartVars() {
   const [vars, setVars] = React.useState<string[]>(["var(--color-chart-1)", "var(--color-chart-2)", "var(--color-chart-3)", "var(--color-chart-4)", "var(--color-chart-5)"]);
   React.useEffect(() => {
     const style = getComputedStyle(document.documentElement);
-    const extracted = [1,2,3,4,5].map(i => style.getPropertyValue(`--color-chart-${i}`).trim() || `var(--color-chart-${i})`);
+    const extracted = [1, 2, 3, 4, 5].map(i => style.getPropertyValue(`--color-chart-${i}`).trim() || `var(--color-chart-${i})`);
     setVars(extracted);
   }, []);
   return vars;
@@ -62,13 +62,18 @@ export function DashboardCharts({ items }: DashboardChartsProps) {
 
   if (data.length === 0) {
     return (
-      <Card>
+      <Card className="border-border/60">
         <CardHeader>
-          <CardTitle>Gráficos de Categorías</CardTitle>
+          <CardTitle className="font-serif text-lg font-bold">Gráficos de Categorías</CardTitle>
           <CardDescription>No hay datos suficientes para mostrar gráficos</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="text-sm text-muted-foreground">Agrega gastos o marca algunos como pagados.</div>
+          <div className="text-center py-12">
+            <div className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-muted/60 mb-3">
+              <span className="text-2xl">📊</span>
+            </div>
+            <p className="text-sm text-muted-foreground">Agrega gastos o marca algunos como pagados.</p>
+          </div>
         </CardContent>
       </Card>
     );
@@ -83,9 +88,9 @@ export function DashboardCharts({ items }: DashboardChartsProps) {
 
   return (
     <div className="grid gap-6 lg:grid-cols-2">
-      <Card>
+      <Card className="border-border/60">
         <CardHeader>
-          <CardTitle>Pagado vs Pendiente</CardTitle>
+          <CardTitle className="font-serif text-lg font-bold">Pagado vs Pendiente</CardTitle>
           <CardDescription>Distribución por categoría (monto estimado)</CardDescription>
         </CardHeader>
         <CardContent>
@@ -107,16 +112,16 @@ export function DashboardCharts({ items }: DashboardChartsProps) {
                   }
                 />
                 <ChartLegend content={<ChartLegendContent />} />
-                <Bar dataKey="paid" stackId="a" fill="var(--color-paid)" radius={[2,2,0,0]} />
-                <Bar dataKey="pending" stackId="a" fill="var(--color-pending)" radius={[2,2,0,0]} />
+                <Bar dataKey="paid" stackId="a" fill="var(--color-paid)" radius={[2, 2, 0, 0]} />
+                <Bar dataKey="pending" stackId="a" fill="var(--color-pending)" radius={[2, 2, 0, 0]} />
               </BarChart>
             </ChartContainer>
           </div>
         </CardContent>
       </Card>
-      <Card>
+      <Card className="border-border/60">
         <CardHeader>
-          <CardTitle>Participación de Categorías</CardTitle>
+          <CardTitle className="font-serif text-lg font-bold">Participación de Categorías</CardTitle>
           <CardDescription>Proporción del total estimado</CardDescription>
         </CardHeader>
         <CardContent>

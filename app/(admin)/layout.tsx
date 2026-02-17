@@ -30,7 +30,7 @@ export default async function DashboardLayout({
             <AppSidebar variant="inset" />
             <SidebarInset>
                <AppHeader user={user} />
-               <main className="flex-1 p-6">
+               <main className="flex-1 p-6 bg-muted/20">
                   <Suspense fallback={null}>
                      <ToastHandler />
                   </Suspense>
