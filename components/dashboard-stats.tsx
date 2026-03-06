@@ -16,7 +16,10 @@ export interface DashboardStatsProps {
 }
 
 export function DashboardStatsClient(props: DashboardStatsProps) {
-  const paidPercent = props.totalEstimated > 0 ? (props.totalPaid / props.totalEstimated) * 100 : 0;
+  const paidPercent =
+    props.totalEstimated > 0
+      ? (props.totalPaid / props.totalEstimated) * 100
+      : 0;
   const effectiveTotal = props.itemCount - props.skippedCount; // total considerado (sin skip)
   const progressPercent = (props.paidCount / (effectiveTotal || 1)) * 100;
   return (
@@ -30,14 +33,18 @@ export function DashboardStatsClient(props: DashboardStatsProps) {
       <StatCard
         title="Total Pagado"
         iconName="trendingDown"
-  value={<span className="text-primary">{formatCurrency(props.totalPaid)}</span>}
+        value={
+          <span className="text-primary">
+            {formatCurrency(props.totalPaid)}
+          </span>
+        }
         subtitle={`${paidPercent.toFixed(1)}% completado`}
         progress={paidPercent}
       />
       <StatCard
         title="Pendiente"
         iconName="trendingUp"
-  value={<span className="text-accent">{formatCurrency(props.totalPending)}</span>}
+        value={<span>{formatCurrency(props.totalPending)}</span>}
         subtitle={`${props.remainingCount} items restantes`}
         progress={paidPercent}
       />
