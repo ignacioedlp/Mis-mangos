@@ -82,7 +82,7 @@ export default function AppSidebar({
   ];
 
   return (
-    <Sidebar collapsible="icon" {...props}>
+    <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader className="flex items-center px-4 py-5">
         <div className="flex items-center gap-2.5">
           <Logo />
