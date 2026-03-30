@@ -109,6 +109,64 @@ export interface CategoryBudgetStatusDTO {
    monthlyIncome: number;
 }
 
+// Installment types
+export interface InstallmentPurchaseDTO {
+   id: string;
+   expenseId: string;
+   productName: string;
+   totalPrice: number;
+   totalInstallments: number;
+   installmentAmount: number;
+   startYear: number;
+   startMonth: number;
+   notes?: string | null;
+   paidCount: number;
+   pendingCount: number;
+   createdAt: Date;
+}
+
+export interface InstallmentPaymentDTO {
+   id: string;
+   installmentPurchaseId: string;
+   installmentNumber: number;
+   year: number;
+   month: number;
+   amount: number;
+   isPaid: boolean;
+   paidAt?: Date | null;
+   // Denormalized from InstallmentPurchase for dialog display
+   productName: string;
+   totalInstallments: number;
+}
+
+export interface InstallmentProgressItemDTO {
+   purchaseId: string;
+   expenseId: string;
+   expenseName: string;
+   productName: string;
+   totalInstallments: number;
+   paidCount: number;
+   pendingCount: number;
+   progressPercentage: number;
+   remainingAmount: number;
+   dueThisMonthAmount: number;
+   nextInstallmentNumber?: number;
+   nextInstallmentYear?: number;
+   nextInstallmentMonth?: number;
+   isCompleted: boolean;
+}
+
+export interface InstallmentProgressOverviewDTO {
+   year: number;
+   month: number;
+   totalProducts: number;
+   completedProducts: number;
+   activeProducts: number;
+   totalPendingAmount: number;
+   dueThisMonthAmount: number;
+   items: InstallmentProgressItemDTO[];
+}
+
 // Goal types
 export type GoalType = "SAVINGS" | "DEBT_PAYMENT" | "EXPENSE_REDUCTION" | "CUSTOM";
 export type GoalStatus = "ACTIVE" | "COMPLETED" | "CANCELLED" | "PAUSED";

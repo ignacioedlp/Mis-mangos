@@ -129,13 +129,54 @@ model Expense {
   createdAt       DateTime         @default(now())
   updatedAt       DateTime         @updatedAt
 
-  occurrences ExpenseOccurrence[]
+  occurrences          ExpenseOccurrence[]
+  installmentPurchases InstallmentPurchase[]
 
   @@index([userId])
   @@index([categoryId])
   @@index([subcategoryId])
   @@index([deletedAt]) // Index for soft delete queries
   @@map("expense")
+}
+
+model InstallmentPurchase {
+  id                String   @id @default(uuid())
+  expenseId         String
+  expense           Expense  @relation(fields: [expenseId], references: [id], onDelete: Cascade)
+  productName       String
+  totalPrice        Decimal  @db.Decimal(12, 2)
+  totalInstallments Int
+  installmentAmount Decimal  @db.Decimal(12, 2)
+  startYear         Int
+  startMonth        Int // 1-12
+  notes             String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  payments InstallmentPayment[]
+
+  @@index([expenseId])
+  @@index([startYear, startMonth])
+  @@map("installment_purchase")
+}
+
+model InstallmentPayment {
+  id                    String              @id @default(uuid())
+  installmentPurchaseId String
+  installmentPurchase   InstallmentPurchase @relation(fields: [installmentPurchaseId], references: [id], onDelete: Cascade)
+  installmentNumber     Int // 1-based cuota number
+  year                  Int
+  month                 Int // 1-12
+  amount                Decimal             @db.Decimal(12, 2)
+  isPaid                Boolean             @default(false)
+  paidAt                DateTime?
+  createdAt             DateTime            @default(now())
+  updatedAt             DateTime            @updatedAt
+
+  @@unique([installmentPurchaseId, installmentNumber])
+  @@index([year, month])
+  @@index([isPaid])
+  @@map("installment_payment")
 }
 
 model ExpenseOccurrence {

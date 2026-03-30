@@ -1,6 +1,7 @@
-# Better Auth Starter 🚀
+# Mis Mangos 🚀
 
-Better Auth Starter is a Next.js 15 boilerplate with built-in authentication using **BetterAuth**. It supports **Google Login** and **BetterAuth credentials**, providing a solid foundation for any Next.js project requiring authentication.
+Mis Mangos is a modern expense tracker built with Next.js 15, featuring authentication powered by BetterAuth. It offers a sleek user interface designed with Tailwind CSS and ShadCN, and utilizes Prisma ORM for seamless database interactions with PostgreSQL.
+
 
 ## ✨ Features
 

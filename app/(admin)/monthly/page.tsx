@@ -1,49 +1,87 @@
-import { getMonthlyDetails, generateMonthOccurrences, getSalary, getExportData, getDailyExpensesHeatmap } from "@/actions/expense-actions"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Separator } from "@/components/ui/separator"
-import { Progress } from "@/components/ui/progress"
-import { CalendarDays, Plus, TrendingUp, TrendingDown, DollarSign, BarChart3 } from "lucide-react"
-import { formatCurrency } from "@/lib/utils"
-import { MonthSelector } from "@/components/month-selector"
-import { ExpenseCharts } from "@/components/expense-charts"
-import { ExportDialog } from "@/components/export-dialog"
-import { SalaryDialog } from "@/components/salary-dialog"
-import { PendingAlerts } from "@/components/pending-alerts"
-import type { ExpenseFrequency } from "@/lib/types"
-import { MonthlyExpensesTable } from "@/components/tables/monthly-expenses-table"
-import { ExpenseHeatmap } from "@/components/expense-heatmap"
+import {
+  getMonthlyDetails,
+  generateMonthOccurrences,
+  getSalary,
+  getExportData,
+  getDailyExpensesHeatmap,
+} from "@/actions/expense-actions";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import { Progress } from "@/components/ui/progress";
+import {
+  CalendarDays,
+  Plus,
+  TrendingUp,
+  TrendingDown,
+  DollarSign,
+  BarChart3,
+} from "lucide-react";
+import { formatCurrency } from "@/lib/utils";
+import { MonthSelector } from "@/components/month-selector";
+import { ExpenseCharts } from "@/components/expense-charts";
+import { ExportDialog } from "@/components/export-dialog";
+import { SalaryDialog } from "@/components/salary-dialog";
+import { PendingAlerts } from "@/components/pending-alerts";
+import type { ExpenseFrequency } from "@/lib/types";
+import { MonthlyExpensesTable } from "@/components/tables/monthly-expenses-table";
+import { ExpenseHeatmap } from "@/components/expense-heatmap";
+import { getInstallmentProgressOverview } from "@/actions/installment-actions";
+import { InstallmentProgressSection } from "@/components/installment-progress-section";
 
 interface MonthlyPageProps {
-  searchParams: Promise<{ year?: string; month?: string }>
+  searchParams: Promise<{ year?: string; month?: string }>;
 }
 
 export default async function MonthlyPage({ searchParams }: MonthlyPageProps) {
-  const params = await searchParams
-  const currentDate = new Date()
-  const year = parseInt(params.year || currentDate.getFullYear().toString())
-  const month = parseInt(params.month || (currentDate.getMonth() + 1).toString())
+  const params = await searchParams;
+  const currentDate = new Date();
+  const year = parseInt(params.year || currentDate.getFullYear().toString());
+  const month = parseInt(
+    params.month || (currentDate.getMonth() + 1).toString(),
+  );
 
-  const [data, salary, heatmapData] = await Promise.all([
+  const [data, salary, heatmapData, installmentProgress] = await Promise.all([
     getMonthlyDetails(year, month),
     getSalary(year, month),
-    getDailyExpensesHeatmap(year, month)
-  ])
+    getDailyExpensesHeatmap(year, month),
+    getInstallmentProgressOverview(year, month),
+  ]);
 
-  const exportData = await getExportData(year, month)
+  const exportData = await getExportData(year, month);
 
   // Tipado mínimo para evitar `any` en filtros
-  type ItemForCounts = { isSkipped: boolean; frequency: ExpenseFrequency; hasOccurrence: boolean }
+  type ItemForCounts = {
+    isSkipped: boolean;
+    frequency: ExpenseFrequency;
+    hasOccurrence: boolean;
+  };
   // Derivados para visualización
-  const activeCount = data.items.filter((i: ItemForCounts) => !i.isSkipped).length
-  const completionPct = activeCount > 0 ? (data.totalPaid / activeCount) * 100 : 0
-  const estUsagePct = data.totalEstimated > 0 ? (data.totalActual / data.totalEstimated) * 100 : 0
-  const salaryUsagePct = salary?.amount ? (data.totalActual / salary.amount) * 100 : 0
-  const missingRecurringOccurrences = data.items.filter((i: ItemForCounts) => i.frequency !== 'ONE_TIME' && !i.hasOccurrence).length
+  const activeCount = data.items.filter(
+    (i: ItemForCounts) => !i.isSkipped,
+  ).length;
+  const completionPct =
+    activeCount > 0 ? (data.totalPaid / activeCount) * 100 : 0;
+  const estUsagePct =
+    data.totalEstimated > 0
+      ? (data.totalActual / data.totalEstimated) * 100
+      : 0;
+  const salaryUsagePct = salary?.amount
+    ? (data.totalActual / salary.amount) * 100
+    : 0;
+  const missingRecurringOccurrences = data.items.filter(
+    (i: ItemForCounts) => i.frequency !== "ONE_TIME" && !i.hasOccurrence,
+  ).length;
 
   async function generateOccurrencesAction() {
-    "use server"
-    await generateMonthOccurrences(year, month)
+    "use server";
+    await generateMonthOccurrences(year, month);
   }
 
   return (
@@ -51,8 +89,15 @@ export default async function MonthlyPage({ searchParams }: MonthlyPageProps) {
       <div className="flex flex-col gap-3">
         <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
           <div className="space-y-1">
-            <h2 className="font-serif text-3xl font-extrabold tracking-tight">Vista mensual</h2>
-            <p className="text-muted-foreground text-sm">Resumen y detalle de tus gastos en <span className="font-medium text-foreground/70">{data.monthName}</span></p>
+            <h2 className="font-serif text-3xl font-extrabold tracking-tight">
+              Vista mensual
+            </h2>
+            <p className="text-muted-foreground text-sm">
+              Resumen y detalle de tus gastos en{" "}
+              <span className="font-medium text-foreground/70">
+                {data.monthName}
+              </span>
+            </p>
           </div>
           <div className="flex flex-wrap items-center gap-2">
             <MonthSelector currentYear={year} currentMonth={month} />
@@ -69,11 +114,14 @@ export default async function MonthlyPage({ searchParams }: MonthlyPageProps) {
       {/* Resumen con progreso */}
       <Card className="border-border/60">
         <CardHeader className="pb-3">
-          <CardTitle className="font-serif text-lg font-bold">Resumen</CardTitle>
+          <CardTitle className="font-serif text-lg font-bold">
+            Resumen
+          </CardTitle>
           <CardDescription>
             {activeCount > 0 ? (
               <span>
-                {data.totalPaid} de {activeCount} gastos activos pagados • {data.monthName}
+                {data.totalPaid} de {activeCount} gastos activos pagados •{" "}
+                {data.monthName}
               </span>
             ) : (
               <span>Sin gastos activos este mes</span>
@@ -84,34 +132,74 @@ export default async function MonthlyPage({ searchParams }: MonthlyPageProps) {
           <div className="grid gap-4 md:grid-cols-2">
             <div>
               <div className="flex items-center justify-between mb-2">
-                <span className="text-sm text-muted-foreground">Uso vs estimado</span>
-                <span className="text-sm font-medium">{estUsagePct.toFixed(1)}%</span>
+                <span className="text-sm text-muted-foreground">
+                  Uso vs estimado
+                </span>
+                <span className="text-sm font-medium">
+                  {estUsagePct.toFixed(1)}%
+                </span>
               </div>
               <Progress value={estUsagePct} />
               <div className="mt-2 text-xs text-muted-foreground flex gap-4">
-                <span>Estimado: <strong className="text-foreground">{formatCurrency(data.totalEstimated)}</strong></span>
-                <span>Real: <strong className="text-foreground">{formatCurrency(data.totalActual)}</strong></span>
                 <span>
-                  {data.totalActual >= data.totalEstimated ? 'Sobre' : 'Bajo'}: {formatCurrency(Math.abs(data.totalEstimated - data.totalActual))}
+                  Estimado:{" "}
+                  <strong className="text-foreground">
+                    {formatCurrency(data.totalEstimated)}
+                  </strong>
+                </span>
+                <span>
+                  Real:{" "}
+                  <strong className="text-foreground">
+                    {formatCurrency(data.totalActual)}
+                  </strong>
+                </span>
+                <span>
+                  {data.totalActual >= data.totalEstimated ? "Sobre" : "Bajo"}:{" "}
+                  {formatCurrency(
+                    Math.abs(data.totalEstimated - data.totalActual),
+                  )}
                 </span>
               </div>
             </div>
             <div>
               <div className="flex items-center justify-between mb-2">
-                <span className="text-sm text-muted-foreground">Uso del salario</span>
-                <span className="text-sm font-medium">{salary?.amount ? salaryUsagePct.toFixed(1) : '—'}%</span>
+                <span className="text-sm text-muted-foreground">
+                  Uso del salario
+                </span>
+                <span className="text-sm font-medium">
+                  {salary?.amount ? salaryUsagePct.toFixed(1) : "—"}%
+                </span>
               </div>
               <Progress value={salary?.amount ? salaryUsagePct : 0} />
               <div className="mt-2 text-xs text-muted-foreground flex gap-4">
-                <span>Salario: <strong className="text-foreground">{salary?.amount ? formatCurrency(salary.amount) : 'No establecido'}</strong></span>
-                <span>Disponible: <strong className="text-foreground">{salary?.amount ? formatCurrency(Math.max(0, salary.amount - data.totalActual)) : '—'}</strong></span>
+                <span>
+                  Salario:{" "}
+                  <strong className="text-foreground">
+                    {salary?.amount
+                      ? formatCurrency(salary.amount)
+                      : "No establecido"}
+                  </strong>
+                </span>
+                <span>
+                  Disponible:{" "}
+                  <strong className="text-foreground">
+                    {salary?.amount
+                      ? formatCurrency(
+                          Math.max(0, salary.amount - data.totalActual),
+                        )
+                      : "—"}
+                  </strong>
+                </span>
               </div>
             </div>
           </div>
           <Separator />
           <div className="flex items-center justify-between text-sm text-muted-foreground">
             <span>Progreso de pagos</span>
-            <span className="font-medium text-foreground">{data.totalPaid}/{activeCount} pagados ({completionPct.toFixed(1)}%)</span>
+            <span className="font-medium text-foreground">
+              {data.totalPaid}/{activeCount} pagados ({completionPct.toFixed(1)}
+              %)
+            </span>
           </div>
         </CardContent>
       </Card>
@@ -120,78 +208,97 @@ export default async function MonthlyPage({ searchParams }: MonthlyPageProps) {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
         <Card className="border-border/60 hover:border-primary/20 transition-all duration-300 hover:shadow-md">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-            <CardTitle className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Salario Mensual</CardTitle>
+            <CardTitle className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              Salario Mensual
+            </CardTitle>
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-500/10">
               <DollarSign className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
             </div>
           </CardHeader>
           <CardContent>
             <div className="font-serif text-xl font-extrabold text-primary">
-              {salary ? formatCurrency(salary.amount) : 'No establecido'}
+              {salary ? formatCurrency(salary.amount) : "No establecido"}
             </div>
             <p className="text-xs text-muted-foreground">
               {salary && data.totalActual > 0
                 ? `${((data.totalActual / salary.amount) * 100).toFixed(1)}% utilizado`
-                : 'Establecé un salario para ver el uso'
-              }
+                : "Establecé un salario para ver el uso"}
             </p>
           </CardContent>
         </Card>
         <Card className="border-border/60 hover:border-primary/20 transition-all duration-300 hover:shadow-md">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-            <CardTitle className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Total Estimado</CardTitle>
+            <CardTitle className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              Total Estimado
+            </CardTitle>
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-muted">
               <DollarSign className="h-4 w-4 text-muted-foreground" />
             </div>
           </CardHeader>
           <CardContent>
-            <div className="font-serif text-xl font-extrabold">{formatCurrency(data.totalEstimated)}</div>
+            <div className="font-serif text-xl font-extrabold">
+              {formatCurrency(data.totalEstimated)}
+            </div>
             <p className="text-xs text-muted-foreground">{data.monthName}</p>
           </CardContent>
         </Card>
         <Card className="border-border/60 hover:border-primary/20 transition-all duration-300 hover:shadow-md">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-            <CardTitle className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Total Real</CardTitle>
+            <CardTitle className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              Total Real
+            </CardTitle>
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-destructive/10">
               <TrendingDown className="h-4 w-4 text-destructive" />
             </div>
           </CardHeader>
           <CardContent>
-            <div className="font-serif text-xl font-extrabold text-destructive">{formatCurrency(data.totalActual)}</div>
+            <div className="font-serif text-xl font-extrabold text-destructive">
+              {formatCurrency(data.totalActual)}
+            </div>
             <p className="text-xs text-muted-foreground">
-              {data.totalEstimated > 0 ? ((data.totalActual / data.totalEstimated) * 100).toFixed(1) : 0}% del estimado
+              {data.totalEstimated > 0
+                ? ((data.totalActual / data.totalEstimated) * 100).toFixed(1)
+                : 0}
+              % del estimado
             </p>
           </CardContent>
         </Card>
         <Card className="border-border/60 hover:border-primary/20 transition-all duration-300 hover:shadow-md">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-            <CardTitle className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Ahorros</CardTitle>
+            <CardTitle className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              Ahorros
+            </CardTitle>
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
               <TrendingUp className="h-4 w-4 text-primary" />
             </div>
           </CardHeader>
           <CardContent>
             <div className="font-serif text-xl font-extrabold text-primary">
-              {salary ? formatCurrency(salary.amount - data.totalActual) : '-'}
+              {salary ? formatCurrency(salary.amount - data.totalActual) : "-"}
             </div>
             <p className="text-xs text-muted-foreground">
               {salary
                 ? `${(((salary.amount - data.totalActual) / salary.amount) * 100).toFixed(1)}% ahorrado`
-                : 'Establecé un salario para ver ahorros'
-              }
+                : "Establecé un salario para ver ahorros"}
             </p>
           </CardContent>
         </Card>
         <Card className="border-border/60 hover:border-primary/20 transition-all duration-300 hover:shadow-md">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-            <CardTitle className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Progreso</CardTitle>
+            <CardTitle className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              Progreso
+            </CardTitle>
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-500/10">
               <BarChart3 className="h-4 w-4 text-blue-600 dark:text-blue-400" />
             </div>
           </CardHeader>
           <CardContent>
-            <div className="font-serif text-xl font-extrabold text-primary">{data.totalPaid}/{activeCount}</div>
-            <p className="text-xs text-muted-foreground">gastos activos pagados</p>
+            <div className="font-serif text-xl font-extrabold text-primary">
+              {data.totalPaid}/{activeCount}
+            </div>
+            <p className="text-xs text-muted-foreground">
+              gastos activos pagados
+            </p>
           </CardContent>
         </Card>
       </div>
@@ -202,10 +309,18 @@ export default async function MonthlyPage({ searchParams }: MonthlyPageProps) {
       {/* Heatmap Calendar */}
       <ExpenseHeatmap data={heatmapData} year={year} month={month} />
 
+      <InstallmentProgressSection
+        data={installmentProgress}
+        monthLabel={data.monthName}
+        maxItems={8}
+      />
+
       {/* Detalle de gastos */}
       <Card className="border-border/60">
         <CardHeader>
-          <CardTitle className="font-serif text-lg font-bold">Detalle de Gastos</CardTitle>
+          <CardTitle className="font-serif text-lg font-bold">
+            Detalle de Gastos
+          </CardTitle>
           <CardDescription>
             Lista completa de gastos para {data.monthName}
           </CardDescription>
@@ -233,7 +348,8 @@ export default async function MonthlyPage({ searchParams }: MonthlyPageProps) {
             Configuración del Mes
           </CardTitle>
           <CardDescription>
-            Generá ocurrencias de gastos para {data.monthName} y comenzá a rastrear pagos
+            Generá ocurrencias de gastos para {data.monthName} y comenzá a
+            rastrear pagos
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -241,13 +357,12 @@ export default async function MonthlyPage({ searchParams }: MonthlyPageProps) {
             <Button type="submit" disabled={missingRecurringOccurrences === 0}>
               <Plus className="h-4 w-4 mr-2" />
               {missingRecurringOccurrences === 0
-                ? 'No hay ocurrencias pendientes'
-                : `Generar ${missingRecurringOccurrences} ocurrencia${missingRecurringOccurrences !== 1 ? 's' : ''} pendientes`
-              }
+                ? "No hay ocurrencias pendientes"
+                : `Generar ${missingRecurringOccurrences} ocurrencia${missingRecurringOccurrences !== 1 ? "s" : ""} pendientes`}
             </Button>
           </form>
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

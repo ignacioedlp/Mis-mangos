@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls \"d:/Projects/Mis-mangos/app/\\(admin\\)/\")",
+      "Bash(npx prisma:*)",
+      "Bash(ls d:/Projects/Mis-mangos/app/\\\\\\(admin\\\\\\)/expenses/)"
+    ]
+  }
+}

@@ -261,7 +261,13 @@ export async function listExpenses() {
       active: true,
       deletedAt: null, // Only show non-deleted expenses
     },
-    include: { category: true, subcategory: true },
+    include: {
+      category: true,
+      subcategory: true,
+      _count: {
+        select: { installmentPurchases: true },
+      },
+    },
     orderBy: { name: "asc" },
   });
 
@@ -269,6 +275,7 @@ export async function listExpenses() {
   return expenses.map((expense) => ({
     ...expense,
     estimatedAmount: Number(expense.estimatedAmount),
+    hasInstallments: expense._count.installmentPurchases > 0,
     category: {
       ...expense.category,
       budgetPercentage: expense.category.budgetPercentage
@@ -455,8 +462,8 @@ export async function togglePaid(
         !occ.isPaid && finalAmount
           ? finalAmount
           : occ.isPaid
-          ? null
-          : occ.amount,
+            ? null
+            : occ.amount,
     },
   });
 
@@ -535,6 +542,9 @@ export async function getMonthlyDetails(year: number, month: number) {
       occurrences: {
         where: { year, month },
       },
+      _count: {
+        select: { installmentPurchases: true },
+      },
     },
   });
 
@@ -553,6 +563,7 @@ export async function getMonthlyDetails(year: number, month: number) {
       paidAt: occ?.paidAt ?? null,
       skippedAt: occ?.skippedAt ?? null,
       hasOccurrence: !!occ,
+      hasInstallments: e._count.installmentPurchases > 0,
     };
   });
 
@@ -693,7 +704,7 @@ export async function getComparison(
       salary: salary ? Number(salary.amount) : 0,
       savingsRate: salary
         ? ((Number(salary.amount) - data.totalActual) / Number(salary.amount)) *
-          100
+        100
         : 0,
     });
   }
@@ -938,7 +949,7 @@ export async function getPendingExpenses() {
       estimatedAmount: Number(e.estimatedAmount),
       daysOverdue: Math.floor(
         (new Date().getTime() - new Date(year, month - 1, 1).getTime()) /
-          (1000 * 60 * 60 * 24)
+        (1000 * 60 * 60 * 24)
       ),
     }));
 
@@ -969,7 +980,7 @@ export async function getDailyExpensesHeatmap(year: number, month: number) {
 
   // Group by day and sum amounts
   const dailyData: Record<number, number> = {};
-  
+
   occurrences.forEach((occ) => {
     if (occ.paidAt) {
       const day = occ.paidAt.getDate();
@@ -980,7 +991,7 @@ export async function getDailyExpensesHeatmap(year: number, month: number) {
 
   // Get the number of days in the month
   const daysInMonth = new Date(year, month, 0).getDate();
-  
+
   // Fill in missing days with 0
   const result = Array.from({ length: daysInMonth }, (_, i) => ({
     day: i + 1,
@@ -1005,7 +1016,7 @@ export async function duplicateExpenseOccurrence(
   targetMonth?: number
 ) {
   const userId = await requireUserId();
-  
+
   // Verify the expense exists and belongs to the user
   const expense = await prisma.expense.findFirst({
     where: {
@@ -1014,16 +1025,16 @@ export async function duplicateExpenseOccurrence(
       deletedAt: null,
     },
   });
-  
+
   if (!expense) {
     throw new Error("Expense not found or access denied");
   }
-  
+
   // Get target month/year or use current
   const base = getYearMonth();
   const year = targetYear ?? base.year;
   const month = targetMonth ?? base.month;
-  
+
   // Check if occurrence already exists
   const existingOccurrence = await prisma.expenseOccurrence.findUnique({
     where: {
@@ -1034,14 +1045,14 @@ export async function duplicateExpenseOccurrence(
       },
     },
   });
-  
+
   if (existingOccurrence) {
     throw new Error(
       `Ya existe una ocurrencia para este gasto en ${month}/${year}. ` +
       `Si deseas registrar un pago adicional, marca la existente como pagada primero.`
     );
   }
-  
+
   // Create new occurrence for the target month
   const newOccurrence = await prisma.expenseOccurrence.create({
     data: {
@@ -1053,11 +1064,11 @@ export async function duplicateExpenseOccurrence(
       amount: expense.estimatedAmount, // Use the estimated amount as default
     },
   });
-  
+
   revalidatePath("/expenses");
   revalidatePath("/monthly");
   revalidatePath("/dashboard");
-  
+
   return {
     success: true,
     occurrence: {

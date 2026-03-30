@@ -1,75 +1,94 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { Table, TableBody, TableCell, TableHeader, TableRow } from "@/components/ui/table"
-import { Badge } from "@/components/ui/badge"
-import { SortableTableHead, useSortableData } from "@/components/ui/sortable-table-client"
-import { ExpenseDeleteButton } from "@/components/table-actions/expense-delete-button"
-import { DuplicateExpenseButton } from "@/components/duplicate-expense-button"
-import { formatCurrency } from "@/lib/utils"
+import * as React from "react";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
+import {
+  SortableTableHead,
+  useSortableData,
+} from "@/components/ui/sortable-table-client";
+import { ExpenseDeleteButton } from "@/components/table-actions/expense-delete-button";
+import { DuplicateExpenseButton } from "@/components/duplicate-expense-button";
+import Link from "next/link";
+import { CreditCard } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { formatCurrency } from "@/lib/utils";
 
 // Tipo para los gastos con relaciones incluidas
 type ExpenseWithRelations = {
-  id: string
-  name: string
-  estimatedAmount: number
-  frequency: string
+  id: string;
+  name: string;
+  estimatedAmount: number;
+  frequency: string;
   category: {
-    name: string
-  }
+    name: string;
+  };
   subcategory: {
-    name: string
-  }
-}
+    name: string;
+  };
+  hasInstallments: boolean;
+};
 
 interface ExpensesTableProps {
-  data: ExpenseWithRelations[]
-  emptyMessage?: string
-  emptyIcon?: React.ReactNode
+  data: ExpenseWithRelations[];
+  emptyMessage?: string;
+  emptyIcon?: React.ReactNode;
 }
 
-export function ExpensesTable({ 
-  data, 
+export function ExpensesTable({
+  data,
   emptyMessage = "No hay gastos aún. Crea tu primer gasto para comenzar",
-  emptyIcon 
+  emptyIcon,
 }: ExpensesTableProps) {
   const frequencyColors = {
     WEEKLY: "bg-muted text-foreground",
-    MONTHLY: "bg-primary/10 text-primary", 
+    MONTHLY: "bg-primary/10 text-primary",
     ANNUAL: "bg-accent/10 text-accent-foreground",
-    ONE_TIME: "bg-muted text-foreground"
-  }
+    ONE_TIME: "bg-muted text-foreground",
+  };
 
   // Función para obtener el valor de ordenamiento
-  const getSortValue = React.useCallback((item: ExpenseWithRelations, key: string) => {
-    switch (key) {
-      case 'name':
-        return item.name
-      case 'category':
-        return item.category.name
-      case 'estimatedAmount':
-        return Number(item.estimatedAmount)
-      case 'frequency':
-        return item.frequency
-      default:
-        return ''
-    }
-  }, [])
+  const getSortValue = React.useCallback(
+    (item: ExpenseWithRelations, key: string) => {
+      switch (key) {
+        case "name":
+          return item.name;
+        case "category":
+          return item.category.name;
+        case "estimatedAmount":
+          return Number(item.estimatedAmount);
+        case "frequency":
+          return item.frequency;
+        default:
+          return "";
+      }
+    },
+    [],
+  );
 
   const getStatusName = (expense: ExpenseWithRelations) => {
     switch (expense.frequency) {
-      case 'WEEKLY':
-        return 'Semanal'
-      case 'MONTHLY':
-        return 'Mensual'
-      case 'ANNUAL':
-        return 'Anual'
-      case 'ONE_TIME':
-        return 'Único'
+      case "WEEKLY":
+        return "Semanal";
+      case "MONTHLY":
+        return "Mensual";
+      case "ANNUAL":
+        return "Anual";
+      case "ONE_TIME":
+        return "Único";
     }
-  }
+  };
 
-  const { sortedData, sortConfig, requestSort } = useSortableData(data, getSortValue)
+  const { sortedData, sortConfig, requestSort } = useSortableData(
+    data,
+    getSortValue,
+  );
 
   if (data.length === 0) {
     return (
@@ -77,7 +96,7 @@ export function ExpensesTable({
         {emptyIcon && <div className="mb-4">{emptyIcon}</div>}
         <p>{emptyMessage}</p>
       </div>
-    )
+    );
   }
 
   return (
@@ -143,17 +162,37 @@ export function ExpensesTable({
               </span>
             </TableCell>
             <TableCell>
-              <Badge 
-                variant="secondary" 
-                className={frequencyColors[expense.frequency as keyof typeof frequencyColors]}
+              <Badge
+                variant="secondary"
+                className={
+                  frequencyColors[
+                    expense.frequency as keyof typeof frequencyColors
+                  ]
+                }
               >
                 {getStatusName(expense)}
               </Badge>
             </TableCell>
             <TableCell>
               <div className="flex items-center gap-1">
-                <DuplicateExpenseButton 
-                  expenseId={expense.id} 
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  asChild
+                  title="Gestionar cuotas"
+                >
+                  <Link href={`/expenses/${expense.id}/installments`}>
+                    <CreditCard
+                      className={
+                        expense.hasInstallments
+                          ? "h-4 w-4 text-primary"
+                          : "h-4 w-4"
+                      }
+                    />
+                  </Link>
+                </Button>
+                <DuplicateExpenseButton
+                  expenseId={expense.id}
                   expenseName={expense.name}
                 />
                 <ExpenseDeleteButton expenseId={expense.id} />
@@ -163,5 +202,5 @@ export function ExpensesTable({
         ))}
       </TableBody>
     </Table>
-  )
+  );
 }
