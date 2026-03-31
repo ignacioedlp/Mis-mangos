@@ -122,7 +122,9 @@ function DashboardList({
               >
                 <div className="flex flex-col space-y-1 min-w-0">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <span className="font-medium text-sm leading-tight truncate max-w-[70vw] sm:max-w-[40vw]">
+                    <span
+                      className={`font-medium text-sm leading-tight truncate max-w-[70vw] sm:max-w-[40vw]`}
+                    >
                       {item.name}
                     </span>
                     {item.isPaid && (
@@ -131,6 +133,14 @@ function DashboardList({
                         className="text-[10px] rounded-full px-2 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-0"
                       >
                         Pagado
+                      </Badge>
+                    )}
+                    {item.isHidden && (
+                      <Badge
+                        variant="outline"
+                        className="text-[10px] rounded-full px-2 text-muted-foreground"
+                      >
+                        Oculto
                       </Badge>
                     )}
                   </div>
@@ -149,6 +159,7 @@ function DashboardList({
                     estimatedAmount={item.estimatedAmount}
                     isPaid={item.isPaid}
                     isSkipped={item.isSkipped}
+                    isHidden={item.isHidden}
                     year={data.year}
                     month={data.month}
                   />

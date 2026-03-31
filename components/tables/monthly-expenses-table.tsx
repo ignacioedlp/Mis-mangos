@@ -32,6 +32,7 @@ type MonthlyExpenseItem = {
   skippedAt: Date | null;
   hasOccurrence: boolean;
   hasInstallments: boolean;
+  isHidden?: boolean;
 };
 
 interface MonthlyExpensesTableProps {
@@ -167,10 +168,18 @@ export function MonthlyExpensesTable({
           <TableRow key={item.expenseId}>
             <TableCell>
               <div className="flex flex-col">
-                <span className="font-medium flex items-center gap-2">
+                <span className={`font-medium flex items-center gap-2`}>
                   {item.name}
                   {item.hasInstallments ? (
                     <CreditCard className="h-3.5 w-3.5 text-primary" />
+                  ) : null}
+                  {item.isHidden ? (
+                    <Badge
+                      variant="outline"
+                      className="text-[10px] px-1.5 text-muted-foreground no-underline"
+                    >
+                      Oculto
+                    </Badge>
                   ) : null}
                 </span>
                 <span className="text-xs text-muted-foreground">
@@ -229,6 +238,7 @@ export function MonthlyExpensesTable({
                   isPaid={item.isPaid}
                   isSkipped={item.isSkipped}
                   hasInstallments={item.hasInstallments}
+                  isHidden={item.isHidden}
                   year={year}
                   month={month}
                 />

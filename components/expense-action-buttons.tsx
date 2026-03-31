@@ -30,6 +30,7 @@ interface ExpenseActionButtonsProps {
   hasInstallments?: boolean;
   year?: number;
   month?: number;
+  isHidden?: boolean;
 }
 
 export function ExpenseActionButtons({
@@ -41,6 +42,7 @@ export function ExpenseActionButtons({
   hasInstallments = false,
   year,
   month,
+  isHidden = false,
 }: ExpenseActionButtonsProps) {
   const [paidOpen, setPaidOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
@@ -84,6 +86,15 @@ export function ExpenseActionButtons({
       }
     });
   };
+
+  // If expense is hidden (soft-deleted), only show a read-only indicator
+  if (isHidden) {
+    return (
+      <span className="text-xs text-muted-foreground font-medium">
+        Oculto
+      </span>
+    );
+  }
 
   // If expense is skipped, show different UI
   if (isSkipped) {

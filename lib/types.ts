@@ -43,6 +43,7 @@ export interface MonthlyExpenseItemDTO {
    isSkipped: boolean; // For skip functionality
    paidAt?: Date | null;
    skippedAt?: Date | null; // When was this occurrence skipped
+   isHidden?: boolean; // Soft-deleted but still showing because it has a paid occurrence
 }
 
 export interface MonthlySummaryDTO {

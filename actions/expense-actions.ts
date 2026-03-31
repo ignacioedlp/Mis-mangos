@@ -387,7 +387,10 @@ export async function getMonthlyDashboard(year?: number, month?: number) {
     where: {
       userId,
       active: true,
-      deletedAt: null, // Only show non-deleted expenses
+      OR: [
+        { deletedAt: null },
+        { deletedAt: { not: null }, occurrences: { some: { year: y, month: m, isPaid: true } } },
+      ],
       occurrences: {
         some: { year: y, month: m }, // Only expenses that have an occurrence for the month
       },
@@ -417,6 +420,7 @@ export async function getMonthlyDashboard(year?: number, month?: number) {
       isSkipped,
       paidAt,
       skippedAt,
+      isHidden: e.deletedAt !== null,
     };
   });
 
@@ -531,7 +535,10 @@ export async function getMonthlyDetails(year: number, month: number) {
     where: {
       userId,
       active: true,
-      deletedAt: null,
+      OR: [
+        { deletedAt: null },
+        { deletedAt: { not: null }, occurrences: { some: { year, month, isPaid: true } } },
+      ],
       occurrences: {
         some: { year, month }, // Only expenses that have an occurrence for the month
       },
@@ -564,6 +571,7 @@ export async function getMonthlyDetails(year: number, month: number) {
       skippedAt: occ?.skippedAt ?? null,
       hasOccurrence: !!occ,
       hasInstallments: e._count.installmentPurchases > 0,
+      isHidden: e.deletedAt !== null,
     };
   });
 
@@ -753,9 +761,9 @@ export async function getBudgetAnalysis(year?: number, month?: number) {
     include: {
       expenses: {
         where: {
-          deletedAt: null,
           active: true,
           // Include expenses (recurring and ONE_TIME) that have a PAID occurrence in the target month
+          // Including soft-deleted expenses since money was actually spent
           occurrences: {
             some: {
               year: y,
@@ -859,9 +867,9 @@ export async function getCategoryBudgetStatus(
     include: {
       expenses: {
         where: {
-          deletedAt: null,
           active: true,
           // Include both recurring and ONE_TIME expenses if they have a PAID occurrence in month
+          // Including soft-deleted expenses since money was actually spent
           occurrences: {
             some: { year: y, month: m, isPaid: true, isSkipped: false },
           },
@@ -966,7 +974,6 @@ export async function getDailyExpensesHeatmap(year: number, month: number) {
       expense: {
         userId,
         active: true,
-        deletedAt: null,
       },
       year,
       month,
