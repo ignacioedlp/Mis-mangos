@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/sortable-table-client";
 import { ExpenseDeleteButton } from "@/components/table-actions/expense-delete-button";
 import { DuplicateExpenseButton } from "@/components/duplicate-expense-button";
+import { EditExpenseDialog } from "@/components/edit-expense-dialog";
 import Link from "next/link";
 import { CreditCard } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -25,7 +26,10 @@ type ExpenseWithRelations = {
   id: string;
   name: string;
   estimatedAmount: number;
+  displayAmount: number;
   frequency: string;
+  categoryId: string;
+  subcategoryId: string;
   category: {
     name: string;
   };
@@ -37,12 +41,16 @@ type ExpenseWithRelations = {
 
 interface ExpensesTableProps {
   data: ExpenseWithRelations[];
+  categories: Array<{ id: string; name: string }>;
+  subcategories: Array<{ id: string; name: string; categoryId: string }>;
   emptyMessage?: string;
   emptyIcon?: React.ReactNode;
 }
 
 export function ExpensesTable({
   data,
+  categories,
+  subcategories,
   emptyMessage = "No hay gastos aún. Crea tu primer gasto para comenzar",
   emptyIcon,
 }: ExpensesTableProps) {
@@ -62,7 +70,7 @@ export function ExpensesTable({
         case "category":
           return item.category.name;
         case "estimatedAmount":
-          return Number(item.estimatedAmount);
+          return Number(item.displayAmount);
         case "frequency":
           return item.frequency;
         default:
@@ -136,7 +144,6 @@ export function ExpensesTable({
             sortKey="actions"
             currentSort={sortConfig}
             onSort={requestSort}
-            className="w-20"
           >
             Acciones
           </SortableTableHead>
@@ -158,7 +165,7 @@ export function ExpensesTable({
             </TableCell>
             <TableCell>
               <span className="font-medium">
-                {formatCurrency(Number(expense.estimatedAmount))}
+                {formatCurrency(expense.displayAmount)}
               </span>
             </TableCell>
             <TableCell>
@@ -175,6 +182,17 @@ export function ExpensesTable({
             </TableCell>
             <TableCell>
               <div className="flex items-center gap-1">
+                <EditExpenseDialog
+                  expense={{
+                    id: expense.id,
+                    name: expense.name,
+                    frequency: expense.frequency,
+                    categoryId: expense.categoryId,
+                    subcategoryId: expense.subcategoryId,
+                  }}
+                  categories={categories}
+                  subcategories={subcategories}
+                />
                 <Button
                   variant="ghost"
                   size="icon"

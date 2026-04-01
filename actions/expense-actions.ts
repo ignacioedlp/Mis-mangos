@@ -255,6 +255,7 @@ export async function createExpense(input: unknown) {
 
 export async function listExpenses() {
   const userId = await requireUserId();
+  const { year: currentYear, month: currentMonth } = getYearMonth();
   const expenses = await prisma.expense.findMany({
     where: {
       userId,
@@ -267,22 +268,43 @@ export async function listExpenses() {
       _count: {
         select: { installmentPurchases: true },
       },
+      installmentPurchases: {
+        select: {
+          payments: {
+            where: { year: currentYear, month: currentMonth },
+            select: { amount: true },
+          },
+        },
+      },
     },
     orderBy: { name: "asc" },
   });
 
   // Serialize Decimal to number for client components
-  return expenses.map((expense) => ({
-    ...expense,
-    estimatedAmount: Number(expense.estimatedAmount),
-    hasInstallments: expense._count.installmentPurchases > 0,
-    category: {
-      ...expense.category,
-      budgetPercentage: expense.category.budgetPercentage
-        ? Number(expense.category.budgetPercentage)
-        : null,
-    },
-  }));
+  return expenses.map((expense) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { installmentPurchases, _count, ...rest } = expense;
+    const hasInstallments = _count.installmentPurchases > 0;
+    const installmentMonthlyTotal = installmentPurchases
+      .flatMap((p) => p.payments)
+      .reduce((sum, pay) => sum + Number(pay.amount), 0);
+    const displayAmount =
+      hasInstallments && installmentMonthlyTotal > 0
+        ? installmentMonthlyTotal
+        : Number(expense.estimatedAmount);
+    return {
+      ...rest,
+      estimatedAmount: Number(expense.estimatedAmount),
+      displayAmount,
+      hasInstallments,
+      category: {
+        ...expense.category,
+        budgetPercentage: expense.category.budgetPercentage
+          ? Number(expense.category.budgetPercentage)
+          : null,
+      },
+    };
+  });
 }
 
 export async function updateExpense(id: string, input: unknown) {
@@ -404,6 +426,14 @@ export async function getMonthlyDashboard(year?: number, month?: number) {
       _count: {
         select: { installmentPurchases: true },
       },
+      installmentPurchases: {
+        select: {
+          payments: {
+            where: { year: y, month: m },
+            select: { amount: true },
+          },
+        },
+      },
     },
   });
 
@@ -413,17 +443,25 @@ export async function getMonthlyDashboard(year?: number, month?: number) {
     const isSkipped = occ?.isSkipped ?? false;
     const paidAt = occ?.paidAt ?? null;
     const skippedAt = occ?.skippedAt ?? null;
+    const hasInstallments = e._count.installmentPurchases > 0;
+    const installmentMonthlyTotal = e.installmentPurchases
+      .flatMap((p) => p.payments)
+      .reduce((sum, pay) => sum + Number(pay.amount), 0);
+    const estimatedAmount =
+      hasInstallments && installmentMonthlyTotal > 0
+        ? installmentMonthlyTotal
+        : Number(e.estimatedAmount);
     return {
       expenseId: e.id,
       name: e.name,
       categoryName: e.category.name,
       subcategoryName: e.subcategory.name,
-      estimatedAmount: Number(e.estimatedAmount),
+      estimatedAmount,
       isPaid,
       isSkipped,
       paidAt,
       skippedAt,
-      hasInstallments: e._count.installmentPurchases > 0,
+      hasInstallments,
       isHidden: e.deletedAt !== null,
     };
   });

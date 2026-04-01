@@ -18,7 +18,7 @@ async function Prefetch() {
 export default async function ExpensesPage() {
   const { categories, subcategories, expenses } = await Prefetch()
 
-  const totalEstimated = expenses.reduce((sum: number, expense: { estimatedAmount: number }) => sum + Number(expense.estimatedAmount), 0)
+  const totalEstimated = expenses.reduce((sum: number, expense: { displayAmount: number }) => sum + expense.displayAmount, 0)
   const totalSubcategories = subcategories.length
 
   return (
@@ -96,6 +96,8 @@ export default async function ExpensesPage() {
         <CardContent>
           <ExpensesTable
             data={expenses}
+            categories={categories}
+            subcategories={subcategories}
             emptyMessage="No hay gastos aún. Crea tu primer gasto para comenzar"
             emptyIcon={<DollarSign className="h-8 w-8 mx-auto mb-2 opacity-50" />}
           />
