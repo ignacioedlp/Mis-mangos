@@ -401,6 +401,9 @@ export async function getMonthlyDashboard(year?: number, month?: number) {
       occurrences: {
         where: { year: y, month: m },
       },
+      _count: {
+        select: { installmentPurchases: true },
+      },
     },
   });
 
@@ -420,6 +423,7 @@ export async function getMonthlyDashboard(year?: number, month?: number) {
       isSkipped,
       paidAt,
       skippedAt,
+      hasInstallments: e._count.installmentPurchases > 0,
       isHidden: e.deletedAt !== null,
     };
   });

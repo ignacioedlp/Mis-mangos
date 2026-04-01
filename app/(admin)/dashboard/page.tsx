@@ -159,6 +159,7 @@ function DashboardList({
                     estimatedAmount={item.estimatedAmount}
                     isPaid={item.isPaid}
                     isSkipped={item.isSkipped}
+                    hasInstallments={item.hasInstallments}
                     isHidden={item.isHidden}
                     year={data.year}
                     month={data.month}
