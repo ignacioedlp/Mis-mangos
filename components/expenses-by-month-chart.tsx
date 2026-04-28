@@ -1,8 +1,9 @@
 "use client"
 
+import { useState } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { formatCurrency } from "@/lib/utils"
-import { LineChart, Line, XAxis, YAxis, CartesianGrid } from 'recharts'
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from 'recharts'
 import { ChartContainer, ChartLegend, ChartLegendContent, ChartTooltip, ChartTooltipContent, type ChartConfig } from "@/components/ui/chart"
 
 // Tipo para los datos de comparación que incluyen items
@@ -28,6 +29,20 @@ interface ExpensesByMonthChartProps {
 }
 
 export function ExpensesByMonthChart({ data }: ExpensesByMonthChartProps) {
+  const [visibleExpenses, setVisibleExpenses] = useState<Set<string>>(new Set())
+
+  const toggleExpense = (expenseName: string) => {
+    setVisibleExpenses(prev => {
+      const newSet = new Set(prev)
+      if (newSet.has(expenseName)) {
+        newSet.delete(expenseName)
+      } else {
+        newSet.add(expenseName)
+      }
+      return newSet
+    })
+  }
+
   // Filtrar gastos que no sean ONE_TIME y que no estén saltados
   const filteredItems = data.flatMap(monthData =>
     monthData.items
@@ -140,8 +155,9 @@ export function ExpensesByMonthChart({ data }: ExpensesByMonthChartProps) {
         <CardDescription>Gastos recurrentes a lo largo del tiempo (excluye gastos únicos)</CardDescription>
       </CardHeader>
       <CardContent>
-        <ChartContainer config={chartConfig} className="min-h-[400px]">
-          <LineChart data={chartData}>
+        <div className="w-full overflow-x-auto">
+          <ChartContainer config={chartConfig} className="min-h-[450px]" style={{ minWidth: '500px' }}>
+            <LineChart data={chartData}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis
               dataKey="month"
@@ -172,9 +188,10 @@ export function ExpensesByMonthChart({ data }: ExpensesByMonthChartProps) {
             />
             {expenseNames.map((originalName, index) => {
               const sanitizedKey = sanitizeName(originalName)
-              // Obtener el color directamente del array
+              const isVisible = visibleExpenses.size === 0 || visibleExpenses.has(originalName)
               const lineColor = chartColors[index % chartColors.length]
-              return (
+
+              return isVisible ? (
                 <Line
                   key={originalName}
                   type="monotone"
@@ -186,11 +203,25 @@ export function ExpensesByMonthChart({ data }: ExpensesByMonthChartProps) {
                   connectNulls={true}
                   isAnimationActive={true}
                 />
-              )
+              ) : null
             })}
-            <ChartLegend content={<ChartLegendContent />} />
-          </LineChart>
-        </ChartContainer>
+            <ChartLegend
+              onClick={(e: any) => {
+                const payload = e?.payload
+                if (payload?.value) {
+                  toggleExpense(payload.value)
+                }
+              }}
+              content={
+                <ChartLegendContent
+                  wrapperStyle={{ paddingTop: '20px', cursor: 'pointer', paddingLeft: '0px', paddingRight: '0px' }}
+                />
+              }
+              wrapperStyle={{ paddingBottom: '0px' }}
+            />
+            </LineChart>
+          </ChartContainer>
+        </div>
       </CardContent>
     </Card>
   )
