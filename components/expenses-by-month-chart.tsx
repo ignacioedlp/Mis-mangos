@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { formatCurrency } from "@/lib/utils"
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from 'recharts'
+import { LineChart, Line, XAxis, YAxis, CartesianGrid } from 'recharts'
 import { ChartContainer, ChartLegend, ChartLegendContent, ChartTooltip, ChartTooltipContent, type ChartConfig } from "@/components/ui/chart"
 
 // Tipo para los datos de comparación que incluyen items
@@ -206,7 +206,7 @@ export function ExpensesByMonthChart({ data }: ExpensesByMonthChartProps) {
               ) : null
             })}
             <ChartLegend
-              onClick={(e: any) => {
+              onClick={(e: { payload?: { value?: string } }) => {
                 const payload = e?.payload
                 if (payload?.value) {
                   toggleExpense(payload.value)
