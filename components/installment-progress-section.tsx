@@ -24,7 +24,9 @@ export function InstallmentProgressSection({
   monthLabel,
   maxItems = 6,
 }: InstallmentProgressSectionProps) {
-  const visibleItems = data.items.slice(0, maxItems);
+  const visibleItems = data.items
+    .filter((item) => !item.isCompleted)
+    .slice(0, maxItems);
 
   return (
     <Card className="border-border/60">
