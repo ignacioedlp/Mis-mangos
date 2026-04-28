@@ -214,7 +214,7 @@ export function ExpensesByMonthChart({ data }: ExpensesByMonthChartProps) {
               }}
               content={
                 <ChartLegendContent
-                  wrapperStyle={{ paddingTop: '20px', cursor: 'pointer', paddingLeft: '0px', paddingRight: '0px' }}
+                  className="pt-5 cursor-pointer px-0"
                 />
               }
               wrapperStyle={{ paddingBottom: '0px' }}
