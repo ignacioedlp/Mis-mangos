@@ -9,13 +9,14 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   SortableTableHead,
   useSortableData,
 } from "@/components/ui/sortable-table-client";
 import { ExpenseActionButtons } from "@/components/expense-action-buttons";
 import { formatCurrency } from "@/lib/utils";
-import { CreditCard } from "lucide-react";
+import { CreditCard, Download } from "lucide-react";
 
 // Tipo para los elementos mensuales
 type MonthlyExpenseItem = {
@@ -99,6 +100,65 @@ export function MonthlyExpensesTable({
     getSortValue,
   );
 
+  function exportToCsv() {
+    const headers = [
+      "Gasto",
+      "Categoría",
+      "Subcategoría",
+      "Frecuencia",
+      "Estimado",
+      "Actual",
+      "Estado",
+      "Pagado",
+      "Omitido",
+      "FechaPago",
+      "FechaOmitido",
+      "ConCuotas",
+    ];
+
+    const rows = sortedData.map((item) => {
+      const status = !item.hasOccurrence
+        ? "Sin ocurrencias"
+        : item.isSkipped
+          ? "Omitido"
+          : item.isPaid
+            ? "Pagado"
+            : "Pendiente";
+      const paidAt = item.paidAt ? new Date(item.paidAt).toISOString() : "";
+      const skippedAt = item.skippedAt
+        ? new Date(item.skippedAt).toISOString()
+        : "";
+      return [
+        item.name,
+        item.categoryName,
+        item.subcategoryName,
+        getStatusName(item),
+        item.estimatedAmount ?? "",
+        item.actualAmount ?? "",
+        status,
+        item.isPaid ? "Sí" : "No",
+        item.isSkipped ? "Sí" : "No",
+        paidAt,
+        skippedAt,
+        item.hasInstallments ? "Sí" : "No",
+      ];
+    });
+
+    const csvContent = [headers, ...rows]
+      .map((r) => r.map((c) => `"${String(c).replace(/"/g, '""')}"`).join(","))
+      .join("\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `gastos_${year}_${String(month).padStart(2, "0")}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  }
+
   if (data.length === 0) {
     return (
       <div className="text-center py-8 text-muted-foreground">
@@ -159,7 +219,17 @@ export function MonthlyExpensesTable({
             currentSort={sortConfig}
             onSort={requestSort}
           >
-            Acciones
+            <div className="flex items-center justify-end gap-2">
+              <span>Acciones</span>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={exportToCsv}
+                title="Descargar CSV"
+              >
+                <Download className="h-4 w-4" />
+              </Button>
+            </div>
           </SortableTableHead>
         </TableRow>
       </TableHeader>
