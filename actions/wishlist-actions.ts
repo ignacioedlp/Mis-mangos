@@ -6,6 +6,7 @@ import { z } from "zod";
 
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
+import { hasMaterialFinancingShortfall } from "@/lib/wishlist-financing";
 import type {
   WishlistItemDTO,
   WishlistPriority,
@@ -29,8 +30,13 @@ const wishlistInputSchema = z
       .nullable(),
   })
   .superRefine((data, context) => {
-    const financedTotal = data.totalInstallments * data.installmentAmount;
-    if (financedTotal + 0.005 < data.cashPrice) {
+    if (
+      hasMaterialFinancingShortfall(
+        data.cashPrice,
+        data.totalInstallments,
+        data.installmentAmount,
+      )
+    ) {
       context.addIssue({
         code: z.ZodIssueCode.custom,
         path: ["installmentAmount"],

@@ -37,6 +37,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { formatCurrency, formatPercentage } from "@/lib/utils";
+import { hasMaterialFinancingShortfall } from "@/lib/wishlist-financing";
 import type { WishlistItemDTO, WishlistPriority } from "@/lib/types";
 
 const wishlistFormSchema = z
@@ -59,8 +60,11 @@ const wishlistFormSchema = z
   })
   .superRefine((data, context) => {
     if (
-      data.totalInstallments * data.installmentAmount + 0.005 <
-      data.cashPrice
+      hasMaterialFinancingShortfall(
+        data.cashPrice,
+        data.totalInstallments,
+        data.installmentAmount,
+      )
     ) {
       context.addIssue({
         code: z.ZodIssueCode.custom,
