@@ -34,6 +34,9 @@ import { MonthlyExpensesTable } from "@/components/tables/monthly-expenses-table
 import { ExpenseHeatmap } from "@/components/expense-heatmap";
 import { getInstallmentProgressOverview } from "@/actions/installment-actions";
 import { InstallmentProgressSection } from "@/components/installment-progress-section";
+import { getCryptoDollarRate } from "@/lib/crypto-dollar-server";
+import { formatArsToCryptoUsd } from "@/lib/crypto-dollar";
+import { CryptoDollarQuote } from "@/components/crypto-dollar-quote";
 
 interface MonthlyPageProps {
   searchParams: Promise<{ year?: string; month?: string }>;
@@ -47,12 +50,14 @@ export default async function MonthlyPage({ searchParams }: MonthlyPageProps) {
     params.month || (currentDate.getMonth() + 1).toString(),
   );
 
-  const [data, salary, heatmapData, installmentProgress] = await Promise.all([
-    getMonthlyDetails(year, month),
-    getSalary(year, month),
-    getDailyExpensesHeatmap(year, month),
-    getInstallmentProgressOverview(year, month),
-  ]);
+  const [data, salary, heatmapData, installmentProgress, cryptoDollarRate] =
+    await Promise.all([
+      getMonthlyDetails(year, month),
+      getSalary(year, month),
+      getDailyExpensesHeatmap(year, month),
+      getInstallmentProgressOverview(year, month),
+      getCryptoDollarRate(),
+    ]);
 
   const exportData = await getExportData(year, month);
 
@@ -98,6 +103,7 @@ export default async function MonthlyPage({ searchParams }: MonthlyPageProps) {
                 {data.monthName}
               </span>
             </p>
+            <CryptoDollarQuote rate={cryptoDollarRate} />
           </div>
           <div className="flex flex-wrap items-center gap-2">
             <MonthSelector currentYear={year} currentMonth={month} />
@@ -236,8 +242,16 @@ export default async function MonthlyPage({ searchParams }: MonthlyPageProps) {
             </div>
           </CardHeader>
           <CardContent>
-            <div className="font-serif text-xl font-extrabold">
-              {formatCurrency(data.totalEstimated)}
+            <div className="space-y-1">
+              <div className="font-serif text-xl font-extrabold">
+                {formatCurrency(data.totalEstimated)}
+              </div>
+              <div className="text-xs font-medium text-muted-foreground">
+                {formatArsToCryptoUsd(
+                  data.totalEstimated,
+                  cryptoDollarRate,
+                ) ?? "Cotización no disponible"}
+              </div>
             </div>
             <p className="text-xs text-muted-foreground">{data.monthName}</p>
           </CardContent>
@@ -330,6 +344,7 @@ export default async function MonthlyPage({ searchParams }: MonthlyPageProps) {
             data={data.items}
             year={year}
             month={month}
+            cryptoDollarRate={cryptoDollarRate}
             emptyMessage="No se encontraron gastos. Agregá gastos para comenzar."
           />
         </CardContent>

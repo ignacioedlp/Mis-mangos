@@ -3,6 +3,10 @@
 import * as React from "react";
 import { StatCard } from "@/components/stat-card";
 import { formatCurrency } from "@/lib/utils";
+import {
+  formatArsToCryptoUsd,
+  type CryptoDollarRate,
+} from "@/lib/crypto-dollar";
 
 export interface DashboardStatsProps {
   monthName: string;
@@ -13,6 +17,7 @@ export interface DashboardStatsProps {
   paidCount: number;
   remainingCount: number;
   skippedCount: number;
+  cryptoDollarRate: CryptoDollarRate | null;
 }
 
 export function DashboardStatsClient(props: DashboardStatsProps) {
@@ -22,12 +27,27 @@ export function DashboardStatsClient(props: DashboardStatsProps) {
       : 0;
   const effectiveTotal = props.itemCount - props.skippedCount; // total considerado (sin skip)
   const progressPercent = (props.paidCount / (effectiveTotal || 1)) * 100;
+  const estimatedInUsd = formatArsToCryptoUsd(
+    props.totalEstimated,
+    props.cryptoDollarRate,
+  );
+  const pendingInUsd = formatArsToCryptoUsd(
+    props.totalPending,
+    props.cryptoDollarRate,
+  );
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
       <StatCard
         title="Total Estimado"
         iconName="dollar"
-        value={formatCurrency(props.totalEstimated)}
+        value={
+          <div className="space-y-1">
+            <div>{formatCurrency(props.totalEstimated)}</div>
+            <div className="font-sans text-xs font-medium text-muted-foreground">
+              {estimatedInUsd ?? "Cotización no disponible"}
+            </div>
+          </div>
+        }
         subtitle={props.monthName}
       />
       <StatCard
@@ -44,7 +64,14 @@ export function DashboardStatsClient(props: DashboardStatsProps) {
       <StatCard
         title="Pendiente"
         iconName="trendingUp"
-        value={<span>{formatCurrency(props.totalPending)}</span>}
+        value={
+          <div className="space-y-1">
+            <div>{formatCurrency(props.totalPending)}</div>
+            <div className="font-sans text-xs font-medium text-muted-foreground">
+              {pendingInUsd ?? "Cotización no disponible"}
+            </div>
+          </div>
+        }
         subtitle={`${props.remainingCount} items restantes`}
         progress={paidPercent}
       />

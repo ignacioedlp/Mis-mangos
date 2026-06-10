@@ -15,11 +15,16 @@ import { DashboardCharts } from "@/components/dashboard-charts";
 import { DashboardStatsClient } from "@/components/dashboard-stats";
 import { getInstallmentProgressOverview } from "@/actions/installment-actions";
 import { InstallmentProgressSection } from "@/components/installment-progress-section";
+import { getCryptoDollarRate } from "@/lib/crypto-dollar-server";
+import type { CryptoDollarRate } from "@/lib/crypto-dollar";
+import { formatArsToCryptoUsd } from "@/lib/crypto-dollar";
+import { CryptoDollarQuote } from "@/components/crypto-dollar-quote";
 
 export default async function DashboardPage() {
-  const [data, installmentProgress] = await Promise.all([
+  const [data, installmentProgress, cryptoDollarRate] = await Promise.all([
     getMonthlyDashboard(),
     getInstallmentProgressOverview(),
+    getCryptoDollarRate(),
   ]);
   const monthName = new Date(data.year, data.month - 1).toLocaleString(
     "default",
@@ -35,6 +40,7 @@ export default async function DashboardPage() {
           Seguimiento de gastos y pagos —{" "}
           <span className="font-medium text-foreground/70">{monthName}</span>
         </p>
+        <CryptoDollarQuote rate={cryptoDollarRate} />
       </header>
 
       <BudgetAlerts />
@@ -50,6 +56,7 @@ export default async function DashboardPage() {
           data.items.filter((i) => !i.isPaid && !i.isSkipped).length
         }
         skippedCount={data.items.filter((i) => i.isSkipped).length}
+        cryptoDollarRate={cryptoDollarRate}
       />
 
       {/* Sanitizamos items para evitar pasar instancias Date a un componente cliente */}
@@ -70,7 +77,11 @@ export default async function DashboardPage() {
         monthLabel={monthName}
       />
 
-      <DashboardList data={data} monthName={monthName} />
+      <DashboardList
+        data={data}
+        monthName={monthName}
+        cryptoDollarRate={cryptoDollarRate}
+      />
     </div>
   );
 }
@@ -78,9 +89,11 @@ export default async function DashboardPage() {
 function DashboardList({
   data,
   monthName,
+  cryptoDollarRate,
 }: {
   data: Awaited<ReturnType<typeof getMonthlyDashboard>>;
   monthName: string;
+  cryptoDollarRate: CryptoDollarRate | null;
 }) {
   return (
     <Card className="border-border/60">
@@ -118,7 +131,7 @@ function DashboardList({
             {data.items.map((item) => (
               <div
                 key={item.expenseId}
-                className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-3.5 rounded-xl border border-border/40 bg-card/60 hover:bg-muted/30 hover:border-primary/15 transition-all duration-200"
+                className="grid gap-3 rounded-xl border border-border/40 bg-card/60 p-3.5 transition-all duration-200 hover:border-primary/15 hover:bg-muted/30 md:grid-cols-[minmax(0,1fr)_9rem_12rem] md:items-center"
               >
                 <div className="flex flex-col space-y-1 min-w-0">
                   <div className="flex items-center gap-2 flex-wrap">
@@ -149,10 +162,18 @@ function DashboardList({
                     {item.subcategoryName}
                   </span>
                 </div>
-                <div className="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-end">
-                  <span className="font-serif text-sm font-bold tabular-nums text-foreground sm:text-right">
+                <div className="flex flex-col md:items-end md:text-right">
+                  <span className="font-serif text-sm font-bold tabular-nums text-foreground">
                     {formatCurrency(item.estimatedAmount)}
                   </span>
+                  <span className="text-xs tabular-nums text-muted-foreground">
+                    {formatArsToCryptoUsd(
+                      item.estimatedAmount,
+                      cryptoDollarRate,
+                    ) ?? "Cotización no disponible"}
+                  </span>
+                </div>
+                <div className="flex min-w-0 items-center md:justify-end">
                   <ExpenseActionButtons
                     expenseId={item.expenseId}
                     expenseName={item.name}

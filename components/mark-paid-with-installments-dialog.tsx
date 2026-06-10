@@ -182,9 +182,9 @@ export function MarkPaidWithInstallmentsDialog({
       }}
     >
       <DialogTrigger asChild>
-        <Button size="sm">
+        <Button size="sm" className="w-36">
           <Check className="mr-1 h-3 w-3" />
-          Marcar como pagado
+          Marcar
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[680px]">

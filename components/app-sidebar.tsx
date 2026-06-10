@@ -9,7 +9,7 @@ import {
   TrendingUp,
   PieChart,
   FileText,
-  Target,
+  Gift,
 } from "lucide-react";
 import {
   Sidebar,
@@ -62,10 +62,10 @@ export default function AppSidebar({
       isActive: pathname.startsWith("/budget"),
     },
     {
-      href: "/goals",
-      icon: Target,
-      label: "Objetivos",
-      isActive: pathname.startsWith("/goals"),
+      href: "/wishlist",
+      icon: Gift,
+      label: "Lista de deseos",
+      isActive: pathname.startsWith("/wishlist"),
     },
     {
       href: "/reports",

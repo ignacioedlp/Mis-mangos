@@ -17,6 +17,10 @@ import {
 import { ExpenseActionButtons } from "@/components/expense-action-buttons";
 import { formatCurrency } from "@/lib/utils";
 import { CreditCard, Download } from "lucide-react";
+import {
+  formatArsToCryptoUsd,
+  type CryptoDollarRate,
+} from "@/lib/crypto-dollar";
 
 // Tipo para los elementos mensuales
 type MonthlyExpenseItem = {
@@ -41,6 +45,7 @@ interface MonthlyExpensesTableProps {
   year: number;
   month: number;
   emptyMessage?: string;
+  cryptoDollarRate: CryptoDollarRate | null;
 }
 
 export function MonthlyExpensesTable({
@@ -48,6 +53,7 @@ export function MonthlyExpensesTable({
   year,
   month,
   emptyMessage = "No tienes gastos programados para este mes",
+  cryptoDollarRate,
 }: MonthlyExpensesTableProps) {
   const frequencyColors = {
     WEEKLY: "bg-muted text-foreground",
@@ -273,9 +279,17 @@ export function MonthlyExpensesTable({
               </Badge>
             </TableCell>
             <TableCell>
-              <span className="font-medium">
-                {formatCurrency(item.estimatedAmount)}
-              </span>
+              <div className="flex flex-col">
+                <span className="font-medium">
+                  {formatCurrency(item.estimatedAmount)}
+                </span>
+                <span className="text-xs text-muted-foreground">
+                  {formatArsToCryptoUsd(
+                    item.estimatedAmount,
+                    cryptoDollarRate,
+                  ) ?? "Cotización no disponible"}
+                </span>
+              </div>
             </TableCell>
             <TableCell>
               {item.actualAmount ? (

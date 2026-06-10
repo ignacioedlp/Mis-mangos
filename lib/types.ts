@@ -168,25 +168,45 @@ export interface InstallmentProgressOverviewDTO {
    items: InstallmentProgressItemDTO[];
 }
 
-// Goal types
-export type GoalType = "SAVINGS" | "DEBT_PAYMENT" | "EXPENSE_REDUCTION" | "CUSTOM";
-export type GoalStatus = "ACTIVE" | "COMPLETED" | "CANCELLED" | "PAUSED";
+export type WishlistStatus = "PLANNED" | "COMPLETED" | "DISCARDED";
+export type WishlistPriority = "LOW" | "MEDIUM" | "HIGH";
+export type WishlistAffordabilityStatus =
+   | "AFFORDABLE"
+   | "NOT_AFFORDABLE"
+   | "INSUFFICIENT_DATA";
 
-export interface GoalDTO {
+export interface WishlistItemDTO {
    id: string;
    name: string;
-   description?: string | null;
-   type: GoalType;
-   status: GoalStatus;
-   targetAmount: number;
-   currentAmount: number;
-   categoryId?: string | null;
-   categoryName?: string | null;
-   startDate: Date;
-   targetDate?: Date | null;
-   completedAt?: Date | null;
-   progress: number; // Percentage (0-100)
-   remainingAmount: number;
+   cashPrice: number;
+   totalInstallments: number;
+   installmentAmount: number;
+   financedTotal: number;
+   interestAmount: number;
+   interestPercentage: number;
+   status: WishlistStatus;
+   priority: WishlistPriority;
+   url?: string | null;
+   subcategoryId: string;
+   subcategoryName: string;
+   categoryId: string;
+   categoryName: string;
+   categoryBudgetAmount: number | null;
+   categoryCommittedAmount: number;
+   categoryAvailableAmount: number | null;
+   monthlyIncome: number | null;
+   monthlyCommittedAmount: number;
+   monthlyAvailableAmount: number | null;
+   balanceAfterPurchase: number | null;
+   affordabilityStatus: WishlistAffordabilityStatus;
+   affordabilityReason: string;
    createdAt: Date;
    updatedAt: Date;
+}
+
+export interface WishlistSummaryDTO {
+   planned: number;
+   completed: number;
+   discarded: number;
+   plannedFinancedTotal: number;
 }

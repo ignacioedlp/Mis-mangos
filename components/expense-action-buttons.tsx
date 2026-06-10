@@ -90,9 +90,7 @@ export function ExpenseActionButtons({
   // If expense is hidden (soft-deleted), only show a read-only indicator
   if (isHidden) {
     return (
-      <span className="text-xs text-muted-foreground font-medium">
-        Oculto
-      </span>
+      <span className="text-xs text-muted-foreground font-medium">Oculto</span>
     );
   }
 
@@ -117,11 +115,12 @@ export function ExpenseActionButtons({
   }
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="grid grid-cols-[2rem_9rem] items-center gap-2">
       {/* Skip Button */}
       <Button
         variant="ghost"
         size="sm"
+        className="w-8 px-0"
         onClick={handleToggleSkip}
         disabled={isPending}
         title="Saltar esta ocurrencia"
@@ -140,7 +139,11 @@ export function ExpenseActionButtons({
       ) : (
         <Dialog open={paidOpen} onOpenChange={setPaidOpen}>
           <DialogTrigger asChild>
-            <Button variant={isPaid ? "outline" : "default"} size="sm">
+            <Button
+              variant={isPaid ? "outline" : "default"}
+              size="sm"
+              className="w-36"
+            >
               {isPaid ? (
                 <>
                   <X className="h-3 w-3 mr-1" />
@@ -149,7 +152,7 @@ export function ExpenseActionButtons({
               ) : (
                 <>
                   <Check className="h-3 w-3 mr-1" />
-                  Marcar como pagado
+                  Marcar
                 </>
               )}
             </Button>
