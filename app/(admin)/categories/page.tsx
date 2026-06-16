@@ -1,6 +1,7 @@
 import { listCategories, listSubcategories } from "@/actions/expense-actions"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { FolderPlus } from "lucide-react"
+import { AdminPageHeader } from "@/components/admin-page-header"
 import { CreateCategoryDialog } from "@/components/category-dialog"
 import { CreateSubcategoryDialog } from "@/components/subcategory-dialog"
 import { CategoriesTable } from "@/components/tables/categories-table"
@@ -26,19 +27,20 @@ export default async function CategoriesPage() {
 
   return (
     <div className="space-y-8">
-      <div className="flex flex-col gap-1">
-        <h2 className="font-serif text-3xl font-extrabold tracking-tight">Categorías y subcategorías</h2>
-        <p className="text-muted-foreground text-sm">Organiza tus gastos con categorías y subcategorías</p>
-      </div>
+      <AdminPageHeader
+        eyebrow="Organización"
+        title="Categorías y subcategorías"
+        description="Organiza tus gastos con categorías consistentes y subcategorías detalladas."
+      />
 
       <div className="grid gap-6 lg:grid-cols-2">
         {/* Categories Card */}
-        <Card className="border-border/60">
+        <Card className="border-border/70">
           <CardHeader>
             <div className="flex items-center justify-between">
               <div>
                 <CardTitle className="flex items-center gap-2 font-serif text-lg font-bold">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-primary/20 bg-primary/10">
                     <FolderPlus className="h-4 w-4 text-primary" />
                   </div>
                   Categorías
@@ -58,11 +60,11 @@ export default async function CategoriesPage() {
         </Card>
 
         {/* Subcategories Card */}
-        <Card className="border-border/60">
+        <Card className="border-border/70">
           <CardHeader>
             <div className="flex items-center justify-between">
               <div>
-                <CardTitle className="font-serif text-lg font-bold">Subcategorías</CardTitle>
+                <CardTitle className="font-serif text-lg font-bold tracking-normal">Subcategorías</CardTitle>
                 <CardDescription className="mt-1">Subcategorías de gastos detalladas</CardDescription>
               </div>
               <CreateSubcategoryDialog categories={categories} />

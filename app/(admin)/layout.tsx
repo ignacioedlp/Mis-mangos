@@ -30,12 +30,16 @@ export default async function DashboardLayout({
             <AppSidebar variant="inset" />
             <SidebarInset>
                <AppHeader user={user} />
-               <main className="flex-1 p-6 bg-muted/20">
+               <main className="relative flex-1 overflow-hidden bg-muted/10 p-4 sm:p-6">
+                  <div className="fintech-grid pointer-events-none absolute inset-0 opacity-40" />
+                  <div className="pointer-events-none absolute -right-24 top-0 h-80 w-80 rounded-full bg-primary/[0.07] blur-3xl" />
+                  <div className="relative">
                   <Suspense fallback={null}>
                      <ToastHandler />
                   </Suspense>
                   {children}
                   <PWAInstaller />
+                  </div>
                </main>
             </SidebarInset>
          </SidebarProvider>

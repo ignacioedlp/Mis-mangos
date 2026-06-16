@@ -82,18 +82,19 @@ export default function AppSidebar({
   ];
 
   return (
-    <Sidebar collapsible="offcanvas" {...props}>
+    <Sidebar collapsible="offcanvas" className="border-sidebar-border/70 bg-sidebar/95" {...props}>
       <SidebarHeader className="flex items-center px-4 py-5">
-        <div className="flex items-center gap-2.5">
+        <div className="relative flex w-full items-center gap-2.5 overflow-hidden rounded-xl border border-border/70 bg-card/80 px-3 py-2.5 shadow-sm">
+          <div className="pointer-events-none absolute -right-6 -top-8 h-16 w-16 rounded-full bg-primary/[0.12] blur-2xl" />
           <Logo />
-          <span className="font-serif text-base font-bold tracking-tight">
+          <span className="relative font-serif text-base font-bold tracking-normal">
             Mis Mangos
           </span>
         </div>
       </SidebarHeader>
       <SidebarContent>
         <div className="px-3 py-2">
-          <span className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground/60 px-3">
+          <span className="px-3 font-mono text-[10px] font-semibold uppercase tracking-normal text-muted-foreground/70">
             Navegación
           </span>
         </div>
@@ -103,16 +104,17 @@ export default function AppSidebar({
             return (
               <SidebarMenuItem key={item.href}>
                 <SidebarMenuButton
+                  asChild
                   isActive={item.isActive}
                   size="lg"
-                  className="rounded-xl"
+                  className="group rounded-lg border border-transparent transition-all hover:border-primary/15 hover:bg-sidebar-accent/50 data-[active=true]:border-primary/25 data-[active=true]:bg-primary/10 data-[active=true]:shadow-sm"
                 >
                   <Link
                     href={item.href}
                     className={`${item.isActive ? "text-foreground font-semibold" : "text-muted-foreground"} flex items-center gap-3 transition-colors`}
                   >
                     <div
-                      className={`flex h-8 w-8 items-center justify-center rounded-lg ${item.isActive ? "bg-primary/15 text-primary" : "bg-muted text-muted-foreground"} transition-colors`}
+                      className={`flex h-8 w-8 items-center justify-center rounded-lg border ${item.isActive ? "border-primary/25 bg-primary/20 text-primary shadow-xs shadow-primary/20" : "border-border/50 bg-background/60 text-muted-foreground"} transition-colors`}
                     >
                       <Icon className="h-4 w-4" />
                     </div>

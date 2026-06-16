@@ -19,13 +19,15 @@ const GoogleIcon = (
 export default function SignUpSection() {
    return (
       <div className="w-full max-w-md mx-auto">
-         <div className="rounded-2xl border border-border/60 bg-card/80 backdrop-blur-sm p-8 shadow-xl">
+         <div className="fintech-panel relative overflow-hidden rounded-2xl p-8">
+            <div className="pointer-events-none absolute right-0 top-0 h-24 w-24 rounded-full bg-primary/15 blur-2xl" />
+            <div className="relative">
             <div className="flex items-center gap-3 mb-8">
                <Logo />
-               <span className="font-serif text-lg font-bold tracking-tight">Mis Mangos</span>
+               <span className="font-serif text-lg font-bold tracking-normal">Mis Mangos</span>
             </div>
 
-            <h1 className="font-serif text-2xl font-extrabold tracking-tight">
+            <h1 className="font-serif text-2xl font-extrabold tracking-normal">
                Creá tu cuenta
             </h1>
             <p className="mt-2 text-sm text-muted-foreground">
@@ -41,7 +43,7 @@ export default function SignUpSection() {
             <div className="mt-7">
                <Button
                   variant="outline"
-                  className="w-full h-11 font-medium border-border/60 hover:bg-accent/50 transition-all"
+                  className="w-full h-11 font-medium"
                   onClick={signInWithGoogle}
                >
                   <GoogleIcon className="size-4 mr-2" aria-hidden={true} />
@@ -55,7 +57,7 @@ export default function SignUpSection() {
                      <span className="w-full border-t border-border/60"></span>
                   </div>
                   <div className="relative flex justify-center text-xs">
-                     <span className="bg-card px-3 text-muted-foreground font-medium">
+                     <span className="bg-card/90 px-3 text-muted-foreground font-medium">
                         o con tu correo
                      </span>
                   </div>
@@ -63,6 +65,7 @@ export default function SignUpSection() {
             </div>
 
             <SignUpForm />
+            </div>
          </div>
 
          <p className="pt-6 text-center text-xs text-muted-foreground max-w-sm mx-auto leading-relaxed">

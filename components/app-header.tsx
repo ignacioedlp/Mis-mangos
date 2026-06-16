@@ -11,16 +11,16 @@ type UserProps = {
 
 export default function AppHeader({ user }: UserProps) {
    return (
-      <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b border-border/60 px-6 bg-background/80 backdrop-blur-xl">
-         <SidebarTrigger className="text-muted-foreground hover:text-foreground" />
+      <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b border-border/70 bg-background/75 px-4 shadow-sm backdrop-blur-2xl sm:px-6">
+         <SidebarTrigger className="rounded-lg text-muted-foreground hover:bg-accent/70 hover:text-foreground" />
          <Separator
             orientation="vertical"
-            className="mx-1 data-[orientation=vertical]:h-4"
+            className="mx-1 data-[orientation=vertical]:h-5"
          />
          <div className="flex flex-1 items-center justify-between">
             <div>
-               <h1 className="font-serif text-lg font-bold tracking-tight">Hola, {user?.name}</h1>
-               <p className="text-xs text-muted-foreground -mt-0.5">Bienvenido a tu panel financiero</p>
+               <h1 className="font-serif text-lg font-bold tracking-normal">Hola, {user?.name}</h1>
+               <p className="-mt-0.5 text-xs font-medium text-muted-foreground">Panel financiero actualizado</p>
             </div>
             <div className="flex items-center gap-2">
                <NotificationsPanel />

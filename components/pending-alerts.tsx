@@ -24,9 +24,10 @@ export function PendingAlerts() {
     const fetchPending = async () => {
       try {
         const items = await getPendingExpenses()
-        setPendingItems(items)
+        setPendingItems(Array.isArray(items) ? items : [])
       } catch (error) {
         console.error('Failed to fetch pending expenses:', error)
+        setPendingItems([])
       } finally {
         setLoading(false)
       }
@@ -38,6 +39,8 @@ export function PendingAlerts() {
     const interval = setInterval(fetchPending, 5 * 60 * 1000)
     return () => clearInterval(interval)
   }, [])
+
+  const pendingCount = pendingItems.length
 
   if (loading) {
     return (
@@ -56,12 +59,12 @@ export function PendingAlerts() {
     )
   }
 
-  if (pendingItems.length === 0) {
+  if (pendingCount === 0) {
     return (
-      <Card className="border-border/60">
+      <Card className="border-border/70">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 font-serif text-lg font-bold">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-500/10">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-primary/20 bg-primary/10">
               <Clock className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
             </div>
             Gastos Pendientes
@@ -76,17 +79,17 @@ export function PendingAlerts() {
   }
 
   return (
-    <Card className="border-border/60">
+    <Card className="border-border/70">
       <CardHeader>
         <CardTitle className="flex items-center gap-2 font-serif text-lg font-bold">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-500/10">
             <AlertTriangle className="h-4 w-4 text-amber-600 dark:text-amber-400" />
           </div>
           Gastos Pendientes
-          <Badge variant="destructive" className="rounded-full">{pendingItems.length}</Badge>
+          <Badge variant="destructive" className="rounded-full">{pendingCount}</Badge>
         </CardTitle>
         <CardDescription>
-          Tienes {pendingItems.length} gasto{pendingItems.length !== 1 ? 's' : ''} sin pagar este mes
+          Tienes {pendingCount} gasto{pendingCount !== 1 ? 's' : ''} sin pagar este mes
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -109,7 +112,7 @@ export function PendingAlerts() {
               </div>
             </div>
           ))}
-          <div className="pt-3 border-t border-border/60">
+          <div className="pt-3 border-t border-border/70">
             <div className="text-sm font-serif font-bold">
               Total pendiente: {formatCurrency(pendingItems.reduce((sum, item) => sum + item.estimatedAmount, 0))}
             </div>

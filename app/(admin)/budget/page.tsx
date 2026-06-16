@@ -1,4 +1,5 @@
 import { BudgetDashboard } from "@/components/budget-dashboard"
+import { AdminPageHeader } from "@/components/admin-page-header"
 import { MonthSelector } from "@/components/month-selector"
 
 interface BudgetPageProps {
@@ -13,17 +14,14 @@ export default async function BudgetPage({ searchParams }: BudgetPageProps) {
 
   return (
     <div className="space-y-8">
-      <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
-        <div className="space-y-1">
-          <h2 className="font-serif text-3xl font-extrabold tracking-tight">Análisis de presupuesto</h2>
-          <p className="text-muted-foreground text-sm">
-            Compara tus gastos con la asignación de tu presupuesto por categoría
-          </p>
-        </div>
-        <div className="flex items-center gap-2">
+      <AdminPageHeader
+        eyebrow="Control"
+        title="Análisis de presupuesto"
+        description="Compara tus gastos con la asignación de tu presupuesto por categoría."
+        actions={
           <MonthSelector currentYear={year} currentMonth={month} />
-        </div>
-      </div>
+        }
+      />
 
       <BudgetDashboard year={year} month={month} />
     </div>

@@ -109,10 +109,10 @@ export async function BudgetAlerts({ year, month }: BudgetAlertsProps) {
 
   if (!hasAlerts) {
     return (
-      <Card className="border-border/60">
+      <Card className="border-border/70">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium flex items-center gap-2">
-            <div className="flex h-6 w-6 items-center justify-center rounded-md bg-emerald-500/10">
+            <div className="flex h-6 w-6 items-center justify-center rounded-md border border-primary/20 bg-primary/10">
               <CheckCircle className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
             </div>
             Estado del Presupuesto
@@ -131,7 +131,7 @@ export async function BudgetAlerts({ year, month }: BudgetAlertsProps) {
     <div className="space-y-4">
       {/* Over Budget Alerts */}
       {overBudgetCategories.length > 0 && (
-        <Card className="border-border/60">
+        <Card className="border-border/70">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium flex items-center gap-2">
               <div className="flex h-6 w-6 items-center justify-center rounded-md bg-destructive/10">
@@ -163,7 +163,7 @@ export async function BudgetAlerts({ year, month }: BudgetAlertsProps) {
 
       {/* Near Limit Alerts */}
       {nearLimitCategories.length > 0 && (
-        <Card className="border-border/60">
+        <Card className="border-border/70">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium flex items-center gap-2">
               <div className="flex h-6 w-6 items-center justify-center rounded-md bg-amber-500/10">
@@ -194,7 +194,7 @@ export async function BudgetAlerts({ year, month }: BudgetAlertsProps) {
       )}
 
       {/* Budget Summary */}
-      <Card className="border-border/60">
+      <Card className="border-border/70">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium">Resumen del Presupuesto</CardTitle>
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-muted">

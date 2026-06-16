@@ -5,7 +5,7 @@ export default function Footer() {
       <footer className="relative border-t border-border/60 overflow-hidden">
          {/* Giant background text */}
          <div className="flex items-center justify-center overflow-hidden py-8 md:py-0">
-            <div className="text-[7rem] md:text-[11rem] lg:text-[15rem] font-serif font-extrabold select-none pointer-events-none leading-none bg-gradient-to-b from-primary/15 to-transparent bg-clip-text text-transparent tracking-tighter">
+            <div className="text-[7rem] md:text-[11rem] lg:text-[15rem] font-serif font-extrabold select-none pointer-events-none leading-none bg-gradient-to-b from-primary/15 to-transparent bg-clip-text text-transparent tracking-normal">
                MANGOS
             </div>
          </div>

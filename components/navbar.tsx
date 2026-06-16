@@ -17,7 +17,7 @@ export default function Navbar() {
             <nav className="flex items-center justify-between gap-4 sm:gap-6">
                <div className="flex items-center gap-3">
                   <Logo />
-                  <span className="font-serif text-lg font-bold tracking-tight hidden sm:block">Mis Mangos</span>
+                  <span className="font-serif text-lg font-bold tracking-normal hidden sm:block">Mis Mangos</span>
                </div>
                <div className='flex items-center gap-2'>
                   {user ? (

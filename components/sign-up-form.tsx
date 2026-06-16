@@ -14,13 +14,14 @@ import { authClient } from "@/lib/auth-client"
 import { formSchema } from "@/lib/auth-schema"
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import { redirect } from "next/navigation"
+import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { z } from "zod"
 
 
 export default function SignUpForm() {
+   const router = useRouter()
    const form = useForm<z.infer<typeof formSchema>>({
       resolver: zodResolver(formSchema),
       defaultValues: {
@@ -42,7 +43,7 @@ export default function SignUpForm() {
          },
          onSuccess: () => {
             form.reset()
-            redirect("/sign-in")
+            router.push("/sign-in")
          },
          onError: (ctx) => {
             toast.error(ctx.error.message);

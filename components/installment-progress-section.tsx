@@ -29,7 +29,7 @@ export function InstallmentProgressSection({
     .slice(0, maxItems);
 
   return (
-    <Card className="border-border/60">
+    <Card className="border-border/70">
       <CardHeader>
         <CardTitle className="flex items-center gap-2 font-serif text-lg font-bold">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">

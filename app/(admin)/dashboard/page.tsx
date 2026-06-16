@@ -30,17 +30,62 @@ export default async function DashboardPage() {
     "default",
     { month: "long", year: "numeric" },
   );
+  const paidPercent =
+    data.totalEstimated > 0 ? (data.totalPaid / data.totalEstimated) * 100 : 0;
+  const activeItems = data.items.filter((i) => !i.isSkipped).length;
+  const completedItems = data.items.filter((i) => i.isPaid).length;
+
   return (
     <div className="flex flex-col gap-8 w-full">
-      <header className="flex flex-col gap-1">
-        <h2 className="font-serif text-3xl font-extrabold tracking-tight">
-          Panel Mensual
-        </h2>
-        <p className="text-muted-foreground text-sm">
-          Seguimiento de gastos y pagos —{" "}
-          <span className="font-medium text-foreground/70">{monthName}</span>
-        </p>
-        <CryptoDollarQuote rate={cryptoDollarRate} />
+      <header className="fintech-hero relative overflow-hidden rounded-xl p-5">
+        <div className="pointer-events-none absolute right-0 top-0 h-36 w-36 rounded-full bg-primary/10 blur-3xl" />
+        <div className="relative flex flex-col gap-5 xl:flex-row xl:items-end xl:justify-between">
+          <div className="flex flex-col gap-3">
+            <span className="w-fit rounded-md border border-primary/20 bg-primary/10 px-2.5 py-1 font-mono text-[10px] font-semibold uppercase tracking-normal text-primary">
+              Snapshot mensual
+            </span>
+            <div>
+              <h2 className="font-serif text-3xl font-extrabold tracking-normal">
+                Panel Mensual
+              </h2>
+              <p className="mt-2 text-sm text-muted-foreground">
+                Seguimiento de gastos y pagos —{" "}
+                <span className="font-medium text-foreground/80">
+                  {monthName}
+                </span>
+              </p>
+            </div>
+            <CryptoDollarQuote rate={cryptoDollarRate} />
+          </div>
+
+          <div className="grid gap-2 sm:grid-cols-3 xl:min-w-[34rem]">
+            {[
+              ["Pagado", formatCurrency(data.totalPaid), `${paidPercent.toFixed(1)}%`],
+              ["Pendiente", formatCurrency(data.totalPending), `${data.items.filter((i) => !i.isPaid && !i.isSkipped).length} items`],
+              ["Avance", `${completedItems}/${activeItems || 0}`, "gastos"],
+            ].map(([label, value, meta]) => (
+              <div key={label} className="fintech-kpi rounded-lg p-3">
+                <div className="flex items-center justify-between gap-3">
+                  <span className="font-mono text-[10px] font-semibold uppercase text-muted-foreground">
+                    {label}
+                  </span>
+                  <span className="rounded-md bg-primary/10 px-1.5 py-0.5 font-mono text-[10px] font-bold text-primary">
+                    {meta}
+                  </span>
+                </div>
+                <div className="mt-1.5 font-serif text-base font-extrabold tracking-normal">
+                  {value}
+                </div>
+              </div>
+            ))}
+            <div className="h-1 overflow-hidden rounded-full bg-primary/15 sm:col-span-3">
+              <div
+                className="h-full rounded-full bg-gradient-to-r from-primary via-gold-300 to-gold-200"
+                style={{ width: `${Math.min(paidPercent, 100)}%` }}
+              />
+            </div>
+          </div>
+        </div>
       </header>
 
       <BudgetAlerts />
@@ -99,7 +144,7 @@ function DashboardList({
     <Card className="border-border/60">
       <CardHeader className="pb-4">
         <div className="flex items-center justify-between">
-          <CardTitle className="font-serif text-lg font-bold">
+          <CardTitle className="font-serif text-lg font-bold tracking-normal">
             Lista de Gastos
           </CardTitle>
           <Badge
@@ -131,7 +176,7 @@ function DashboardList({
             {data.items.map((item) => (
               <div
                 key={item.expenseId}
-                className="grid gap-3 rounded-xl border border-border/40 bg-card/60 p-3.5 transition-all duration-200 hover:border-primary/15 hover:bg-muted/30 md:grid-cols-[minmax(0,1fr)_9rem_12rem] md:items-center"
+                className="grid gap-3 rounded-xl border border-border/60 bg-background/60 p-3.5 shadow-xs transition-all duration-200 hover:border-primary/25 hover:bg-accent/30 hover:shadow-sm md:grid-cols-[minmax(0,1fr)_9rem_12rem] md:items-center"
               >
                 <div className="flex flex-col space-y-1 min-w-0">
                   <div className="flex items-center gap-2 flex-wrap">

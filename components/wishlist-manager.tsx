@@ -23,6 +23,7 @@ import {
   WishlistDialog,
   type WishlistSubcategoryOption,
 } from "@/components/wishlist-dialog";
+import { AdminPageHeader } from "@/components/admin-page-header";
 import { CryptoDollarQuote } from "@/components/crypto-dollar-quote";
 import {
   AlertDialog,
@@ -151,18 +152,18 @@ export function WishlistManager({
 
   return (
     <div className="flex flex-col gap-8">
-      <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-        <div>
-          <h1 className="font-serif text-3xl font-extrabold tracking-tight">
-            Lista de deseos
-          </h1>
-          <p className="mt-1 text-sm text-muted-foreground">
+      <AdminPageHeader
+        eyebrow="Planificación"
+        title="Lista de deseos"
+        description={
+          <>
             Compará cada compra con tus compromisos y presupuesto del mes actual.
-          </p>
-          <div className="mt-3">
-            <CryptoDollarQuote rate={cryptoDollarRate} />
-          </div>
-        </div>
+            <span className="mt-2 block">
+              <CryptoDollarQuote rate={cryptoDollarRate} />
+            </span>
+          </>
+        }
+        actions={
         <Button
           onClick={() => {
             setSelectedItem(null);
@@ -173,7 +174,8 @@ export function WishlistManager({
           <Plus data-icon="inline-start" />
           Agregar artículo
         </Button>
-      </div>
+        }
+      />
 
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <SummaryCard title="Planeados" value={String(summary.planned)} />
@@ -191,7 +193,7 @@ export function WishlistManager({
         />
       </div>
 
-      <div className="flex flex-col gap-3 rounded-xl border bg-card p-4 sm:flex-row">
+      <div className="fintech-surface flex flex-col gap-3 rounded-xl p-4 sm:flex-row">
         <Select value={statusFilter} onValueChange={setStatusFilter}>
           <SelectTrigger className="sm:w-48">
             <SelectValue />
@@ -217,7 +219,7 @@ export function WishlistManager({
       </div>
 
       {subcategories.length === 0 ? (
-        <Card className="border-dashed">
+        <Card className="border-dashed border-border/70">
           <CardHeader className="items-center text-center">
             <CardTitle>Primero necesitás una subcategoría</CardTitle>
             <CardDescription>
@@ -226,7 +228,7 @@ export function WishlistManager({
           </CardHeader>
         </Card>
       ) : filteredItems.length === 0 ? (
-        <Card className="border-dashed">
+        <Card className="border-dashed border-border/70">
           <CardHeader className="items-center text-center">
             <ShoppingBag className="size-10 text-muted-foreground" />
             <CardTitle>No hay artículos para mostrar</CardTitle>
@@ -295,7 +297,7 @@ function SummaryCard({
   detail?: string;
 }) {
   return (
-    <Card>
+    <Card className="border-border/70">
       <CardHeader className="pb-2">
         <CardDescription>{title}</CardDescription>
       </CardHeader>
@@ -346,7 +348,7 @@ function WishlistCard({
   const AffordabilityIcon = affordability.icon;
 
   return (
-    <Card className="overflow-hidden">
+    <Card className="overflow-hidden border-border/70">
       <CardHeader className="gap-3">
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
@@ -425,7 +427,7 @@ function WishlistCard({
           />
         </div>
 
-        <div className="grid gap-3 rounded-xl bg-muted/40 p-4 sm:grid-cols-2">
+        <div className="grid gap-3 rounded-xl border border-border/60 bg-background/35 p-4 sm:grid-cols-2">
           <Metric
             label="Interés total"
             value={`${formatCurrency(item.interestAmount)} (${formatPercentage(item.interestPercentage)})`}

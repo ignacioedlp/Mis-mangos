@@ -1,4 +1,5 @@
 import { getUserReports } from "@/actions/report-actions"
+import { AdminPageHeader } from "@/components/admin-page-header"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { FileText } from "lucide-react"
 import { ReportsGenerator } from "@/components/reports-generator"
@@ -14,21 +15,20 @@ export default async function ReportsPage() {
 
   return (
     <div className="space-y-8">
-      <div className="flex flex-col gap-1">
-        <h2 className="font-serif text-3xl font-extrabold tracking-tight">Reportes y Analíticas</h2>
-        <p className="text-muted-foreground text-sm">
-          Genera reportes detallados y analiza tus datos financieros
-        </p>
-      </div>
+      <AdminPageHeader
+        eyebrow="Analítica"
+        title="Reportes y Analíticas"
+        description="Genera reportes detallados y analiza tus datos financieros."
+      />
 
       {/* Report Generator */}
       <ReportsGenerator />
 
       {/* Reports List */}
-      <Card className="border-border/60">
+      <Card className="border-border/70">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 font-serif text-lg font-bold">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-primary/20 bg-primary/10">
               <FileText className="h-4 w-4 text-primary" />
             </div>
             Reportes Generados

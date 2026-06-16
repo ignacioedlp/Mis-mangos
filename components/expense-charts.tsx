@@ -18,7 +18,7 @@ interface ExpenseChartsProps {
 export function ExpenseCharts({ categoryData }: ExpenseChartsProps) {
   if (!categoryData || categoryData.length === 0) {
     return (
-      <Card className="border-border/60">
+      <Card className="border-border/70">
         <CardHeader>
           <CardTitle className="font-serif text-lg font-bold">Analisis de gastos</CardTitle>
           <CardDescription>No hay datos disponibles para los gráficos</CardDescription>
@@ -93,7 +93,7 @@ export function ExpenseCharts({ categoryData }: ExpenseChartsProps) {
       </Card>
 
       {/* Pie Chart - Spending Distribution */}
-      <Card className="border-border/60">
+      <Card className="border-border/70">
         <CardHeader>
           <CardTitle className="font-serif text-lg font-bold">Distribución de Gastos</CardTitle>
           <CardDescription>Desglose de gastos por categoría</CardDescription>
@@ -129,7 +129,7 @@ export function ExpenseCharts({ categoryData }: ExpenseChartsProps) {
       </Card>
 
       {/* Summary Stats */}
-      <Card className="lg:col-span-2 border-border/60">
+      <Card className="lg:col-span-2 border-border/70">
         <CardHeader>
           <CardTitle className="font-serif text-lg font-bold">Resumen por categoría</CardTitle>
           <CardDescription>Uso vs estimado y detalle por categoría</CardDescription>

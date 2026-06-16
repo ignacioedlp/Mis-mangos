@@ -13,19 +13,19 @@ const benefits = [
 export default function CTASection() {
    return (
       <section className="relative py-24 md:py-36 overflow-hidden">
-         {/* Warm gradient background */}
-         <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-accent/40 to-primary/5 pointer-events-none" />
+         <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-accent/35 to-primary/5 pointer-events-none" />
+         <div className="fintech-grid pointer-events-none absolute inset-0 opacity-70" />
          <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
          <div className="absolute bottom-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
 
          <div className="container mx-auto relative">
-            <div className="max-w-3xl mx-auto text-center">
+            <div className="fintech-panel max-w-3xl mx-auto rounded-2xl p-6 text-center sm:p-10">
                <FadeInView>
-                  <span className="text-sm font-semibold uppercase tracking-widest text-primary">¡Empezá hoy!</span>
+                  <span className="font-mono text-[11px] font-semibold uppercase tracking-normal text-primary">¡Empezá hoy!</span>
                </FadeInView>
 
                <FadeInView delay={0.1}>
-                  <h2 className="font-serif text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl mt-4">
+                  <h2 className="font-serif text-4xl font-extrabold tracking-normal sm:text-5xl md:text-6xl mt-4">
                      Tomá el control de tus finanzas{" "}
                      <span className="text-transparent bg-gradient-to-r from-primary via-gold-300 to-primary bg-clip-text">
                         en minutos

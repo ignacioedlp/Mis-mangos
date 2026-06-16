@@ -6,6 +6,7 @@ import {
   getDailyExpensesHeatmap,
 } from "@/actions/expense-actions";
 import { Button } from "@/components/ui/button";
+import { AdminPageHeader } from "@/components/admin-page-header";
 import {
   Card,
   CardContent,
@@ -31,6 +32,7 @@ import { SalaryDialog } from "@/components/salary-dialog";
 import { PendingAlerts } from "@/components/pending-alerts";
 import type { ExpenseFrequency } from "@/lib/types";
 import { MonthlyExpensesTable } from "@/components/tables/monthly-expenses-table";
+import { MetricCard } from "@/components/metric-card";
 import { ExpenseHeatmap } from "@/components/expense-heatmap";
 import { getInstallmentProgressOverview } from "@/actions/installment-actions";
 import { InstallmentProgressSection } from "@/components/installment-progress-section";
@@ -91,21 +93,22 @@ export default async function MonthlyPage({ searchParams }: MonthlyPageProps) {
 
   return (
     <div className="space-y-8">
-      <div className="flex flex-col gap-3">
-        <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
-          <div className="space-y-1">
-            <h2 className="font-serif text-3xl font-extrabold tracking-tight">
-              Vista mensual
-            </h2>
-            <p className="text-muted-foreground text-sm">
-              Resumen y detalle de tus gastos en{" "}
-              <span className="font-medium text-foreground/70">
-                {data.monthName}
-              </span>
-            </p>
-            <CryptoDollarQuote rate={cryptoDollarRate} />
-          </div>
-          <div className="flex flex-wrap items-center gap-2">
+      <AdminPageHeader
+        eyebrow="Mes activo"
+        title="Vista mensual"
+        description={
+          <>
+            Resumen y detalle de tus gastos en{" "}
+            <span className="font-medium text-foreground/80">
+              {data.monthName}
+            </span>
+            <span className="mt-2 block">
+              <CryptoDollarQuote rate={cryptoDollarRate} />
+            </span>
+          </>
+        }
+        actions={
+          <>
             <MonthSelector currentYear={year} currentMonth={month} />
             <ExportDialog data={exportData} />
             <SalaryDialog
@@ -113,12 +116,12 @@ export default async function MonthlyPage({ searchParams }: MonthlyPageProps) {
               month={month}
               currentSalary={salary?.amount}
             />
-          </div>
-        </div>
-      </div>
+          </>
+        }
+      />
 
       {/* Resumen con progreso */}
-      <Card className="border-border/60">
+      <Card className="border-border/70">
         <CardHeader className="pb-3">
           <CardTitle className="font-serif text-lg font-bold">
             Resumen
@@ -212,109 +215,56 @@ export default async function MonthlyPage({ searchParams }: MonthlyPageProps) {
 
       {/* Tarjetas de métricas */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
-        <Card className="border-border/60 hover:border-primary/20 transition-all duration-300 hover:shadow-md">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-            <CardTitle className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              Salario Mensual
-            </CardTitle>
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-500/10">
-              <DollarSign className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="font-serif text-xl font-extrabold text-primary">
-              {salary ? formatCurrency(salary.amount) : "No establecido"}
-            </div>
-            <p className="text-xs text-muted-foreground">
-              {salary && data.totalActual > 0
-                ? `${((data.totalActual / salary.amount) * 100).toFixed(1)}% utilizado`
-                : "Establecé un salario para ver el uso"}
-            </p>
-          </CardContent>
-        </Card>
-        <Card className="border-border/60 hover:border-primary/20 transition-all duration-300 hover:shadow-md">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-            <CardTitle className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              Total Estimado
-            </CardTitle>
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-muted">
-              <DollarSign className="h-4 w-4 text-muted-foreground" />
-            </div>
-          </CardHeader>
-          <CardContent>
+        <MetricCard
+          title="Salario Mensual"
+          value={salary ? formatCurrency(salary.amount) : "No establecido"}
+          subtitle={
+            salary && data.totalActual > 0
+              ? `${((data.totalActual / salary.amount) * 100).toFixed(1)}% utilizado`
+              : "Establecé un salario para ver el uso"
+          }
+          icon={DollarSign}
+          tone="success"
+        />
+        <MetricCard
+          title="Total Estimado"
+          value={
             <div className="space-y-1">
-              <div className="font-serif text-xl font-extrabold">
-                {formatCurrency(data.totalEstimated)}
-              </div>
-              <div className="text-xs font-medium text-muted-foreground">
-                {formatArsToCryptoUsd(
-                  data.totalEstimated,
-                  cryptoDollarRate,
-                ) ?? "Cotización no disponible"}
+              <div>{formatCurrency(data.totalEstimated)}</div>
+              <div className="font-sans text-xs font-medium text-muted-foreground">
+                {formatArsToCryptoUsd(data.totalEstimated, cryptoDollarRate) ??
+                  "Cotización no disponible"}
               </div>
             </div>
-            <p className="text-xs text-muted-foreground">{data.monthName}</p>
-          </CardContent>
-        </Card>
-        <Card className="border-border/60 hover:border-primary/20 transition-all duration-300 hover:shadow-md">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-            <CardTitle className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              Total Real
-            </CardTitle>
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-destructive/10">
-              <TrendingDown className="h-4 w-4 text-destructive" />
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="font-serif text-xl font-extrabold text-destructive">
-              {formatCurrency(data.totalActual)}
-            </div>
-            <p className="text-xs text-muted-foreground">
-              {data.totalEstimated > 0
-                ? ((data.totalActual / data.totalEstimated) * 100).toFixed(1)
-                : 0}
-              % del estimado
-            </p>
-          </CardContent>
-        </Card>
-        <Card className="border-border/60 hover:border-primary/20 transition-all duration-300 hover:shadow-md">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-            <CardTitle className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              Ahorros
-            </CardTitle>
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
-              <TrendingUp className="h-4 w-4 text-primary" />
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="font-serif text-xl font-extrabold text-primary">
-              {salary ? formatCurrency(salary.amount - data.totalActual) : "-"}
-            </div>
-            <p className="text-xs text-muted-foreground">
-              {salary
-                ? `${(((salary.amount - data.totalActual) / salary.amount) * 100).toFixed(1)}% ahorrado`
-                : "Establecé un salario para ver ahorros"}
-            </p>
-          </CardContent>
-        </Card>
-        <Card className="border-border/60 hover:border-primary/20 transition-all duration-300 hover:shadow-md">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-            <CardTitle className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              Progreso
-            </CardTitle>
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-500/10">
-              <BarChart3 className="h-4 w-4 text-blue-600 dark:text-blue-400" />
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="font-serif text-xl font-extrabold text-primary">
-              {data.totalPaid}/{activeCount}
-            </div>
-            <p className="text-xs text-muted-foreground">
-              gastos activos pagados
-            </p>
-          </CardContent>
-        </Card>
+          }
+          subtitle={data.monthName}
+          icon={DollarSign}
+          tone="muted"
+        />
+        <MetricCard
+          title="Total Real"
+          value={formatCurrency(data.totalActual)}
+          subtitle={`${data.totalEstimated > 0 ? ((data.totalActual / data.totalEstimated) * 100).toFixed(1) : 0}% del estimado`}
+          icon={TrendingDown}
+          tone="danger"
+        />
+        <MetricCard
+          title="Ahorros"
+          value={salary ? formatCurrency(salary.amount - data.totalActual) : "-"}
+          subtitle={
+            salary
+              ? `${(((salary.amount - data.totalActual) / salary.amount) * 100).toFixed(1)}% ahorrado`
+              : "Establecé un salario para ver ahorros"
+          }
+          icon={TrendingUp}
+        />
+        <MetricCard
+          title="Progreso"
+          value={`${data.totalPaid}/${activeCount}`}
+          subtitle="gastos activos pagados"
+          icon={BarChart3}
+          tone="warning"
+        />
       </div>
 
       {/* Charts */}
@@ -330,7 +280,7 @@ export default async function MonthlyPage({ searchParams }: MonthlyPageProps) {
       />
 
       {/* Detalle de gastos */}
-      <Card className="border-border/60">
+      <Card className="border-border/70">
         <CardHeader>
           <CardTitle className="font-serif text-lg font-bold">
             Detalle de Gastos
@@ -354,7 +304,7 @@ export default async function MonthlyPage({ searchParams }: MonthlyPageProps) {
       <PendingAlerts />
 
       {/* Generar ocurrencias */}
-      <Card className="border-border/60 border-dashed">
+      <Card className="border-border/70 border-dashed">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 font-serif text-lg font-bold">
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">

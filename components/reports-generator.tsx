@@ -106,10 +106,10 @@ export function ReportsGenerator() {
   const selectedReportType = reportTypes.find(type => type.value === reportType)
 
   return (
-    <Card className="border-border/60">
+    <Card className="border-border/70">
       <CardHeader>
         <CardTitle className="flex items-center gap-2 font-serif text-lg font-bold">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-primary/20 bg-primary/10">
             <FileText className="h-4 w-4 text-primary" />
           </div>
           Generador de Reportes
@@ -146,7 +146,7 @@ export function ReportsGenerator() {
 
         {/* Parameters based on report type */}
         {reportType && (
-          <div className="space-y-4 p-4 bg-muted/50 rounded-lg">
+          <div className="space-y-4 rounded-lg border border-border/60 bg-background/45 p-4">
             <div className="flex items-center gap-2 mb-4">
               {selectedReportType?.icon}
               <h4 className="font-medium text-sm">{selectedReportType?.label} — Parámetros</h4>

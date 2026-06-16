@@ -53,7 +53,7 @@ export function ExpenseHeatmap({ data, year, month }: ExpenseHeatmapProps) {
     })
 
     return (
-        <Card className="w-full md:w-2xl border-border/60">
+        <Card className="w-full border-border/70 md:w-2xl">
             <CardHeader>
                 <CardTitle className="flex items-center gap-2 font-serif text-lg font-bold">
                     <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">

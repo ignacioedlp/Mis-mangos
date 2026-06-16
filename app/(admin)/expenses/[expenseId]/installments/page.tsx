@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, CreditCard } from "lucide-react";
 
+import { AdminPageHeader } from "@/components/admin-page-header";
 import { listExpenses } from "@/actions/expense-actions";
 import { listInstallmentPurchases } from "@/actions/installment-actions";
 import { InstallmentPurchaseForm } from "@/components/installment-purchase-form";
@@ -37,17 +38,12 @@ export default async function InstallmentsPage({
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-        <div className="space-y-1">
-          <h2 className="flex items-center gap-2 font-serif text-3xl font-extrabold tracking-tight">
-            <CreditCard className="h-7 w-7 text-primary" />
-            Cuotas de {expense.name}
-          </h2>
-          <p className="text-sm text-muted-foreground">
-            Gestioná compras financiadas y su progreso de pago mensual.
-          </p>
-        </div>
-        <div className="flex items-center gap-2">
+      <AdminPageHeader
+        eyebrow="Financiación"
+        title={`Cuotas de ${expense.name}`}
+        description="Gestioná compras financiadas y su progreso de pago mensual."
+        actions={
+          <>
           <Button variant="outline" asChild>
             <Link href="/expenses">
               <ArrowLeft className="mr-2 h-4 w-4" />
@@ -55,12 +51,18 @@ export default async function InstallmentsPage({
             </Link>
           </Button>
           <InstallmentPurchaseForm expenseId={expenseId} />
-        </div>
-      </div>
+          </>
+        }
+      />
 
-      <Card>
+      <Card className="border-border/70">
         <CardHeader>
-          <CardTitle>Compras en cuotas</CardTitle>
+          <CardTitle className="flex items-center gap-2 font-serif text-lg font-bold tracking-normal">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-primary/20 bg-primary/10">
+              <CreditCard className="h-4 w-4 text-primary" />
+            </div>
+            Compras en cuotas
+          </CardTitle>
           <CardDescription>
             Revisá cuotas pagadas, pendientes y eliminá registros incorrectos
             cuando sea necesario.

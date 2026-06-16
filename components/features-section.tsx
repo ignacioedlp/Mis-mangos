@@ -56,13 +56,12 @@ const features = [
 export default function FeaturesSection() {
    return (
       <section className="relative py-24 md:py-36">
-         {/* Background accent */}
-         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-muted/30 to-transparent pointer-events-none" />
+         <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-muted/35 to-transparent" />
 
          <div className="container mx-auto relative">
             <FadeInView className="space-y-3 pb-16 max-w-2xl">
-               <span className="text-sm font-semibold uppercase tracking-widest text-primary">Características</span>
-               <h2 className="font-serif text-4xl font-extrabold tracking-tight sm:text-5xl">
+               <span className="font-mono text-[11px] font-semibold uppercase tracking-normal text-primary">Características</span>
+               <h2 className="font-serif text-4xl font-extrabold tracking-normal sm:text-5xl">
                   Todo lo que necesitás para{" "}
                   <span className="text-primary">controlar tus finanzas</span>
                </h2>
@@ -77,11 +76,12 @@ export default function FeaturesSection() {
                      key={index}
                      delay={0.06 * (index + 1)}
                   >
-                     <div className="group relative h-full rounded-2xl border border-border/60 bg-card p-6 transition-all duration-300 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5 hover:-translate-y-0.5">
-                        <div className={`flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br ${feature.accent} text-foreground mb-5`}>
+                     <div className="fintech-surface group relative h-full overflow-hidden rounded-xl p-6 transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5">
+                        <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
+                        <div className={`mb-5 flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br ${feature.accent} text-foreground ring-1 ring-border/50`}>
                            {feature.icon}
                         </div>
-                        <h3 className="font-serif text-base font-bold mb-2 group-hover:text-primary transition-colors">
+                        <h3 className="font-serif text-base font-bold tracking-normal mb-2 group-hover:text-primary transition-colors">
                            {feature.name}
                         </h3>
                         <p className="text-sm text-muted-foreground leading-relaxed">

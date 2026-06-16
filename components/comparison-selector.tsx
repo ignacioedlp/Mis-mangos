@@ -41,9 +41,9 @@ export function ComparisonSelector({ startYear, startMonth, endYear, endMonth }:
   }
 
   return (
-    <Card className="w-fit border-border/60">
+    <Card className="w-fit border-border/70">
       <CardHeader className="pb-3">
-        <CardTitle className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Selección de Período</CardTitle>
+        <CardTitle className="font-mono text-[11px] font-semibold uppercase tracking-normal text-muted-foreground">Selección de Período</CardTitle>
       </CardHeader>
       <CardContent className="space-y-3">
         <div className="text-xs text-muted-foreground">

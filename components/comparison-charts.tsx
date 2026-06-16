@@ -20,7 +20,7 @@ interface ComparisonChartsProps {
 export function ComparisonCharts({ data }: ComparisonChartsProps) {
   if (!data || data.length === 0) {
     return (
-      <Card className="border-border/60">
+      <Card className="border-border/70">
         <CardHeader>
           <CardTitle className="font-serif text-lg font-bold">Grafico de Comparación</CardTitle>
           <CardDescription>No hay datos disponibles para los gráficos</CardDescription>
@@ -99,7 +99,7 @@ export function ComparisonCharts({ data }: ComparisonChartsProps) {
       </Card>
 
       {/* Savings Rate Trend */}
-      <Card className="border-border/60">
+      <Card className="border-border/70">
         <CardHeader>
           <CardTitle className="font-serif text-lg font-bold">Tendencia de la Tasa de Ahorro</CardTitle>
           <CardDescription>Tu porcentaje de tasa de ahorro a lo largo del tiempo</CardDescription>
@@ -132,7 +132,7 @@ export function ComparisonCharts({ data }: ComparisonChartsProps) {
       </Card>
 
       {/* Income vs Expenses */}
-      <Card className="border-border/60">
+      <Card className="border-border/70">
         <CardHeader>
           <CardTitle className="font-serif text-lg font-bold">Ingreso vs Gastos</CardTitle>
           <CardDescription>Salario mensual en comparación con el gasto real</CardDescription>
@@ -164,7 +164,7 @@ export function ComparisonCharts({ data }: ComparisonChartsProps) {
       </Card>
 
       {/* Net Savings */}
-      <Card className="border-border/60">
+      <Card className="border-border/70">
         <CardHeader>
           <CardTitle className="font-serif text-lg font-bold">Ahorros Netos</CardTitle>
           <CardDescription>Monto ahorrado cada mes (Salario - Gastos)</CardDescription>
