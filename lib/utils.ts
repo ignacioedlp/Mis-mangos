@@ -43,6 +43,18 @@ export function formatCurrency(
 }
 
 /**
+ * Formats a number as US Dollar currency using Argentine locale conventions.
+ */
+export function formatUsdCurrency(amount: number): string {
+  return new Intl.NumberFormat('es-AR', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(amount);
+}
+
+/**
  * Formats a number as Argentine Peso without currency symbol
  * @param amount - The amount to format
  * @returns Formatted number string (e.g., "12.345,67")

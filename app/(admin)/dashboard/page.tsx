@@ -1,4 +1,5 @@
 import { getMonthlyDashboard } from "@/actions/expense-actions";
+import { getUsdCashflow } from "@/actions/usd-cashflow-actions";
 import {
   Card,
   CardContent,
@@ -7,10 +8,11 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Wallet } from "lucide-react";
 // Iconos se gestionan dentro de StatCard para evitar pasar funciones a componentes cliente
 import { ExpenseActionButtons } from "@/components/expense-action-buttons";
 import { BudgetAlerts } from "@/components/budget-alerts";
-import { formatCurrency } from "@/lib/utils";
+import { formatCurrency, formatUsdCurrency } from "@/lib/utils";
 import { DashboardCharts } from "@/components/dashboard-charts";
 import { DashboardStatsClient } from "@/components/dashboard-stats";
 import { getInstallmentProgressOverview } from "@/actions/installment-actions";
@@ -26,6 +28,7 @@ export default async function DashboardPage() {
     getInstallmentProgressOverview(),
     getCryptoDollarRate(),
   ]);
+  const usdCashflow = await getUsdCashflow(data.year, data.month);
   const monthName = new Date(data.year, data.month - 1).toLocaleString(
     "default",
     { month: "long", year: "numeric" },
@@ -104,6 +107,8 @@ export default async function DashboardPage() {
         cryptoDollarRate={cryptoDollarRate}
       />
 
+      <UsdCashflowSummary data={usdCashflow} monthName={monthName} />
+
       {/* Sanitizamos items para evitar pasar instancias Date a un componente cliente */}
       <DashboardCharts
         items={data.items.map((it) => ({
@@ -128,6 +133,52 @@ export default async function DashboardPage() {
         cryptoDollarRate={cryptoDollarRate}
       />
     </div>
+  );
+}
+
+function UsdCashflowSummary({
+  data,
+  monthName,
+}: {
+  data: Awaited<ReturnType<typeof getUsdCashflow>>;
+  monthName: string;
+}) {
+  return (
+    <Card className="border-border/60 bg-card/[0.94]">
+      <CardHeader className="pb-3">
+        <div className="flex items-center justify-between gap-3">
+          <div>
+            <CardTitle className="font-serif text-lg font-bold tracking-normal">
+              USD disponible
+            </CardTitle>
+            <CardDescription>
+              Sueldo y transferencias a cuenta de uso para {monthName}
+            </CardDescription>
+          </div>
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-primary/20 bg-primary/10 text-primary">
+            <Wallet className="h-5 w-5" aria-hidden="true" />
+          </div>
+        </div>
+      </CardHeader>
+      <CardContent>
+        <div className="grid gap-3 sm:grid-cols-3">
+          {[
+            ["Disponible", formatUsdCurrency(data.available)],
+            ["Transferido", formatUsdCurrency(data.totalTransferred)],
+            ["Sueldo USD", formatUsdCurrency(data.monthlyIncome)],
+          ].map(([label, value]) => (
+            <div key={label} className="rounded-lg border border-border/60 bg-background/50 p-3">
+              <div className="font-mono text-[10px] font-semibold uppercase text-muted-foreground">
+                {label}
+              </div>
+              <div className="mt-1 font-serif text-lg font-extrabold tabular-nums tracking-normal">
+                {value}
+              </div>
+            </div>
+          ))}
+        </div>
+      </CardContent>
+    </Card>
   );
 }
 

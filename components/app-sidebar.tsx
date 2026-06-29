@@ -10,6 +10,7 @@ import {
   PieChart,
   FileText,
   Gift,
+  Wallet,
 } from "lucide-react";
 import {
   Sidebar,
@@ -66,6 +67,12 @@ export default function AppSidebar({
       icon: Gift,
       label: "Lista de deseos",
       isActive: pathname.startsWith("/wishlist"),
+    },
+    {
+      href: "/usd-cashflow",
+      icon: Wallet,
+      label: "USD disponible",
+      isActive: pathname.startsWith("/usd-cashflow"),
     },
     {
       href: "/reports",

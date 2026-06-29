@@ -21,6 +21,32 @@ export function PWAInstaller() {
   const [isInstalled, setIsInstalled] = useState(false)
 
   useEffect(() => {
+    if (process.env.NODE_ENV !== "production") {
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.getRegistrations()
+          .then((registrations) => {
+            registrations.forEach((registration) => registration.unregister())
+          })
+          .catch((error) => {
+            console.log("SW cleanup failed: ", error)
+          })
+      }
+
+      if ("caches" in window) {
+        caches.keys()
+          .then((cacheNames) => {
+            cacheNames
+              .filter((cacheName) => cacheName.startsWith("better-auth-") || cacheName.startsWith("mis-mangos-"))
+              .forEach((cacheName) => caches.delete(cacheName))
+          })
+          .catch((error) => {
+            console.log("Cache cleanup failed: ", error)
+          })
+      }
+
+      return
+    }
+
     // Register service worker
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/sw.js')

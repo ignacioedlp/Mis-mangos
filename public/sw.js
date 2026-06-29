@@ -1,27 +1,11 @@
-const CACHE_NAME = 'better-auth-v1'
-const STATIC_CACHE = 'better-auth-static-v1'
-const DYNAMIC_CACHE = 'better-auth-dynamic-v1'
+const STATIC_CACHE = 'mis-mangos-static-v2'
+const DYNAMIC_CACHE = 'mis-mangos-dynamic-v2'
 
 // Files to cache immediately
 const STATIC_FILES = [
-  '/',
-  '/dashboard',
-  '/expenses',
-  '/budget',
-  '/monthly',
-  '/categories',
-  '/reports',
   '/offline',
   '/manifest.json',
   '/logo.png'
-]
-
-// API routes that can be cached
-const CACHEABLE_ROUTES = [
-  '/api/auth',
-  '/api/expenses',
-  '/api/categories',
-  '/api/budget'
 ]
 
 // Install event - cache static files
@@ -80,6 +64,12 @@ self.addEventListener('fetch', (event) => {
   if (url.origin !== location.origin) {
     return
   }
+
+  // Next.js build assets must stay network-owned. Caching them can mix old
+  // webpack chunks/CSS with a new dev or production build.
+  if (url.pathname.startsWith('/_next/')) {
+    return
+  }
   
   event.respondWith(
     handleRequest(request)
@@ -95,9 +85,10 @@ async function handleRequest(request) {
       return await cacheFirst(request, STATIC_CACHE)
     }
     
-    // Strategy 2: API routes - Network First
+    // Strategy 2: API routes - Network only. Auth and mutation endpoints should
+    // never be replayed from an HTTP cache.
     if (isApiRoute(url.pathname)) {
-      return await networkFirst(request, DYNAMIC_CACHE)
+      return await fetch(request)
     }
     
     // Strategy 3: Pages - Stale While Revalidate
@@ -126,7 +117,9 @@ async function cacheFirst(request, cacheName) {
   
   if (networkResponse.ok) {
     const cache = await caches.open(cacheName)
-    cache.put(request, networkResponse.clone())
+    await cache.put(request, networkResponse.clone()).catch((error) => {
+      console.error('Failed to cache response:', error)
+    })
   }
   
   return networkResponse
@@ -139,7 +132,9 @@ async function networkFirst(request, cacheName) {
     
     if (networkResponse.ok) {
       const cache = await caches.open(cacheName)
-      cache.put(request, networkResponse.clone())
+      await cache.put(request, networkResponse.clone()).catch((error) => {
+        console.error('Failed to cache response:', error)
+      })
     }
     
     return networkResponse
@@ -158,18 +153,24 @@ async function networkFirst(request, cacheName) {
 async function staleWhileRevalidate(request, cacheName) {
   const cachedResponse = await caches.match(request)
   
-  const fetchPromise = fetch(request).then((networkResponse) => {
+  const fetchPromise = fetch(request).then(async (networkResponse) => {
     if (networkResponse.ok) {
-      const cache = caches.open(cacheName)
-      cache.then(c => c.put(request, networkResponse.clone()))
+      const cache = await caches.open(cacheName)
+      await cache.put(request, networkResponse.clone()).catch((error) => {
+        console.error('Failed to cache response:', error)
+      })
     }
     return networkResponse
-  }).catch(() => {
-    // Network failed, return cached version if available
-    return cachedResponse
   })
   
-  return cachedResponse || await fetchPromise
+  if (cachedResponse) {
+    fetchPromise.catch(() => {
+      // Keep serving the cached version when revalidation fails.
+    })
+    return cachedResponse
+  }
+
+  return await fetchPromise
 }
 
 // Handle offline scenarios
@@ -221,8 +222,7 @@ function isStaticFile(pathname) {
 }
 
 function isApiRoute(pathname) {
-  return pathname.startsWith('/api/') || 
-         CACHEABLE_ROUTES.some(route => pathname.startsWith(route))
+  return pathname.startsWith('/api/')
 }
 
 function isPageRoute(pathname) {

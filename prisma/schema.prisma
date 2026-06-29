@@ -21,6 +21,8 @@ model User {
   categories    Category[]
   expenses      Expense[]
   salaries      Salary[]
+  usdMonthlyIncomes UsdMonthlyIncome[]
+  usdTransfers  UsdTransfer[]
   notifications Notification[]
   reports       Report[]
   wishlistItems WishlistItem[]
@@ -212,6 +214,38 @@ model Salary {
   @@unique([userId, year, month])
   @@index([year, month])
   @@map("salary")
+}
+
+model UsdMonthlyIncome {
+  id        String   @id @default(uuid())
+  amount    Decimal  @db.Decimal(12, 2)
+  year      Int
+  month     Int // 1-12
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, year, month])
+  @@index([year, month])
+  @@map("usd_monthly_income")
+}
+
+model UsdTransfer {
+  id            String   @id @default(uuid())
+  amount        Decimal  @db.Decimal(12, 2)
+  year          Int
+  month         Int // 1-12
+  transferredAt DateTime
+  description   String?
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([userId, year, month])
+  @@index([transferredAt])
+  @@map("usd_transfer")
 }
 
 /// Types of notifications
