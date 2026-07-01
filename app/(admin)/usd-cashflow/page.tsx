@@ -1,4 +1,4 @@
-import { ArrowDownToLine, Banknote, Wallet } from "lucide-react";
+import { ArrowDownToLine, Banknote, PiggyBank, Wallet } from "lucide-react";
 
 import { getUsdCashflow } from "@/actions/usd-cashflow-actions";
 import { AdminPageHeader } from "@/components/admin-page-header";
@@ -90,7 +90,22 @@ export default async function UsdCashflowPage({
         }
       />
 
-      <div className="grid gap-4 md:grid-cols-3">
+      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+        <MetricCard
+          title="Acumulado sin usar"
+          value={
+            <UsdArsMetricValue
+              amount={data.totalStored}
+              arsValue={formatCryptoUsdToArs(
+                data.totalStored,
+                cryptoDollarRate,
+              )}
+            />
+          }
+          subtitle="Todos los meses cargados"
+          icon={PiggyBank}
+          tone={data.totalStored >= 0 ? "success" : "danger"}
+        />
         <MetricCard
           title="Disponible USD"
           value={

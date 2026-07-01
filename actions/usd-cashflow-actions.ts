@@ -105,7 +105,7 @@ export async function getUsdCashflow(year?: number, month?: number) {
     month: month ?? now.getMonth() + 1,
   });
 
-  const [income, transfers] = await Promise.all([
+  const [income, transfers, totalIncome, totalTransfers] = await Promise.all([
     prisma.usdMonthlyIncome.findUnique({
       where: {
         userId_year_month: {
@@ -123,6 +123,14 @@ export async function getUsdCashflow(year?: number, month?: number) {
       },
       orderBy: [{ transferredAt: "desc" }, { createdAt: "desc" }],
     }),
+    prisma.usdMonthlyIncome.aggregate({
+      where: { userId },
+      _sum: { amount: true },
+    }),
+    prisma.usdTransfer.aggregate({
+      where: { userId },
+      _sum: { amount: true },
+    }),
   ]);
 
   const serializedIncome = serializeIncome(income);
@@ -132,6 +140,9 @@ export async function getUsdCashflow(year?: number, month?: number) {
     0,
   );
   const monthlyIncome = serializedIncome?.amount ?? 0;
+  const totalStored =
+    Number(totalIncome._sum.amount ?? 0) -
+    Number(totalTransfers._sum.amount ?? 0);
 
   return {
     year: target.year,
@@ -141,6 +152,7 @@ export async function getUsdCashflow(year?: number, month?: number) {
     monthlyIncome,
     totalTransferred,
     available: monthlyIncome - totalTransferred,
+    totalStored,
   };
 }
 
