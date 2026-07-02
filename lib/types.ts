@@ -81,8 +81,11 @@ export interface CategoryBudgetAnalysisDTO {
    budgetPercentage: number;
    budgetAmount: number;
    actualSpent: number;
+   estimatedSpent: number;
    remaining: number;
+   estimatedRemaining: number;
    usagePercentage: number;
+   estimatedUsagePercentage: number;
    isOverBudget: boolean;
    expenseCount: number;
 }

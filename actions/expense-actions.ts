@@ -797,27 +797,39 @@ export async function getBudgetAnalysis(year?: number, month?: number) {
     };
   }
 
-  // Get categories with their budget percentages
+  // Get categories with their budget percentages and expenses planned for the month
   const categories = await prisma.category.findMany({
     where: { userId },
     include: {
       expenses: {
         where: {
           active: true,
-          // Include expenses (recurring and ONE_TIME) that have a PAID occurrence in the target month
-          // Including soft-deleted expenses since money was actually spent
+          OR: [
+            { deletedAt: null },
+            {
+              deletedAt: { not: null },
+              occurrences: { some: { year: y, month: m, isPaid: true } },
+            },
+          ],
           occurrences: {
             some: {
               year: y,
               month: m,
-              isPaid: true,
               isSkipped: false,
             },
           },
         },
         include: {
           occurrences: {
-            where: { year: y, month: m, isPaid: true, isSkipped: false },
+            where: { year: y, month: m, isSkipped: false },
+          },
+          installmentPurchases: {
+            select: {
+              payments: {
+                where: { year: y, month: m },
+                select: { amount: true },
+              },
+            },
           },
         },
       },
@@ -830,14 +842,27 @@ export async function getBudgetAnalysis(year?: number, month?: number) {
       : 0;
     const budgetAmount = (monthlyIncome * budgetPercentage) / 100;
 
-    // Calculate actual spending for this category
+    // Calculate actual and estimated spending for this category
     let actualSpent = 0;
+    let estimatedSpent = 0;
     let oneTimeSpent = 0;
     let oneTimeCount = 0;
     for (const expense of category.expenses) {
       const occurrence = expense.occurrences[0];
+      const installmentMonthlyTotal = expense.installmentPurchases
+        .flatMap((purchase) => purchase.payments)
+        .reduce((sum, payment) => sum + Number(payment.amount), 0);
+      const estimatedAmount =
+        installmentMonthlyTotal > 0
+          ? installmentMonthlyTotal
+          : Number(expense.estimatedAmount);
+
       if (occurrence) {
-        const amount = Number(occurrence.amount || expense.estimatedAmount);
+        estimatedSpent += estimatedAmount;
+
+        if (!occurrence.isPaid) continue;
+
+        const amount = Number(occurrence.amount || estimatedAmount);
         actualSpent += amount;
         if (expense.frequency === "ONE_TIME") {
           oneTimeSpent += amount;
@@ -848,8 +873,11 @@ export async function getBudgetAnalysis(year?: number, month?: number) {
     const recurringSpent = actualSpent - oneTimeSpent;
 
     const remaining = budgetAmount - actualSpent;
+    const estimatedRemaining = budgetAmount - estimatedSpent;
     const usagePercentage =
       budgetAmount > 0 ? (actualSpent / budgetAmount) * 100 : 0;
+    const estimatedUsagePercentage =
+      budgetAmount > 0 ? (estimatedSpent / budgetAmount) * 100 : 0;
     const isOverBudget = actualSpent > budgetAmount;
 
     return {
@@ -858,11 +886,14 @@ export async function getBudgetAnalysis(year?: number, month?: number) {
       budgetPercentage,
       budgetAmount,
       actualSpent,
+      estimatedSpent,
       oneTimeSpent,
       oneTimeCount,
       recurringSpent,
       remaining,
+      estimatedRemaining,
       usagePercentage,
+      estimatedUsagePercentage,
       isOverBudget,
       expenseCount: category.expenses.length,
     };

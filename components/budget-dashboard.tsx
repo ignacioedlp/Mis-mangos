@@ -13,11 +13,14 @@ type CategoryBudget = {
   budgetPercentage: number
   budgetAmount: number
   actualSpent: number
+  estimatedSpent: number
   oneTimeSpent: number
   oneTimeCount: number
   recurringSpent: number
   remaining: number
+  estimatedRemaining: number
   usagePercentage: number
+  estimatedUsagePercentage: number
   isOverBudget: boolean
   expenseCount: number
 }
@@ -234,6 +237,33 @@ export async function BudgetDashboard({ year, month }: BudgetDashboardProps) {
                   <div className="flex justify-between text-sm text-muted-foreground">
                     <span>Presupuesto</span>
                     <span>{formatCurrency(category.budgetAmount)}</span>
+                  </div>
+                  <div className="rounded-md border border-border/60 bg-muted/35 p-3">
+                    <div className="flex items-start justify-between gap-3">
+                      <div>
+                        <p className="text-xs font-medium uppercase tracking-normal text-muted-foreground">
+                          Disponible para usar
+                        </p>
+                        <p
+                          className={
+                            category.estimatedRemaining >= 0
+                              ? "font-serif text-xl font-extrabold text-primary"
+                              : "font-serif text-xl font-extrabold text-destructive"
+                          }
+                        >
+                          {category.estimatedRemaining >= 0
+                            ? formatCurrency(category.estimatedRemaining)
+                            : `${formatCurrency(Math.abs(category.estimatedRemaining))} sobre`}
+                        </p>
+                      </div>
+                      <Badge variant="outline" className="shrink-0 text-xs">
+                        Est. {formatCurrency(category.estimatedSpent)}
+                      </Badge>
+                    </div>
+                    <div className="mt-2 flex justify-between text-xs text-muted-foreground">
+                      <span>Según gastos estimados</span>
+                      <span>{formatPercentage(category.estimatedUsagePercentage)} previsto</span>
+                    </div>
                   </div>
                   <Progress
                     value={Math.min(category.usagePercentage, 100)}
