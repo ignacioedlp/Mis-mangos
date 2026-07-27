@@ -14,7 +14,7 @@ export default async function ReportsPage() {
   const { reports } = await ReportsData()
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       <AdminPageHeader
         eyebrow="Analítica"
         title="Reportes y Analíticas"
@@ -25,10 +25,10 @@ export default async function ReportsPage() {
       <ReportsGenerator />
 
       {/* Reports List */}
-      <Card className="border-border/70">
+      <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2 font-serif text-lg font-bold">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-primary/20 bg-primary/10">
+          <CardTitle className="flex items-center gap-2">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-primary/35 bg-primary/10">
               <FileText className="h-4 w-4 text-primary" />
             </div>
             Reportes Generados

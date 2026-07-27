@@ -31,8 +31,8 @@ export default function SignOutForm() {
       })
    }
    return (
-      <Button variant={"destructive"} onClick={handleLogout}>
-         <LogOut className="mr-2 h-4 w-4" />
+      <Button variant={"destructive"} onClick={handleLogout} className="w-full justify-start">
+         <LogOut className="h-4 w-4" />
          Cerrar sesion
       </Button>
    )

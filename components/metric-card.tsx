@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import type { LucideIcon } from "lucide-react";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 
 interface MetricCardProps {
@@ -10,15 +11,16 @@ interface MetricCardProps {
   subtitle?: ReactNode;
   icon: LucideIcon;
   tone?: "primary" | "muted" | "success" | "danger" | "warning";
+  progress?: number;
   className?: string;
 }
 
 const toneClasses = {
-  primary: "border-primary/20 bg-primary/10 text-primary",
-  muted: "border-border/60 bg-muted/50 text-muted-foreground",
-  success: "border-emerald-500/20 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
-  danger: "border-destructive/20 bg-destructive/10 text-destructive",
-  warning: "border-amber-500/20 bg-amber-500/10 text-amber-600 dark:text-amber-400",
+  primary: "border-primary/35 bg-primary/10 text-primary",
+  muted: "border-border/65 bg-muted/55 text-muted-foreground",
+  success: "border-chart-5/35 bg-chart-5/10 text-chart-5",
+  danger: "border-destructive/35 bg-destructive/10 text-destructive",
+  warning: "border-chart-1/35 bg-chart-1/10 text-chart-1",
 };
 
 export function MetricCard({
@@ -27,17 +29,18 @@ export function MetricCard({
   subtitle,
   icon: Icon,
   tone = "primary",
+  progress,
   className,
 }: MetricCardProps) {
   return (
     <Card
       className={cn(
-        "group min-h-32 border-border/70 bg-card/[0.94] hover:-translate-y-0.5 hover:border-primary/25 hover:shadow-md",
+        "group min-h-32 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-md",
         className,
       )}
     >
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-        <CardTitle className="font-mono text-[11px] font-semibold uppercase tracking-normal text-muted-foreground">
+        <CardTitle className="metric-label">
           {title}
         </CardTitle>
         <div
@@ -50,13 +53,16 @@ export function MetricCard({
         </div>
       </CardHeader>
       <CardContent className="space-y-2">
-        <div className="font-serif text-2xl font-extrabold leading-none tracking-normal">
+        <div className="metric-value text-2xl">
           {value}
         </div>
         {subtitle && (
           <p className="text-xs font-medium text-muted-foreground">
             {subtitle}
           </p>
+        )}
+        {typeof progress === "number" && (
+          <Progress value={progress} className="h-1.5" />
         )}
       </CardContent>
     </Card>

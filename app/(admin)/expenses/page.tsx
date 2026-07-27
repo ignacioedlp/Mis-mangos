@@ -24,7 +24,7 @@ export default async function ExpensesPage() {
   const totalSubcategories = subcategories.length
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       <AdminPageHeader
         eyebrow="Catálogo"
         title="Gestión de Gastos"
@@ -46,9 +46,9 @@ export default async function ExpensesPage() {
       </div>
 
       {/* Expenses Table */}
-      <Card className="border-border/70">
+      <Card>
         <CardHeader>
-          <CardTitle className="font-serif text-lg font-bold">Lista de Gastos</CardTitle>
+          <CardTitle>Lista de Gastos</CardTitle>
           <CardDescription>Administra tus gastos recurrentes</CardDescription>
         </CardHeader>
         <CardContent>
@@ -64,5 +64,4 @@ export default async function ExpensesPage() {
     </div>
   )
 }
-
 

@@ -62,9 +62,9 @@ export function ExpensesByMonthChart({ data }: ExpensesByMonthChartProps) {
   // Si no hay gastos, mostrar mensaje
   if (expenseNames.length === 0) {
     return (
-      <Card className="border-border/70">
+      <Card>
         <CardHeader>
-          <CardTitle className="font-serif text-lg font-bold">Evolución de Gastos por Mes</CardTitle>
+          <CardTitle>Evolución de Gastos por Mes</CardTitle>
           <CardDescription>Gastos recurrentes a lo largo del tiempo</CardDescription>
         </CardHeader>
         <CardContent>
@@ -87,23 +87,17 @@ export function ExpensesByMonthChart({ data }: ExpensesByMonthChartProps) {
     nameMap.set(sanitizeName(originalName), originalName)
   })
 
-  // Colores para las líneas (usar colores hexadecimales directos y visibles)
+  // Colores para las líneas, conectados a los tokens del tema.
   const chartColors = [
-    '#3b82f6', // Azul
-    '#ef4444', // Rojo
-    '#10b981', // Verde
-    '#f59e0b', // Naranja
-    '#8b5cf6', // Púrpura
-    '#ec4899', // Rosa
-    '#06b6d4', // Cian
-    '#84cc16', // Lima
+    'var(--color-chart-3)',
+    'var(--color-chart-1)',
+    'var(--color-chart-2)',
+    'var(--color-chart-5)',
+    'var(--color-chart-4)',
+    'var(--primary)',
+    'var(--color-chart-2)',
+    'var(--color-chart-5)',
   ]
-
-  // También crear un mapeo de nombres sanitizados a colores para usar directamente
-  const expenseColorMap = new Map<string, string>()
-  expenseNames.forEach((name, index) => {
-    expenseColorMap.set(sanitizeName(name), chartColors[index % chartColors.length])
-  })
 
   // Crear estructura de datos para el gráfico
   // Usar nombres sanitizados como claves para evitar problemas con espacios
@@ -149,16 +143,16 @@ export function ExpensesByMonthChart({ data }: ExpensesByMonthChartProps) {
   }, {} as ChartConfig)
 
   return (
-    <Card className="border-border/70">
+    <Card>
       <CardHeader>
-        <CardTitle className="font-serif text-lg font-bold">Evolución de Gastos por Mes</CardTitle>
+        <CardTitle>Evolución de Gastos por Mes</CardTitle>
         <CardDescription>Gastos recurrentes a lo largo del tiempo (excluye gastos únicos)</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="w-full overflow-x-auto">
           <ChartContainer config={chartConfig} className="min-h-[450px]" style={{ minWidth: '500px' }}>
             <LineChart data={chartData}>
-            <CartesianGrid strokeDasharray="3 3" />
+            <CartesianGrid strokeDasharray="3 3" className="stroke-border/35" vertical={false} />
             <XAxis
               dataKey="month"
               angle={-45}
@@ -197,7 +191,7 @@ export function ExpensesByMonthChart({ data }: ExpensesByMonthChartProps) {
                   type="monotone"
                   dataKey={sanitizedKey}
                   stroke={lineColor}
-                  strokeWidth={3}
+                  strokeWidth={2.5}
                   dot={{ r: 4, fill: lineColor }}
                   activeDot={{ r: 6, fill: lineColor }}
                   connectNulls={true}
@@ -226,4 +220,3 @@ export function ExpensesByMonthChart({ data }: ExpensesByMonthChartProps) {
     </Card>
   )
 }
-

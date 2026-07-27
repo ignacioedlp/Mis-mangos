@@ -89,23 +89,27 @@ export default function AppSidebar({
   ];
 
   return (
-    <Sidebar collapsible="offcanvas" className="border-sidebar-border/70 bg-sidebar/95" {...props}>
-      <SidebarHeader className="flex items-center px-4 py-5">
-        <div className="relative flex w-full items-center gap-2.5 overflow-hidden rounded-xl border border-border/70 bg-card/80 px-3 py-2.5 shadow-sm">
-          <div className="pointer-events-none absolute -right-6 -top-8 h-16 w-16 rounded-full bg-primary/[0.12] blur-2xl" />
+    <Sidebar collapsible="offcanvas" className="border-sidebar-border/75 bg-sidebar" {...props}>
+      <SidebarHeader className="flex items-center px-3 py-4">
+        <div className="relative flex w-full items-center gap-3 overflow-hidden rounded-xl border border-sidebar-border/80 bg-background/55 px-3 py-2.5 shadow-sm">
           <Logo />
-          <span className="relative font-serif text-base font-bold tracking-normal">
-            Mis Mangos
-          </span>
+          <div className="min-w-0">
+            <span className="block truncate font-serif text-base font-extrabold tracking-normal">
+              Mis Mangos
+            </span>
+            <span className="block truncate font-mono text-[10px] font-bold uppercase text-muted-foreground">
+              Finanzas personales
+            </span>
+          </div>
         </div>
       </SidebarHeader>
       <SidebarContent>
-        <div className="px-3 py-2">
-          <span className="px-3 font-mono text-[10px] font-semibold uppercase tracking-normal text-muted-foreground/70">
+        <div className="px-3 pb-2 pt-1">
+          <span className="px-3 font-mono text-[10px] font-bold uppercase tracking-normal text-muted-foreground/75">
             Navegación
           </span>
         </div>
-        <SidebarMenu className="px-2 space-y-0.5">
+        <SidebarMenu className="space-y-1 px-2">
           {menuItems.map((item) => {
             const Icon = item.icon;
             return (
@@ -114,14 +118,15 @@ export default function AppSidebar({
                   asChild
                   isActive={item.isActive}
                   size="lg"
-                  className="group rounded-lg border border-transparent transition-all hover:border-primary/15 hover:bg-sidebar-accent/50 data-[active=true]:border-primary/25 data-[active=true]:bg-primary/10 data-[active=true]:shadow-sm"
+                  tooltip={item.label}
+                  className="group rounded-lg border border-transparent transition-all hover:border-primary/20 hover:bg-sidebar-accent/55 data-[active=true]:border-primary/40 data-[active=true]:bg-primary/10 data-[active=true]:shadow-sm"
                 >
                   <Link
                     href={item.href}
-                    className={`${item.isActive ? "text-foreground font-semibold" : "text-muted-foreground"} flex items-center gap-3 transition-colors`}
+                    className={`${item.isActive ? "font-bold text-sidebar-foreground" : "text-muted-foreground"} flex items-center gap-3 transition-colors`}
                   >
                     <div
-                      className={`flex h-8 w-8 items-center justify-center rounded-lg border ${item.isActive ? "border-primary/25 bg-primary/20 text-primary shadow-xs shadow-primary/20" : "border-border/50 bg-background/60 text-muted-foreground"} transition-colors`}
+                      className={`flex h-8 w-8 items-center justify-center rounded-lg border ${item.isActive ? "border-primary/45 bg-primary text-primary-foreground shadow-xs shadow-primary/25" : "border-border/55 bg-background/55 text-muted-foreground"} transition-colors`}
                     >
                       <Icon className="h-4 w-4" />
                     </div>

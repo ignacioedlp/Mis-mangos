@@ -29,16 +29,16 @@ export function ExpenseHeatmap({ data, year, month }: ExpenseHeatmapProps) {
     // Create calendar grid with empty cells for alignment
     const calendarGrid: (DailyExpense | null)[] = Array(firstDay).fill(null).concat(data)
 
-    // Get color intensity based on amount (0-100%) - Orange scale
+    // Get color intensity based on amount (0-100%).
     const getColorIntensity = (amount: number) => {
         if (amount === 0) return 'bg-muted/20'
         const intensity = (amount / maxAmount) * 100
 
-        if (intensity <= 20) return 'bg-orange-100 dark:bg-orange-950/30'
-        if (intensity <= 40) return 'bg-orange-200 dark:bg-orange-900/40'
-        if (intensity <= 60) return 'bg-orange-300 dark:bg-orange-800/50'
-        if (intensity <= 80) return 'bg-orange-400 dark:bg-orange-700/60'
-        return 'bg-orange-500 dark:bg-orange-600/70'
+        if (intensity <= 20) return 'bg-primary/15'
+        if (intensity <= 40) return 'bg-primary/30'
+        if (intensity <= 60) return 'bg-primary/50'
+        if (intensity <= 80) return 'bg-primary/70'
+        return 'bg-primary'
     }
 
     // Get tooltip text
@@ -53,10 +53,10 @@ export function ExpenseHeatmap({ data, year, month }: ExpenseHeatmapProps) {
     })
 
     return (
-        <Card className="w-full border-border/70 md:w-2xl">
+        <Card className="w-full lg:max-w-3xl">
             <CardHeader>
-                <CardTitle className="flex items-center gap-2 font-serif text-lg font-bold">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
+                <CardTitle className="flex items-center gap-2">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-primary/35 bg-primary/10">
                         <Calendar className="h-4 w-4 text-primary" />
                     </div>
                     Calendario de Gastos
@@ -85,7 +85,7 @@ export function ExpenseHeatmap({ data, year, month }: ExpenseHeatmapProps) {
                             <div
                                 key={index}
                                 className={cn(
-                                    "aspect-square rounded-sm flex items-center justify-center text-xs font-medium transition-all hover:scale-110 hover:shadow-md cursor-pointer",
+                                    "flex aspect-square cursor-pointer items-center justify-center rounded-md border border-border/20 text-xs font-medium transition-all hover:scale-105 hover:border-primary/40 hover:shadow-md",
                                     dayData
                                         ? getColorIntensity(dayData.amount)
                                         : "bg-transparent"
@@ -107,17 +107,17 @@ export function ExpenseHeatmap({ data, year, month }: ExpenseHeatmapProps) {
                     </div>
 
                     {/* Legend */}
-                    <div className="flex items-center justify-between pt-3 border-t">
+                    <div className="flex items-center justify-between border-t border-border/60 pt-3">
                         <span className="text-xs text-muted-foreground">Intensidad:</span>
                         <div className="flex items-center gap-1.5">
                             <span className="text-[10px] text-muted-foreground">Menos</span>
                             <div className="flex gap-0.5">
                                 <div className="w-3 h-3 rounded-sm bg-muted/20" title="Sin gastos" />
-                                <div className="w-3 h-3 rounded-sm bg-orange-100 dark:bg-orange-950/30" title="20%" />
-                                <div className="w-3 h-3 rounded-sm bg-orange-200 dark:bg-orange-900/40" title="40%" />
-                                <div className="w-3 h-3 rounded-sm bg-orange-300 dark:bg-orange-800/50" title="60%" />
-                                <div className="w-3 h-3 rounded-sm bg-orange-400 dark:bg-orange-700/60" title="80%" />
-                                <div className="w-3 h-3 rounded-sm bg-orange-500 dark:bg-orange-600/70" title="100%" />
+                                <div className="w-3 h-3 rounded-sm bg-primary/15" title="20%" />
+                                <div className="w-3 h-3 rounded-sm bg-primary/30" title="40%" />
+                                <div className="w-3 h-3 rounded-sm bg-primary/50" title="60%" />
+                                <div className="w-3 h-3 rounded-sm bg-primary/70" title="80%" />
+                                <div className="w-3 h-3 rounded-sm bg-primary" title="100%" />
                             </div>
                             <span className="text-[10px] text-muted-foreground">Más</span>
                         </div>
@@ -125,15 +125,15 @@ export function ExpenseHeatmap({ data, year, month }: ExpenseHeatmapProps) {
 
                     {/* Stats */}
                     <div className="grid grid-cols-2 gap-3 pt-2">
-                        <div className="space-y-0.5">
-                            <p className="text-[10px] text-muted-foreground">Días con gastos</p>
-                            <p className="text-base font-bold text-orange-600 dark:text-orange-500">
+                        <div className="data-panel p-3">
+                            <p className="metric-label">Días con gastos</p>
+                            <p className="metric-value mt-1 text-base text-primary">
                                 {data.filter(d => d.amount > 0).length}
                             </p>
                         </div>
-                        <div className="space-y-0.5">
-                            <p className="text-[10px] text-muted-foreground">Día con más gastos</p>
-                            <p className="text-base font-bold text-orange-600 dark:text-orange-500">
+                        <div className="data-panel p-3">
+                            <p className="metric-label">Día con más gastos</p>
+                            <p className="metric-value mt-1 text-base text-primary">
                                 {maxAmount > 0
                                     ? `${data.find(d => d.amount === maxAmount)?.day || '-'} (${formatCurrency(maxAmount)})`
                                     : 'N/A'

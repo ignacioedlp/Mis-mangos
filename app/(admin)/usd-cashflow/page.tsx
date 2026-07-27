@@ -61,7 +61,7 @@ export default async function UsdCashflowPage({
   }));
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       <AdminPageHeader
         eyebrow="Control USD"
         title="USD disponible"
@@ -121,6 +121,7 @@ export default async function UsdCashflowPage({
           }
           icon={Wallet}
           tone={data.available >= 0 ? "success" : "danger"}
+          progress={data.monthlyIncome > 0 ? 100 - usagePct : 0}
         />
         <MetricCard
           title="Transferido"
@@ -136,6 +137,7 @@ export default async function UsdCashflowPage({
           subtitle={`${data.transfers.length} transferencia${data.transfers.length === 1 ? "" : "s"}`}
           icon={ArrowDownToLine}
           tone="warning"
+          progress={usagePct}
         />
         <MetricCard
           title="Sueldo mensual"
@@ -154,9 +156,9 @@ export default async function UsdCashflowPage({
         />
       </div>
 
-      <Card className="border-border/70">
+      <Card>
         <CardHeader className="pb-3">
-          <CardTitle className="font-serif text-lg font-bold">
+          <CardTitle>
             Avance de transferencias
           </CardTitle>
           <CardDescription>
@@ -195,9 +197,9 @@ export default async function UsdCashflowPage({
         </CardContent>
       </Card>
 
-      <Card className="border-border/70">
+      <Card>
         <CardHeader>
-          <CardTitle className="font-serif text-lg font-bold">
+          <CardTitle>
             Transferencias del mes
           </CardTitle>
           <CardDescription>

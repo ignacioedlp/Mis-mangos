@@ -45,9 +45,9 @@ export function ExpensesByMonthTable({ data }: ExpensesByMonthTableProps) {
   // Si no hay gastos, mostrar mensaje
   if (expenseNames.length === 0) {
     return (
-      <Card className="border-border/70">
+      <Card>
         <CardHeader>
-          <CardTitle className="font-serif text-lg font-bold">Gastos por Mes</CardTitle>
+          <CardTitle>Gastos por Mes</CardTitle>
           <CardDescription>Desglose de gastos recurrentes por mes</CardDescription>
         </CardHeader>
         <CardContent>
@@ -102,9 +102,9 @@ export function ExpensesByMonthTable({ data }: ExpensesByMonthTableProps) {
   })
 
   return (
-    <Card className="border-border/70">
+    <Card>
       <CardHeader>
-        <CardTitle className="font-serif text-lg font-bold">Gastos por Mes</CardTitle>
+        <CardTitle>Gastos por Mes</CardTitle>
         <CardDescription>Desglose de gastos recurrentes por mes (excluye gastos únicos)</CardDescription>
       </CardHeader>
       <CardContent>
@@ -149,4 +149,3 @@ export function ExpensesByMonthTable({ data }: ExpensesByMonthTableProps) {
     </Card>
   )
 }
-

@@ -18,9 +18,9 @@ interface ExpenseChartsProps {
 export function ExpenseCharts({ categoryData }: ExpenseChartsProps) {
   if (!categoryData || categoryData.length === 0) {
     return (
-      <Card className="border-border/70">
+      <Card>
         <CardHeader>
-          <CardTitle className="font-serif text-lg font-bold">Analisis de gastos</CardTitle>
+          <CardTitle>Analisis de gastos</CardTitle>
           <CardDescription>No hay datos disponibles para los gráficos</CardDescription>
         </CardHeader>
         <CardContent>
@@ -47,19 +47,34 @@ export function ExpenseCharts({ categoryData }: ExpenseChartsProps) {
 
   // Ordenamos por gasto real (desc) para destacar las categorías más relevantes
   const sortedCategoryData = [...categoryData].sort((a, b) => b.actual - a.actual)
+  const totalActual = categoryData.reduce((sum, item) => sum + item.actual, 0)
+  const totalEstimated = categoryData.reduce((sum, item) => sum + item.estimated, 0)
+  const totalDistribution = pieData.reduce((sum, item) => sum + item.value, 0)
+  const topCategory = sortedCategoryData[0]
+  const topShare = totalActual > 0 && topCategory ? (topCategory.actual / totalActual) * 100 : 0
 
   return (
-    <div className="grid gap-6 lg:grid-cols-2">
+    <div className="grid gap-5 lg:grid-cols-2">
       {/* Bar Chart - Estimated vs Actual */}
       <Card>
         <CardHeader>
-          <CardTitle>Gastos Estimados vs Reales</CardTitle>
-          <CardDescription>Compara los gastos planificados vs reales por categoría</CardDescription>
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <CardTitle>Estimado vs Real</CardTitle>
+              <CardDescription>Compara gastos planificados y reales por categoría</CardDescription>
+            </div>
+            <div className="hidden rounded-lg border border-border/75 bg-background/55 px-3 py-2 text-right sm:block">
+              <p className="metric-label">Delta</p>
+              <p className="mt-0.5 text-xs font-bold text-foreground">
+                {formatCurrency(Math.abs(totalEstimated - totalActual))}
+              </p>
+            </div>
+          </div>
         </CardHeader>
         <CardContent>
           <ChartContainer config={barConfig} className="min-h-[300px]">
             <BarChart data={categoryData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-              <CartesianGrid strokeDasharray="3 3" />
+              <CartesianGrid strokeDasharray="3 3" className="stroke-border/35" vertical={false} />
               <XAxis
                 dataKey="category"
                 tick={{ fontSize: 12 }}
@@ -69,7 +84,7 @@ export function ExpenseCharts({ categoryData }: ExpenseChartsProps) {
               />
               <YAxis tick={{ fontSize: 12 }} />
               <ChartTooltip
-                cursor={{ fill: "hsl(var(--muted))", opacity: 0.3 }}
+                cursor={{ fill: "var(--muted)", opacity: 0.35 }}
                 content={
                   <ChartTooltipContent
                     labelFormatter={(label?: unknown) => `Categoría: ${String(label ?? "")}`}
@@ -84,8 +99,8 @@ export function ExpenseCharts({ categoryData }: ExpenseChartsProps) {
                   />
                 }
               />
-              <Bar dataKey="estimated" fill="var(--color-estimated)" name="estimated" />
-              <Bar dataKey="actual" fill="var(--color-actual)" name="actual" />
+              <Bar dataKey="estimated" fill="var(--color-estimated)" name="estimated" radius={[7, 7, 0, 0]} />
+              <Bar dataKey="actual" fill="var(--color-actual)" name="actual" radius={[7, 7, 0, 0]} />
               <ChartLegend content={<ChartLegendContent />} />
             </BarChart>
           </ChartContainer>
@@ -93,21 +108,23 @@ export function ExpenseCharts({ categoryData }: ExpenseChartsProps) {
       </Card>
 
       {/* Pie Chart - Spending Distribution */}
-      <Card className="border-border/70">
+      <Card>
         <CardHeader>
-          <CardTitle className="font-serif text-lg font-bold">Distribución de Gastos</CardTitle>
-          <CardDescription>Desglose de gastos por categoría</CardDescription>
+          <CardTitle>Distribución de Gastos</CardTitle>
+          <CardDescription>Mix real o estimado por categoría</CardDescription>
         </CardHeader>
-        <CardContent>
-          <ChartContainer config={{}} className="min-h-[300px]">
+        <CardContent className="grid gap-4 md:grid-cols-[1fr_0.95fr] md:items-center">
+          <ChartContainer config={{}} className="min-h-[270px]">
             <PieChart>
               <Pie
                 data={pieData}
                 cx="50%"
                 cy="50%"
                 labelLine={false}
-                label={(props: { name?: string; percent?: number }) => `${props.name} ${((props.percent ?? 0) * 100).toFixed(0)}%`}
-                outerRadius={80}
+                outerRadius={100}
+                innerRadius={64}
+                stroke="var(--color-card)"
+                strokeWidth={3}
                 dataKey="value"
               >
                 {pieData.map((entry, index) => (
@@ -125,13 +142,31 @@ export function ExpenseCharts({ categoryData }: ExpenseChartsProps) {
               />
             </PieChart>
           </ChartContainer>
+          <div className="space-y-3">
+            <div className="data-panel p-3">
+              <p className="metric-label">Categoría dominante</p>
+              <p className="metric-value mt-1 text-lg">{topCategory?.category ?? "-"}</p>
+              <p className="mt-1 text-xs text-muted-foreground">{topShare.toFixed(1)}% del gasto real</p>
+            </div>
+            <div className="space-y-2">
+              {pieData.slice(0, 5).map((item, index) => (
+                <div key={item.name} className="flex items-center gap-2 text-xs">
+                  <span className="h-2.5 w-2.5 rounded-sm" style={{ backgroundColor: `var(--color-chart-${(index % 5) + 1})` }} />
+                  <span className="min-w-0 flex-1 truncate font-medium">{item.name}</span>
+                  <span className="font-mono text-muted-foreground">
+                    {totalDistribution > 0 ? `${((item.value / totalDistribution) * 100).toFixed(0)}%` : "0%"}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
         </CardContent>
       </Card>
 
       {/* Summary Stats */}
-      <Card className="lg:col-span-2 border-border/70">
+      <Card className="lg:col-span-2">
         <CardHeader>
-          <CardTitle className="font-serif text-lg font-bold">Resumen por categoría</CardTitle>
+          <CardTitle>Ranking por categoría</CardTitle>
           <CardDescription>Uso vs estimado y detalle por categoría</CardDescription>
         </CardHeader>
         <CardContent>
@@ -146,7 +181,7 @@ export function ExpenseCharts({ categoryData }: ExpenseChartsProps) {
               return (
                 <div
                   key={item.category}
-                  className={`rounded-lg border p-4 transition-colors ${isOver ? 'bg-muted/40' : 'hover:bg-muted/30'}`}
+                  className={`data-panel p-4 transition-colors ${isOver ? 'border-destructive/35 bg-destructive/5' : 'hover:bg-primary/5'}`}
                 >
                   <div className="flex items-center justify-between gap-3">
                     <div className="flex items-center gap-3 min-w-0">
@@ -156,7 +191,7 @@ export function ExpenseCharts({ categoryData }: ExpenseChartsProps) {
                       />
                       <p className="font-medium text-sm truncate">{item.category}</p>
                     </div>
-                    <span className={`text-xs px-2 py-0.5 rounded-full border ${isOver ? 'text-destructive border-border' : 'text-foreground/80 border-border'}`}>
+                    <span className={`rounded-md border px-2 py-0.5 font-mono text-[10px] font-bold ${isOver ? 'border-destructive/35 text-destructive' : 'border-border text-foreground/80'}`}>
                       {hasEstimate ? `${rawPct.toFixed(0)}%` : '—'}
                     </span>
                   </div>

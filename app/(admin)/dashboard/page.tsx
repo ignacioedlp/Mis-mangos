@@ -39,16 +39,15 @@ export default async function DashboardPage() {
   const completedItems = data.items.filter((i) => i.isPaid).length;
 
   return (
-    <div className="flex flex-col gap-8 w-full">
-      <header className="fintech-hero relative overflow-hidden rounded-xl p-5">
-        <div className="pointer-events-none absolute right-0 top-0 h-36 w-36 rounded-full bg-primary/10 blur-3xl" />
+    <div className="flex w-full flex-col gap-6">
+      <header className="fintech-hero relative overflow-hidden rounded-xl p-4 sm:p-5">
         <div className="relative flex flex-col gap-5 xl:flex-row xl:items-end xl:justify-between">
-          <div className="flex flex-col gap-3">
-            <span className="w-fit rounded-md border border-primary/20 bg-primary/10 px-2.5 py-1 font-mono text-[10px] font-semibold uppercase tracking-normal text-primary">
+          <div className="flex min-w-0 flex-col gap-3">
+            <span className="w-fit rounded-md border border-primary/25 bg-primary/10 px-2.5 py-1 font-mono text-[10px] font-bold uppercase tracking-normal text-primary">
               Snapshot mensual
             </span>
             <div>
-              <h2 className="font-serif text-3xl font-extrabold tracking-normal">
+              <h2 className="font-serif text-3xl font-extrabold tracking-normal sm:text-4xl">
                 Panel Mensual
               </h2>
               <p className="mt-2 text-sm text-muted-foreground">
@@ -61,7 +60,7 @@ export default async function DashboardPage() {
             <CryptoDollarQuote rate={cryptoDollarRate} />
           </div>
 
-          <div className="grid gap-2 sm:grid-cols-3 xl:min-w-[34rem]">
+          <div className="grid gap-2 sm:grid-cols-3 xl:min-w-[36rem]">
             {[
               ["Pagado", formatCurrency(data.totalPaid), `${paidPercent.toFixed(1)}%`],
               ["Pendiente", formatCurrency(data.totalPending), `${data.items.filter((i) => !i.isPaid && !i.isSkipped).length} items`],
@@ -69,21 +68,21 @@ export default async function DashboardPage() {
             ].map(([label, value, meta]) => (
               <div key={label} className="fintech-kpi rounded-lg p-3">
                 <div className="flex items-center justify-between gap-3">
-                  <span className="font-mono text-[10px] font-semibold uppercase text-muted-foreground">
+                  <span className="metric-label">
                     {label}
                   </span>
                   <span className="rounded-md bg-primary/10 px-1.5 py-0.5 font-mono text-[10px] font-bold text-primary">
                     {meta}
                   </span>
                 </div>
-                <div className="mt-1.5 font-serif text-base font-extrabold tracking-normal">
+                <div className="metric-value mt-2 text-lg">
                   {value}
                 </div>
               </div>
             ))}
             <div className="h-1 overflow-hidden rounded-full bg-primary/15 sm:col-span-3">
               <div
-                className="h-full rounded-full bg-gradient-to-r from-primary via-gold-300 to-gold-200"
+                className="h-full rounded-full bg-gradient-to-r from-primary via-chart-1 to-chart-2"
                 style={{ width: `${Math.min(paidPercent, 100)}%` }}
               />
             </div>
@@ -144,18 +143,18 @@ function UsdCashflowSummary({
   monthName: string;
 }) {
   return (
-    <Card className="border-border/60 bg-card/[0.94]">
+    <Card>
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between gap-3">
           <div>
-            <CardTitle className="font-serif text-lg font-bold tracking-normal">
+            <CardTitle>
               USD disponible
             </CardTitle>
             <CardDescription>
               Sueldo y transferencias a cuenta de uso para {monthName}
             </CardDescription>
           </div>
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-primary/20 bg-primary/10 text-primary">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-primary/35 bg-primary/10 text-primary">
             <Wallet className="h-5 w-5" aria-hidden="true" />
           </div>
         </div>
@@ -167,11 +166,11 @@ function UsdCashflowSummary({
             ["Transferido", formatUsdCurrency(data.totalTransferred)],
             ["Sueldo USD", formatUsdCurrency(data.monthlyIncome)],
           ].map(([label, value]) => (
-            <div key={label} className="rounded-lg border border-border/60 bg-background/50 p-3">
-              <div className="font-mono text-[10px] font-semibold uppercase text-muted-foreground">
+            <div key={label} className="data-panel p-3">
+              <div className="metric-label">
                 {label}
               </div>
-              <div className="mt-1 font-serif text-lg font-extrabold tabular-nums tracking-normal">
+              <div className="metric-value mt-1 text-lg">
                 {value}
               </div>
             </div>
@@ -192,15 +191,15 @@ function DashboardList({
   cryptoDollarRate: CryptoDollarRate | null;
 }) {
   return (
-    <Card className="border-border/60">
+    <Card>
       <CardHeader className="pb-4">
         <div className="flex items-center justify-between">
-          <CardTitle className="font-serif text-lg font-bold tracking-normal">
+          <CardTitle>
             Lista de Gastos
           </CardTitle>
           <Badge
             variant="outline"
-            className="rounded-full border-primary/20 text-primary font-medium text-xs px-3"
+            className="border-primary/25 text-primary"
           >
             {monthName}
           </Badge>
@@ -227,19 +226,17 @@ function DashboardList({
             {data.items.map((item) => (
               <div
                 key={item.expenseId}
-                className="grid gap-3 rounded-xl border border-border/60 bg-background/60 p-3.5 shadow-xs transition-all duration-200 hover:border-primary/25 hover:bg-accent/30 hover:shadow-sm md:grid-cols-[minmax(0,1fr)_9rem_12rem] md:items-center"
+                className="data-panel grid gap-3 p-3.5 shadow-xs transition-all duration-200 hover:border-primary/30 hover:bg-primary/5 hover:shadow-sm md:grid-cols-[minmax(0,1fr)_9rem_12rem] md:items-center"
               >
                 <div className="flex flex-col space-y-1 min-w-0">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <span
-                      className={`font-medium text-sm leading-tight truncate max-w-[70vw] sm:max-w-[40vw]`}
-                    >
+                    <span className="max-w-[70vw] truncate text-sm font-semibold leading-tight sm:max-w-[40vw]">
                       {item.name}
                     </span>
                     {item.isPaid && (
                       <Badge
                         variant="secondary"
-                        className="text-[10px] rounded-full px-2 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-0"
+                        className="border-0 bg-chart-5/10 px-2 text-chart-5"
                       >
                         Pagado
                       </Badge>
@@ -247,7 +244,7 @@ function DashboardList({
                     {item.isHidden && (
                       <Badge
                         variant="outline"
-                        className="text-[10px] rounded-full px-2 text-muted-foreground"
+                        className="px-2 text-muted-foreground"
                       >
                         Oculto
                       </Badge>

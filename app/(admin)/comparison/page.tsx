@@ -44,7 +44,7 @@ export default async function ComparisonPage({ searchParams }: ComparisonPagePro
     : 0
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       <AdminPageHeader
         eyebrow="Tendencias"
         title="Comparación de Gastos"
@@ -62,9 +62,9 @@ export default async function ComparisonPage({ searchParams }: ComparisonPagePro
       {/* Summary Stats */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <MetricCard title="Periodo Estimado" value={formatCurrency(totalEstimated)} subtitle={`${comparisonData.length} meses`} icon={DollarSign} tone="muted" />
-        <MetricCard title="Periodo Actual" value={formatCurrency(totalActual)} subtitle={`${totalEstimated > 0 ? ((totalActual / totalEstimated) * 100).toFixed(1) : 0}% de lo estimado`} icon={TrendingDown} tone="danger" />
+        <MetricCard title="Periodo Actual" value={formatCurrency(totalActual)} subtitle={`${totalEstimated > 0 ? ((totalActual / totalEstimated) * 100).toFixed(1) : 0}% de lo estimado`} icon={TrendingDown} tone="danger" progress={totalEstimated > 0 ? (totalActual / totalEstimated) * 100 : 0} />
         <MetricCard title="Total del Salario" value={formatCurrency(totalSalary)} subtitle="Ingresos del periodo" icon={TrendingUp} tone="success" />
-        <MetricCard title="Ahorro Promedio" value={`${avgSavingsRate.toFixed(1)}%`} subtitle="Promedio durante el periodo" icon={Percent} />
+        <MetricCard title="Ahorro Promedio" value={`${avgSavingsRate.toFixed(1)}%`} subtitle="Promedio durante el periodo" icon={Percent} progress={avgSavingsRate} />
       </div>
 
       {/* Charts */}
@@ -77,9 +77,9 @@ export default async function ComparisonPage({ searchParams }: ComparisonPagePro
       <ExpensesByMonthTable data={comparisonData} />
 
       {/* Detailed Table */}
-      <Card className="border-border/70">
+      <Card>
         <CardHeader>
-          <CardTitle className="font-serif text-lg font-bold">Desglose Mensual</CardTitle>
+          <CardTitle>Desglose Mensual</CardTitle>
           <CardDescription>Comparación detallada por mes</CardDescription>
         </CardHeader>
         <CardContent>
@@ -117,14 +117,14 @@ export default async function ComparisonPage({ searchParams }: ComparisonPagePro
                     </TableCell>
                     <TableCell>
                       {data.salary > 0 ? (
-                        <span className={data.salary - data.totalActual > 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-destructive'}>
+                          <span className={data.salary - data.totalActual > 0 ? 'text-chart-5' : 'text-destructive'}>
                           {formatCurrency(data.salary - data.totalActual)}
                         </span>
                       ) : '-'}
                     </TableCell>
                     <TableCell>
                       {data.salary > 0 ? (
-                        <span className={data.savingsRate > 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-destructive'}>
+                          <span className={data.savingsRate > 0 ? 'text-chart-5' : 'text-destructive'}>
                           {data.savingsRate.toFixed(1)}%
                         </span>
                       ) : '-'}
@@ -135,7 +135,7 @@ export default async function ComparisonPage({ searchParams }: ComparisonPagePro
                           {data.totalPaid}/{data.items.length} pagados
                         </Badge>
                         {data.savingsRate > 20 && (
-                          <Badge variant="outline" className="text-emerald-600 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800">
+                          <Badge variant="outline" className="border-chart-5/35 text-chart-5">
                             Buen Ahorro
                           </Badge>
                         )}

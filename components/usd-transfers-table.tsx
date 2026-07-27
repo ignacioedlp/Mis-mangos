@@ -104,7 +104,7 @@ export function UsdTransfersTable({
 }: UsdTransfersTableProps) {
   if (transfers.length === 0) {
     return (
-      <div className="rounded-xl border border-dashed border-border/70 bg-background/50 px-4 py-10 text-center">
+      <div className="data-panel border-dashed px-4 py-10 text-center">
         <p className="font-medium text-foreground">
           No hay transferencias registradas.
         </p>

@@ -20,9 +20,9 @@ interface ComparisonChartsProps {
 export function ComparisonCharts({ data }: ComparisonChartsProps) {
   if (!data || data.length === 0) {
     return (
-      <Card className="border-border/70">
+      <Card>
         <CardHeader>
-          <CardTitle className="font-serif text-lg font-bold">Grafico de Comparación</CardTitle>
+          <CardTitle>Grafico de Comparación</CardTitle>
           <CardDescription>No hay datos disponibles para los gráficos</CardDescription>
         </CardHeader>
         <CardContent>
@@ -63,7 +63,7 @@ export function ComparisonCharts({ data }: ComparisonChartsProps) {
   }
 
   return (
-    <div className="grid gap-6 lg:grid-cols-2">
+    <div className="grid gap-5 lg:grid-cols-2">
       {/* Spending Trends */}
       <Card>
         <CardHeader>
@@ -73,7 +73,7 @@ export function ComparisonCharts({ data }: ComparisonChartsProps) {
         <CardContent>
           <ChartContainer config={trendsConfig} className="min-h-[300px]">
             <LineChart data={chartData}>
-              <CartesianGrid strokeDasharray="3 3" />
+              <CartesianGrid strokeDasharray="3 3" className="stroke-border/35" vertical={false} />
               <XAxis dataKey="month" />
               <YAxis />
               <ChartTooltip
@@ -90,8 +90,8 @@ export function ComparisonCharts({ data }: ComparisonChartsProps) {
                   />
                 }
               />
-              <Line type="monotone" dataKey="estimated" stroke="var(--color-estimated)" strokeWidth={2} />
-              <Line type="monotone" dataKey="actual" stroke="var(--color-actual)" strokeWidth={2} />
+              <Line type="monotone" dataKey="estimated" stroke="var(--color-estimated)" strokeWidth={2.5} dot={{ r: 3 }} activeDot={{ r: 5 }} />
+              <Line type="monotone" dataKey="actual" stroke="var(--color-actual)" strokeWidth={2.5} dot={{ r: 3 }} activeDot={{ r: 5 }} />
               <ChartLegend content={<ChartLegendContent />} />
             </LineChart>
           </ChartContainer>
@@ -99,15 +99,15 @@ export function ComparisonCharts({ data }: ComparisonChartsProps) {
       </Card>
 
       {/* Savings Rate Trend */}
-      <Card className="border-border/70">
+      <Card>
         <CardHeader>
-          <CardTitle className="font-serif text-lg font-bold">Tendencia de la Tasa de Ahorro</CardTitle>
+          <CardTitle>Tendencia de la Tasa de Ahorro</CardTitle>
           <CardDescription>Tu porcentaje de tasa de ahorro a lo largo del tiempo</CardDescription>
         </CardHeader>
         <CardContent>
           <ChartContainer config={savingsRateConfig} className="min-h-[300px]">
             <AreaChart data={chartData}>
-              <CartesianGrid strokeDasharray="3 3" />
+              <CartesianGrid strokeDasharray="3 3" className="stroke-border/35" vertical={false} />
               <XAxis dataKey="month" />
               <YAxis />
               <ChartTooltip
@@ -124,7 +124,8 @@ export function ComparisonCharts({ data }: ComparisonChartsProps) {
                 dataKey="savingsRate"
                 stroke="var(--color-savingsRate)"
                 fill="var(--color-savingsRate)"
-                fillOpacity={0.3}
+                fillOpacity={0.22}
+                strokeWidth={2.5}
               />
             </AreaChart>
           </ChartContainer>
@@ -132,15 +133,15 @@ export function ComparisonCharts({ data }: ComparisonChartsProps) {
       </Card>
 
       {/* Income vs Expenses */}
-      <Card className="border-border/70">
+      <Card>
         <CardHeader>
-          <CardTitle className="font-serif text-lg font-bold">Ingreso vs Gastos</CardTitle>
+          <CardTitle>Ingreso vs Gastos</CardTitle>
           <CardDescription>Salario mensual en comparación con el gasto real</CardDescription>
         </CardHeader>
         <CardContent>
           <ChartContainer config={incomeVsExpensesConfig} className="min-h-[300px]">
             <BarChart data={chartData}>
-              <CartesianGrid strokeDasharray="3 3" />
+              <CartesianGrid strokeDasharray="3 3" className="stroke-border/35" vertical={false} />
               <XAxis dataKey="month" />
               <YAxis />
               <ChartTooltip
@@ -155,8 +156,8 @@ export function ComparisonCharts({ data }: ComparisonChartsProps) {
                   />
                 }
               />
-              <Bar dataKey="salary" fill="var(--color-salary)" />
-              <Bar dataKey="actual" fill="var(--color-actual)" />
+              <Bar dataKey="salary" fill="var(--color-salary)" radius={[7, 7, 0, 0]} />
+              <Bar dataKey="actual" fill="var(--color-actual)" radius={[7, 7, 0, 0]} />
               <ChartLegend content={<ChartLegendContent />} />
             </BarChart>
           </ChartContainer>
@@ -164,15 +165,15 @@ export function ComparisonCharts({ data }: ComparisonChartsProps) {
       </Card>
 
       {/* Net Savings */}
-      <Card className="border-border/70">
+      <Card>
         <CardHeader>
-          <CardTitle className="font-serif text-lg font-bold">Ahorros Netos</CardTitle>
+          <CardTitle>Ahorros Netos</CardTitle>
           <CardDescription>Monto ahorrado cada mes (Salario - Gastos)</CardDescription>
         </CardHeader>
         <CardContent>
           <ChartContainer config={netSavingsConfig} className="min-h-[300px]">
             <BarChart data={chartData}>
-              <CartesianGrid strokeDasharray="3 3" />
+              <CartesianGrid strokeDasharray="3 3" className="stroke-border/35" vertical={false} />
               <XAxis dataKey="month" />
               <YAxis />
               <ChartTooltip
@@ -187,7 +188,7 @@ export function ComparisonCharts({ data }: ComparisonChartsProps) {
                   />
                 }
               />
-              <Bar dataKey="savings" fill="var(--color-savings)" />
+              <Bar dataKey="savings" fill="var(--color-savings)" radius={[7, 7, 0, 0]} />
               <ChartLegend content={<ChartLegendContent />} />
             </BarChart>
           </ChartContainer>

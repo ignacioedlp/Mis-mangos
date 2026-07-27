@@ -241,7 +241,7 @@ export function UsdCsvImportDialog({ year, month }: UsdCsvImportDialogProps) {
           </div>
 
           {(transfers.length > 0 || rejectedRows.length > 0) && (
-            <div className="rounded-lg border border-border/70 bg-background/50 p-3">
+            <div className="data-panel p-3">
               <div className="flex items-center justify-between gap-3 text-sm">
                 <span className="font-medium">
                   {transfers.length} lista{transfers.length === 1 ? "" : "s"}{" "}

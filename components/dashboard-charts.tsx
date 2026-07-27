@@ -46,25 +46,18 @@ function buildCategoryData(items: DashboardChartsProps["items"]) {
   return Array.from(map.values()).sort((a, b) => b.estimated - a.estimated);
 }
 
-function useChartVars() {
-  const [vars, setVars] = React.useState<string[]>(["var(--color-chart-1)", "var(--color-chart-2)", "var(--color-chart-3)", "var(--color-chart-4)", "var(--color-chart-5)"]);
-  React.useEffect(() => {
-    const style = getComputedStyle(document.documentElement);
-    const extracted = [1, 2, 3, 4, 5].map(i => style.getPropertyValue(`--color-chart-${i}`).trim() || `var(--color-chart-${i})`);
-    setVars(extracted);
-  }, []);
-  return vars;
-}
-
 export function DashboardCharts({ items }: DashboardChartsProps) {
   const data = buildCategoryData(items);
-  const chartVars = useChartVars();
+  const chartVars = React.useMemo(
+    () => [1, 2, 3, 4, 5].map((i) => `var(--color-chart-${i})`),
+    [],
+  );
 
   if (data.length === 0) {
     return (
-      <Card className="border-border/60">
+      <Card>
         <CardHeader>
-          <CardTitle className="font-serif text-lg font-bold">Gráficos de Categorías</CardTitle>
+          <CardTitle>Gráficos de Categorías</CardTitle>
           <CardDescription>No hay datos suficientes para mostrar gráficos</CardDescription>
         </CardHeader>
         <CardContent>
@@ -82,6 +75,9 @@ export function DashboardCharts({ items }: DashboardChartsProps) {
   const pieData = data.map((d, i) => ({ name: d.category, value: d.paid + d.pending, color: chartVars[i % chartVars.length] }));
   const totalEstimated = data.reduce((sum, item) => sum + item.estimated, 0);
   const topCategory = data[0];
+  const topShare = totalEstimated > 0 && topCategory ? (topCategory.estimated / totalEstimated) * 100 : 0;
+  const paidTotal = data.reduce((sum, item) => sum + item.paid, 0);
+  const pendingTotal = data.reduce((sum, item) => sum + item.pending, 0);
 
   const barConfig: ChartConfig = {
     paid: { label: "Pagado", color: "var(--color-chart-2)" },
@@ -89,28 +85,27 @@ export function DashboardCharts({ items }: DashboardChartsProps) {
   };
 
   return (
-    <div className="grid gap-6 lg:grid-cols-2">
-      <Card className="relative overflow-hidden border-border/70">
-        <div className="pointer-events-none absolute right-0 top-0 h-28 w-28 rounded-full bg-primary/[0.06] blur-3xl" />
+    <div className="grid gap-5 lg:grid-cols-2">
+      <Card>
         <CardHeader>
           <div className="flex items-start justify-between gap-4">
             <div>
-              <CardTitle className="font-serif text-lg font-bold tracking-normal">Pagado vs Pendiente</CardTitle>
+              <CardTitle>Pagado vs Pendiente</CardTitle>
               <CardDescription>Distribución por categoría (monto estimado)</CardDescription>
             </div>
             {topCategory && (
-              <div className="hidden rounded-lg border border-primary/20 bg-primary/10 px-3 py-2 text-right sm:block">
-                <p className="font-mono text-[10px] font-semibold uppercase text-primary">Mayor categoría</p>
+              <div className="hidden rounded-lg border border-primary/30 bg-primary/10 px-3 py-2 text-right sm:block">
+                <p className="metric-label text-primary">Mayor categoría</p>
                 <p className="mt-0.5 text-xs font-bold text-foreground">{topCategory.category}</p>
               </div>
             )}
           </div>
         </CardHeader>
         <CardContent>
-          <div className="-mx-2 overflow-x-auto rounded-lg bg-background/25 p-3">
+          <div className="-mx-1 overflow-x-auto rounded-lg bg-background/25 p-2">
             <ChartContainer config={barConfig} className="min-h-[260px] w-[640px] sm:w-full">
               <BarChart data={data} margin={{ top: 12, right: 8, left: 8, bottom: 40 }}>
-                <CartesianGrid strokeDasharray="3 3" className="stroke-border/30" vertical={false} />
+                <CartesianGrid strokeDasharray="3 3" className="stroke-border/35" vertical={false} />
                 <XAxis dataKey="category" tick={{ fontSize: 11 }} angle={-30} textAnchor="end" interval={0} height={64} />
                 <YAxis tick={{ fontSize: 12 }} />
                 <ChartTooltip
@@ -125,31 +120,40 @@ export function DashboardCharts({ items }: DashboardChartsProps) {
                   }
                 />
                 <ChartLegend content={<ChartLegendContent />} />
-                <Bar dataKey="paid" stackId="a" fill="var(--color-paid)" radius={[8, 8, 0, 0]} />
-                <Bar dataKey="pending" stackId="a" fill="var(--color-pending)" radius={[8, 8, 0, 0]} />
+                <Bar dataKey="paid" stackId="a" fill="var(--color-paid)" radius={[7, 7, 0, 0]} />
+                <Bar dataKey="pending" stackId="a" fill="var(--color-pending)" radius={[7, 7, 0, 0]} />
               </BarChart>
             </ChartContainer>
           </div>
+          <div className="mt-3 grid gap-2 sm:grid-cols-2">
+            <div className="data-panel p-3">
+              <p className="metric-label">Pagado</p>
+              <p className="metric-value mt-1 text-lg text-chart-2">{formatCurrency(paidTotal)}</p>
+            </div>
+            <div className="data-panel p-3">
+              <p className="metric-label">Pendiente</p>
+              <p className="metric-value mt-1 text-lg text-chart-1">{formatCurrency(pendingTotal)}</p>
+            </div>
+          </div>
         </CardContent>
       </Card>
-      <Card className="relative overflow-hidden border-border/70">
-        <div className="pointer-events-none absolute -right-10 top-24 h-36 w-36 rounded-full bg-gold-300/[0.06] blur-3xl" />
+      <Card>
         <CardHeader>
           <div className="flex items-start justify-between gap-4">
             <div>
-              <CardTitle className="font-serif text-lg font-bold tracking-normal">Participación de Categorías</CardTitle>
+              <CardTitle>Participación de Categorías</CardTitle>
               <CardDescription>Proporción del total estimado</CardDescription>
             </div>
-            <div className="hidden rounded-lg border border-border/60 bg-background/50 px-3 py-2 text-right sm:block">
-              <p className="font-mono text-[10px] font-semibold uppercase text-muted-foreground">Total</p>
+            <div className="hidden rounded-lg border border-border/75 bg-background/55 px-3 py-2 text-right sm:block">
+              <p className="metric-label">Total</p>
               <p className="mt-0.5 text-xs font-bold text-foreground">{formatCurrency(totalEstimated)}</p>
             </div>
           </div>
         </CardHeader>
-        <CardContent>
-          <ChartContainer config={{ value: { label: "Monto", color: "var(--color-chart-1)" } }} className="min-h-[300px]">
+        <CardContent className="grid gap-4 md:grid-cols-[1fr_0.95fr] md:items-center">
+          <ChartContainer config={{ value: { label: "Monto", color: "var(--color-chart-1)" } }} className="min-h-[260px]">
             <PieChart>
-              <Pie data={pieData} dataKey="value" nameKey="name" outerRadius={104} innerRadius={62} stroke="var(--color-card)" strokeWidth={3} label={({ name, percent }) => `${name} ${((percent ?? 0) * 100).toFixed(0)}%`}>
+              <Pie data={pieData} dataKey="value" nameKey="name" outerRadius={102} innerRadius={68} stroke="var(--color-card)" strokeWidth={3}>
                 {pieData.map((p) => (
                   <Cell key={p.name} fill={p.color} />
                 ))}
@@ -167,6 +171,26 @@ export function DashboardCharts({ items }: DashboardChartsProps) {
               />
             </PieChart>
           </ChartContainer>
+          <div className="space-y-3">
+            <div className="data-panel p-3">
+              <p className="metric-label">Concentración</p>
+              <p className="metric-value mt-1 text-xl">{topShare.toFixed(1)}%</p>
+              <p className="mt-1 text-xs text-muted-foreground">
+                del total está en {topCategory?.category ?? "categorías"}
+              </p>
+            </div>
+            <div className="space-y-2">
+              {pieData.slice(0, 5).map((item) => (
+                <div key={item.name} className="flex items-center gap-2 text-xs">
+                  <span className="h-2.5 w-2.5 rounded-sm" style={{ backgroundColor: item.color }} />
+                  <span className="min-w-0 flex-1 truncate font-medium">{item.name}</span>
+                  <span className="font-mono text-muted-foreground">
+                    {totalEstimated > 0 ? `${((item.value / totalEstimated) * 100).toFixed(0)}%` : "0%"}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
         </CardContent>
       </Card>
     </div>

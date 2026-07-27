@@ -55,10 +55,10 @@ export default async function InstallmentsPage({
         }
       />
 
-      <Card className="border-border/70">
+      <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2 font-serif text-lg font-bold tracking-normal">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-primary/20 bg-primary/10">
+          <CardTitle className="flex items-center gap-2">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-primary/35 bg-primary/10">
               <CreditCard className="h-4 w-4 text-primary" />
             </div>
             Compras en cuotas

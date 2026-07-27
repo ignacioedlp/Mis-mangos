@@ -30,10 +30,9 @@ export default async function DashboardLayout({
             <AppSidebar variant="inset" />
             <SidebarInset>
                <AppHeader user={user} />
-               <main className="relative flex-1 overflow-hidden bg-muted/10 p-4 sm:p-6">
-                  <div className="fintech-grid pointer-events-none absolute inset-0 opacity-40" />
-                  <div className="pointer-events-none absolute -right-24 top-0 h-80 w-80 rounded-full bg-primary/[0.07] blur-3xl" />
-                  <div className="relative">
+               <main className="relative flex-1 overflow-hidden bg-background p-3 sm:p-5 lg:p-6">
+                  <div className="fintech-grid pointer-events-none absolute inset-0 opacity-80" />
+                  <div className="relative mx-auto w-full max-w-[1680px]">
                   <Suspense fallback={null}>
                      <ToastHandler />
                   </Suspense>
@@ -46,4 +45,3 @@ export default async function DashboardLayout({
       </UserProvider>
    )
 }
-

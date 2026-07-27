@@ -92,7 +92,7 @@ export default async function MonthlyPage({ searchParams }: MonthlyPageProps) {
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       <AdminPageHeader
         eyebrow="Mes activo"
         title="Vista mensual"
@@ -121,9 +121,9 @@ export default async function MonthlyPage({ searchParams }: MonthlyPageProps) {
       />
 
       {/* Resumen con progreso */}
-      <Card className="border-border/70">
+      <Card>
         <CardHeader className="pb-3">
-          <CardTitle className="font-serif text-lg font-bold">
+          <CardTitle>
             Resumen
           </CardTitle>
           <CardDescription>
@@ -140,7 +140,7 @@ export default async function MonthlyPage({ searchParams }: MonthlyPageProps) {
         <CardContent className="space-y-4">
           <div className="grid gap-4 md:grid-cols-2">
             <div>
-              <div className="flex items-center justify-between mb-2">
+              <div className="mb-2 flex items-center justify-between">
                 <span className="text-sm text-muted-foreground">
                   Uso vs estimado
                 </span>
@@ -149,7 +149,7 @@ export default async function MonthlyPage({ searchParams }: MonthlyPageProps) {
                 </span>
               </div>
               <Progress value={estUsagePct} />
-              <div className="mt-2 text-xs text-muted-foreground flex gap-4">
+              <div className="mt-2 flex flex-wrap gap-3 text-xs text-muted-foreground">
                 <span>
                   Estimado:{" "}
                   <strong className="text-foreground">
@@ -171,7 +171,7 @@ export default async function MonthlyPage({ searchParams }: MonthlyPageProps) {
               </div>
             </div>
             <div>
-              <div className="flex items-center justify-between mb-2">
+              <div className="mb-2 flex items-center justify-between">
                 <span className="text-sm text-muted-foreground">
                   Uso del salario
                 </span>
@@ -180,7 +180,7 @@ export default async function MonthlyPage({ searchParams }: MonthlyPageProps) {
                 </span>
               </div>
               <Progress value={salary?.amount ? salaryUsagePct : 0} />
-              <div className="mt-2 text-xs text-muted-foreground flex gap-4">
+              <div className="mt-2 flex flex-wrap gap-3 text-xs text-muted-foreground">
                 <span>
                   Salario:{" "}
                   <strong className="text-foreground">
@@ -225,6 +225,7 @@ export default async function MonthlyPage({ searchParams }: MonthlyPageProps) {
           }
           icon={DollarSign}
           tone="success"
+          progress={salary?.amount ? salaryUsagePct : 0}
         />
         <MetricCard
           title="Total Estimado"
@@ -240,6 +241,7 @@ export default async function MonthlyPage({ searchParams }: MonthlyPageProps) {
           subtitle={data.monthName}
           icon={DollarSign}
           tone="muted"
+          progress={estUsagePct}
         />
         <MetricCard
           title="Total Real"
@@ -247,6 +249,7 @@ export default async function MonthlyPage({ searchParams }: MonthlyPageProps) {
           subtitle={`${data.totalEstimated > 0 ? ((data.totalActual / data.totalEstimated) * 100).toFixed(1) : 0}% del estimado`}
           icon={TrendingDown}
           tone="danger"
+          progress={estUsagePct}
         />
         <MetricCard
           title="Ahorros"
@@ -257,6 +260,7 @@ export default async function MonthlyPage({ searchParams }: MonthlyPageProps) {
               : "Establecé un salario para ver ahorros"
           }
           icon={TrendingUp}
+          tone="success"
         />
         <MetricCard
           title="Progreso"
@@ -264,6 +268,7 @@ export default async function MonthlyPage({ searchParams }: MonthlyPageProps) {
           subtitle="gastos activos pagados"
           icon={BarChart3}
           tone="warning"
+          progress={completionPct}
         />
       </div>
 
@@ -280,9 +285,9 @@ export default async function MonthlyPage({ searchParams }: MonthlyPageProps) {
       />
 
       {/* Detalle de gastos */}
-      <Card className="border-border/70">
+      <Card>
         <CardHeader>
-          <CardTitle className="font-serif text-lg font-bold">
+          <CardTitle>
             Detalle de Gastos
           </CardTitle>
           <CardDescription>
@@ -304,10 +309,10 @@ export default async function MonthlyPage({ searchParams }: MonthlyPageProps) {
       <PendingAlerts />
 
       {/* Generar ocurrencias */}
-      <Card className="border-border/70 border-dashed">
+      <Card className="border-dashed">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2 font-serif text-lg font-bold">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
+          <CardTitle className="flex items-center gap-2">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-primary/35 bg-primary/10">
               <CalendarDays className="h-4 w-4 text-primary" />
             </div>
             Configuración del Mes
@@ -320,7 +325,7 @@ export default async function MonthlyPage({ searchParams }: MonthlyPageProps) {
         <CardContent>
           <form action={generateOccurrencesAction}>
             <Button type="submit" disabled={missingRecurringOccurrences === 0}>
-              <Plus className="h-4 w-4 mr-2" />
+              <Plus className="h-4 w-4" />
               {missingRecurringOccurrences === 0
                 ? "No hay ocurrencias pendientes"
                 : `Generar ${missingRecurringOccurrences} ocurrencia${missingRecurringOccurrences !== 1 ? "s" : ""} pendientes`}

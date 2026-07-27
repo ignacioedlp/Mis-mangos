@@ -151,7 +151,7 @@ export function WishlistManager({
   };
 
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-6">
       <AdminPageHeader
         eyebrow="Planificación"
         title="Lista de deseos"
@@ -219,7 +219,7 @@ export function WishlistManager({
       </div>
 
       {subcategories.length === 0 ? (
-        <Card className="border-dashed border-border/70">
+        <Card className="border-dashed">
           <CardHeader className="items-center text-center">
             <CardTitle>Primero necesitás una subcategoría</CardTitle>
             <CardDescription>
@@ -228,7 +228,7 @@ export function WishlistManager({
           </CardHeader>
         </Card>
       ) : filteredItems.length === 0 ? (
-        <Card className="border-dashed border-border/70">
+        <Card className="border-dashed">
           <CardHeader className="items-center text-center">
             <ShoppingBag className="size-10 text-muted-foreground" />
             <CardTitle>No hay artículos para mostrar</CardTitle>
@@ -297,12 +297,12 @@ function SummaryCard({
   detail?: string;
 }) {
   return (
-    <Card className="border-border/70">
+    <Card>
       <CardHeader className="pb-2">
         <CardDescription>{title}</CardDescription>
       </CardHeader>
       <CardContent>
-        <p className="font-serif text-2xl font-extrabold">{value}</p>
+        <p className="metric-value text-2xl">{value}</p>
         {detail && (
           <p className="mt-1 text-xs text-muted-foreground">
             {detail} a vender
@@ -348,11 +348,11 @@ function WishlistCard({
   const AffordabilityIcon = affordability.icon;
 
   return (
-    <Card className="overflow-hidden border-border/70">
+    <Card className="overflow-hidden">
       <CardHeader className="gap-3">
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
-            <CardTitle className="truncate font-serif text-xl">
+            <CardTitle className="truncate text-xl">
               {item.name}
             </CardTitle>
             <CardDescription>
@@ -427,7 +427,7 @@ function WishlistCard({
           />
         </div>
 
-        <div className="grid gap-3 rounded-xl border border-border/60 bg-background/35 p-4 sm:grid-cols-2">
+        <div className="data-panel grid gap-3 p-4 sm:grid-cols-2">
           <Metric
             label="Interés total"
             value={`${formatCurrency(item.interestAmount)} (${formatPercentage(item.interestPercentage)})`}
@@ -490,8 +490,8 @@ function WishlistCard({
 function Metric({ label, value }: { label: string; value: string }) {
   return (
     <div className="min-w-0">
-      <p className="text-xs text-muted-foreground">{label}</p>
-      <p className="truncate font-semibold">{value}</p>
+      <p className="metric-label">{label}</p>
+      <p className="truncate font-semibold tabular-nums">{value}</p>
     </div>
   );
 }

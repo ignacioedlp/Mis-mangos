@@ -10,19 +10,21 @@ function Progress({
   value,
   ...props
 }: React.ComponentProps<typeof ProgressPrimitive.Root>) {
+  const normalizedValue = Math.max(0, Math.min(value || 0, 100))
+
   return (
     <ProgressPrimitive.Root
       data-slot="progress"
       className={cn(
-        "bg-primary/20 relative h-2 w-full overflow-hidden rounded-full",
+        "relative h-2 w-full overflow-hidden rounded-full border border-border/45 bg-muted/70 shadow-inner",
         className
       )}
       {...props}
     >
       <ProgressPrimitive.Indicator
         data-slot="progress-indicator"
-        className="bg-primary h-full w-full flex-1 transition-all"
-        style={{ transform: `translateX(-${100 - (value || 0)}%)` }}
+        className="h-full w-full flex-1 bg-gradient-to-r from-primary via-chart-1 to-chart-2 transition-all"
+        style={{ transform: `translateX(-${100 - normalizedValue}%)` }}
       />
     </ProgressPrimitive.Root>
   )

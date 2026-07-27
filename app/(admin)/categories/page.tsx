@@ -26,21 +26,21 @@ export default async function CategoriesPage() {
   const { categories, subcategories } = await CategoriesData()
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       <AdminPageHeader
         eyebrow="Organización"
         title="Categorías y subcategorías"
         description="Organiza tus gastos con categorías consistentes y subcategorías detalladas."
       />
 
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="grid gap-5 lg:grid-cols-2">
         {/* Categories Card */}
-        <Card className="border-border/70">
+        <Card>
           <CardHeader>
             <div className="flex items-center justify-between">
               <div>
-                <CardTitle className="flex items-center gap-2 font-serif text-lg font-bold">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-primary/20 bg-primary/10">
+                <CardTitle className="flex items-center gap-2">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-primary/35 bg-primary/10">
                     <FolderPlus className="h-4 w-4 text-primary" />
                   </div>
                   Categorías
@@ -60,11 +60,11 @@ export default async function CategoriesPage() {
         </Card>
 
         {/* Subcategories Card */}
-        <Card className="border-border/70">
+        <Card>
           <CardHeader>
             <div className="flex items-center justify-between">
               <div>
-                <CardTitle className="font-serif text-lg font-bold tracking-normal">Subcategorías</CardTitle>
+                <CardTitle>Subcategorías</CardTitle>
                 <CardDescription className="mt-1">Subcategorías de gastos detalladas</CardDescription>
               </div>
               <CreateSubcategoryDialog categories={categories} />
@@ -82,5 +82,4 @@ export default async function CategoriesPage() {
     </div>
   )
 }
-
 

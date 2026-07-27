@@ -61,11 +61,11 @@ export function PendingAlerts() {
 
   if (pendingCount === 0) {
     return (
-      <Card className="border-border/70">
+      <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2 font-serif text-lg font-bold">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-primary/20 bg-primary/10">
-              <Clock className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+          <CardTitle className="flex items-center gap-2">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-chart-5/35 bg-chart-5/10">
+              <Clock className="h-4 w-4 text-chart-5" />
             </div>
             Gastos Pendientes
           </CardTitle>
@@ -79,11 +79,11 @@ export function PendingAlerts() {
   }
 
   return (
-    <Card className="border-border/70">
+    <Card>
       <CardHeader>
-        <CardTitle className="flex items-center gap-2 font-serif text-lg font-bold">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-500/10">
-            <AlertTriangle className="h-4 w-4 text-amber-600 dark:text-amber-400" />
+        <CardTitle className="flex items-center gap-2">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-chart-1/35 bg-chart-1/10">
+            <AlertTriangle className="h-4 w-4 text-chart-1" />
           </div>
           Gastos Pendientes
           <Badge variant="destructive" className="rounded-full">{pendingCount}</Badge>
@@ -95,7 +95,7 @@ export function PendingAlerts() {
       <CardContent>
         <div className="space-y-3">
           {pendingItems.map((item) => (
-            <div key={item.id} className="flex items-center justify-between p-3.5 rounded-xl border border-border/40 bg-card/60 hover:bg-muted/30 transition-colors">
+            <div key={item.id} className="data-panel flex items-center justify-between p-3.5 transition-colors hover:bg-primary/5">
               <div className="flex flex-col">
                 <span className="font-medium text-sm">{item.name}</span>
                 <span className="text-xs text-muted-foreground">
@@ -112,8 +112,8 @@ export function PendingAlerts() {
               </div>
             </div>
           ))}
-          <div className="pt-3 border-t border-border/70">
-            <div className="text-sm font-serif font-bold">
+          <div className="border-t border-border/75 pt-3">
+            <div className="text-sm font-bold">
               Total pendiente: {formatCurrency(pendingItems.reduce((sum, item) => sum + item.estimatedAmount, 0))}
             </div>
           </div>

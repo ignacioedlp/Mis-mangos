@@ -29,10 +29,10 @@ export function InstallmentProgressSection({
     .slice(0, maxItems);
 
   return (
-    <Card className="border-border/70">
+    <Card>
       <CardHeader>
-        <CardTitle className="flex items-center gap-2 font-serif text-lg font-bold">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
+        <CardTitle className="flex items-center gap-2">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-primary/35 bg-primary/10">
             <CreditCard className="h-4 w-4 text-primary" />
           </div>
           Seguimiento de Cuotas
@@ -49,25 +49,25 @@ export function InstallmentProgressSection({
         ) : (
           <>
             <div className="grid gap-2 text-xs text-muted-foreground sm:grid-cols-2 lg:grid-cols-4">
-              <div className="rounded-md border bg-muted/30 p-2">
+              <div className="data-panel p-2">
                 <span className="block">Productos activos</span>
                 <strong className="text-sm text-foreground">
                   {data.activeProducts}
                 </strong>
               </div>
-              <div className="rounded-md border bg-muted/30 p-2">
+              <div className="data-panel p-2">
                 <span className="block">Productos completados</span>
                 <strong className="text-sm text-foreground">
                   {data.completedProducts}
                 </strong>
               </div>
-              <div className="rounded-md border bg-muted/30 p-2">
+              <div className="data-panel p-2">
                 <span className="block">Vence este mes</span>
                 <strong className="text-sm text-foreground">
                   {formatCurrency(data.dueThisMonthAmount)}
                 </strong>
               </div>
-              <div className="rounded-md border bg-muted/30 p-2">
+              <div className="data-panel p-2">
                 <span className="block">Saldo pendiente</span>
                 <strong className="text-sm text-foreground">
                   {formatCurrency(data.totalPendingAmount)}
@@ -77,7 +77,7 @@ export function InstallmentProgressSection({
 
             <div className="space-y-2">
               {visibleItems.map((item) => (
-                <div key={item.purchaseId} className="rounded-lg border p-3">
+                <div key={item.purchaseId} className="data-panel p-3">
                   <div className="mb-2 flex items-center justify-between gap-2">
                     <div className="min-w-0">
                       <p className="truncate text-sm font-medium">
