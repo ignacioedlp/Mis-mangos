@@ -2,7 +2,8 @@ import { ArrowDownToLine, Banknote, PiggyBank, Wallet } from "lucide-react";
 
 import { getUsdCashflow } from "@/actions/usd-cashflow-actions";
 import { AdminPageHeader } from "@/components/admin-page-header";
-import { MetricCard } from "@/components/metric-card";
+import { SummaryStrip } from "@/components/summary-strip";
+import { DataSection } from "@/components/data-section";
 import { MonthSelector } from "@/components/month-selector";
 import { CryptoDollarQuote } from "@/components/crypto-dollar-quote";
 import { UsdCsvImportDialog } from "@/components/usd-csv-import-dialog";
@@ -90,83 +91,75 @@ export default async function UsdCashflowPage({
         }
       />
 
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <MetricCard
-          title="Acumulado sin usar"
-          value={
+      <SummaryStrip
+        aria-label="Resumen de fondos en dólares"
+        items={[
+          {
+          label: "Acumulado sin usar",
+          value:
             <UsdArsMetricValue
               amount={data.totalStored}
               arsValue={formatCryptoUsdToArs(
                 data.totalStored,
                 cryptoDollarRate,
               )}
-            />
-          }
-          subtitle="Todos los meses cargados"
-          icon={PiggyBank}
-          tone={data.totalStored >= 0 ? "success" : "danger"}
-        />
-        <MetricCard
-          title="Disponible USD"
-          value={
+            />,
+          detail: "Todos los meses cargados",
+          icon: PiggyBank,
+          tone: data.totalStored >= 0 ? "success" : "danger",
+          },
+          {
+          label: "Disponible USD",
+          value:
             <UsdArsMetricValue
               amount={data.available}
               arsValue={formatCryptoUsdToArs(data.available, cryptoDollarRate)}
-            />
-          }
-          subtitle={
+            />,
+          detail:
             data.monthlyIncome > 0
               ? `${(100 - usagePct).toFixed(1)}% sin transferir`
-              : "Cargá el sueldo del mes"
-          }
-          icon={Wallet}
-          tone={data.available >= 0 ? "success" : "danger"}
-          progress={data.monthlyIncome > 0 ? 100 - usagePct : 0}
-        />
-        <MetricCard
-          title="Transferido"
-          value={
+              : "Cargá el sueldo del mes",
+          icon: Wallet,
+          tone: data.available >= 0 ? "success" : "danger",
+          progress: data.monthlyIncome > 0 ? 100 - usagePct : 0,
+          },
+          {
+          label: "Transferido",
+          value:
             <UsdArsMetricValue
               amount={data.totalTransferred}
               arsValue={formatCryptoUsdToArs(
                 data.totalTransferred,
                 cryptoDollarRate,
               )}
-            />
-          }
-          subtitle={`${data.transfers.length} transferencia${data.transfers.length === 1 ? "" : "s"}`}
-          icon={ArrowDownToLine}
-          tone="warning"
-          progress={usagePct}
-        />
-        <MetricCard
-          title="Sueldo mensual"
-          value={
+            />,
+          detail: `${data.transfers.length} transferencia${data.transfers.length === 1 ? "" : "s"}`,
+          icon: ArrowDownToLine,
+          tone: "accent",
+          progress: usagePct,
+          },
+          {
+          label: "Sueldo mensual",
+          value:
             <UsdArsMetricValue
               amount={data.monthlyIncome}
               arsValue={formatCryptoUsdToArs(
                 data.monthlyIncome,
                 cryptoDollarRate,
               )}
-            />
-          }
-          subtitle={data.income ? monthName : "No establecido"}
-          icon={Banknote}
-          tone="primary"
-        />
-      </div>
+            />,
+          detail: data.income ? monthName : "No establecido",
+          icon: Banknote,
+          tone: "default",
+          },
+        ]}
+      />
 
-      <Card>
-        <CardHeader className="pb-3">
-          <CardTitle>
-            Avance de transferencias
-          </CardTitle>
-          <CardDescription>
-            Mide cuánto del sueldo USD del mes ya fue movido a la cuenta de
-            uso.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-3">
+      <DataSection
+        title="Avance de transferencias"
+        description="Cuánto del sueldo USD del mes ya fue movido a la cuenta de uso."
+      >
+        <div className="space-y-3 p-4 sm:p-5">
           <div className="flex items-center justify-between gap-3 text-sm">
             <span className="text-muted-foreground">Transferido del sueldo</span>
             <span className="font-medium tabular-nums">
@@ -194,8 +187,8 @@ export default async function UsdCashflowPage({
               </strong>
             </span>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </DataSection>
 
       <Card>
         <CardHeader>

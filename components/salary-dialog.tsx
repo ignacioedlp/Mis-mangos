@@ -34,13 +34,13 @@ export function SalaryDialog({ year, month, currentSalary }: SalaryDialogProps) 
       toast.success("Salary updated successfully!")
       setOpen(false)
     } catch {
-      toast.error("Failed to update salary")
+      toast.error("No se pudo actualizar el salario")
     } finally {
       setLoading(false)
     }
   }
 
-  const monthName = new Date(year, month - 1).toLocaleString('default', { month: 'long', year: 'numeric' })
+  const monthName = new Date(year, month - 1).toLocaleString('es-AR', { month: 'long', year: 'numeric' })
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>

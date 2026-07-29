@@ -15,13 +15,13 @@ export default function SignOutForm() {
       await authClient.signOut({
          fetchOptions: {
             onRequest: () => {
-               toast.loading('Logging out...')
+               toast.loading('Cerrando sesión...')
             },
             onSuccess: () => {
                toast.dismiss()
                setUser(null);
                router.push('/');
-               toast.success('Logged out successfully')
+               toast.success('Sesión cerrada')
             },
             onError: (ctx) => {
                toast.dismiss()
@@ -31,9 +31,9 @@ export default function SignOutForm() {
       })
    }
    return (
-      <Button variant={"destructive"} onClick={handleLogout} className="w-full justify-start">
+      <Button variant="ghost" onClick={handleLogout} className="w-full justify-start text-muted-foreground hover:text-destructive">
          <LogOut className="h-4 w-4" />
-         Cerrar sesion
+         Cerrar sesión
       </Button>
    )
 }

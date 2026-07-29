@@ -105,8 +105,8 @@ export async function generateBudgetAnalysisReport(year: number, month: number) 
     data: {
       userId,
       type: "BUDGET_ANALYSIS",
-      title: `Análisis de Presupuesto - ${new Date(year, month - 1).toLocaleString('default', { month: 'long', year: 'numeric' })}`,
-      description: `Análisis detallado del rendimiento del presupuesto para ${new Date(year, month - 1).toLocaleString('default', { month: 'long', year: 'numeric' })}`,
+      title: `Análisis de Presupuesto - ${new Date(year, month - 1).toLocaleString('es-AR', { month: 'long', year: 'numeric' })}`,
+      description: `Análisis detallado del rendimiento del presupuesto para ${new Date(year, month - 1).toLocaleString('es-AR', { month: 'long', year: 'numeric' })}`,
       startDate: new Date(year, month - 1, 1),
       endDate: new Date(year, month, 0),
       categories: budgetData.categories.map(c => c.id),

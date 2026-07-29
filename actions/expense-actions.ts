@@ -658,7 +658,7 @@ export async function getMonthlyDetails(year: number, month: number) {
     totalPending,
     items,
     categoryData,
-    monthName: new Date(year, month - 1).toLocaleString("default", {
+    monthName: new Date(year, month - 1).toLocaleString("es-AR", {
       month: "long",
       year: "numeric",
     }),

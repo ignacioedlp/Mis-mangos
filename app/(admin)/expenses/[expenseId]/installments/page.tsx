@@ -44,7 +44,7 @@ export default async function InstallmentsPage({
         description="Gestioná compras financiadas y su progreso de pago mensual."
         actions={
           <>
-          <Button variant="outline" asChild>
+          <Button variant="outline" size="sm" asChild>
             <Link href="/expenses">
               <ArrowLeft className="mr-2 h-4 w-4" />
               Volver a gastos

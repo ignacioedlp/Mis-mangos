@@ -1,107 +1,107 @@
-"use client"
+"use client";
 
-import { Button } from "@/components/ui/button";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight, CheckCircle2, Clock3, ReceiptText } from "lucide-react";
 import Link from "next/link";
+
 import FadeInView from "./animate-ui/fade-in-view";
+import { Button } from "@/components/ui/button";
+
+const ledgerRows = [
+  { name: "Alquiler", category: "Hogar", value: "$ 485.000", status: "Pagado" },
+  { name: "Tarjeta", category: "Gastos personales", value: "$ 186.420", status: "Pendiente" },
+  { name: "Internet", category: "Servicios", value: "$ 32.800", status: "Pendiente" },
+];
 
 export default function HeroSection() {
-   return (
-      <section className="relative min-h-[92vh] overflow-hidden py-16 md:py-24">
-         <div className="fintech-grid pointer-events-none absolute inset-0" />
-         <div className="pointer-events-none absolute right-[8%] top-16 h-80 w-80 rounded-full bg-primary/10 blur-3xl" />
-         <div className="pointer-events-none absolute bottom-10 left-[5%] h-96 w-96 rounded-full bg-gold-200/10 blur-3xl" />
+  return (
+    <section className="border-b border-border">
+      <div className="container grid min-h-[82vh] items-center gap-14 py-16 lg:grid-cols-[minmax(0,1fr)_34rem] lg:py-24">
+        <FadeInView className="max-w-3xl">
+          <p className="mb-5 text-xs font-semibold uppercase tracking-[0.16em] text-primary">
+            Finanzas personales, sin ruido
+          </p>
+          <h1 className="font-serif text-5xl font-bold leading-[0.96] tracking-[-0.045em] sm:text-6xl lg:text-7xl">
+            Sabé qué pagaste.
+            <span className="block text-muted-foreground">Y qué falta pagar.</span>
+          </h1>
+          <p className="mt-7 max-w-xl text-lg leading-relaxed text-muted-foreground">
+            Organizá gastos, presupuesto y fondos en dólares desde un libro
+            financiero claro, pensado para el día a día en Argentina.
+          </p>
+          <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+            <Button asChild size="lg">
+              <Link href="/sign-up">
+                Crear cuenta
+                <ArrowRight aria-hidden="true" />
+              </Link>
+            </Button>
+            <Button variant="outline" size="lg" asChild>
+              <Link href="/sign-in">Ingresar</Link>
+            </Button>
+          </div>
+          <div className="mt-9 flex flex-wrap gap-x-6 gap-y-2 text-sm text-muted-foreground">
+            <span>Sin tarjeta</span>
+            <span>Datos privados</span>
+            <span>ARS y USD</span>
+          </div>
+        </FadeInView>
 
-         <div className="container relative grid items-center gap-10 lg:grid-cols-[minmax(0,1fr)_28rem]">
-            <div className="flex flex-col items-start gap-8 text-left">
-            <FadeInView>
-               <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/[0.08] px-4 py-2 text-sm font-semibold text-primary shadow-xs backdrop-blur-md">
-                  <Sparkles className="size-3.5" />
-                  <span>Gestión Financiera Personal</span>
-               </div>
-            </FadeInView>
-
-            <FadeInView delay={0.15}>
-               <h1 className="max-w-4xl font-serif text-5xl font-extrabold leading-[0.95] tracking-normal sm:text-6xl md:text-7xl lg:text-8xl">
-                  Controlá{" "}
-                  <span className="relative inline-block">
-                     <span className="relative z-10 text-transparent bg-gradient-to-r from-primary via-gold-300 to-primary bg-clip-text">
-                        tus mangos
-                     </span>
-                     <span className="absolute -bottom-1 left-0 right-0 h-3 bg-primary/10 -skew-x-3 rounded-sm" />
-                  </span>
-               </h1>
-            </FadeInView>
-
-            <FadeInView delay={0.3}>
-               <p className="max-w-xl text-lg leading-relaxed text-muted-foreground md:text-xl">
-                  Rastreá tus gastos, controlá presupuestos y recibí alertas inteligentes.
-                  <span className="text-foreground font-medium"> Todo en un solo lugar.</span>
-               </p>
-            </FadeInView>
-
-            <FadeInView delay={0.45} className="flex flex-col items-stretch gap-4 pt-2 sm:flex-row">
-               <Button asChild size="lg" className="group h-13 px-8 text-base font-semibold shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 transition-all">
-                  <Link href="/sign-up" className="flex items-center gap-2">
-                     <span>Empezar gratis</span>
-                     <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                  </Link>
-               </Button>
-               <Button variant="ghost" size="lg" asChild className="h-13 px-8 text-base text-muted-foreground hover:text-foreground">
-                  <Link href="/sign-in">
-                     Ya tengo cuenta
-                  </Link>
-               </Button>
-            </FadeInView>
-
-            {/* Floating stats badges */}
-            <FadeInView delay={0.6} className="flex flex-wrap items-center gap-6 pt-4">
-               {[
-                  { label: "100% Gratis", icon: "✦" },
-                  { label: "Datos privados", icon: "◆" },
-                  { label: "Sin tarjeta requerida", icon: "●" },
-               ].map((item, i) => (
-                  <span key={i} className="flex items-center gap-2 text-sm text-muted-foreground">
-                     <span className="text-primary text-xs">{item.icon}</span>
-                     {item.label}
-                  </span>
-               ))}
-            </FadeInView>
+        <FadeInView delay={0.15}>
+          <div className="overflow-hidden rounded-lg border border-border bg-card">
+            <div className="flex items-center justify-between border-b border-border px-5 py-4">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">
+                  Julio de 2026
+                </p>
+                <p className="mt-1 font-serif text-xl font-bold">Libro mensual</p>
+              </div>
+              <ReceiptText className="size-5 text-primary" aria-hidden="true" />
             </div>
+            <div className="grid grid-cols-3 border-b border-border">
+              <PreviewMetric label="Pendiente" value="$ 219.220" icon={Clock3} />
+              <PreviewMetric label="Pagado" value="$ 1.827.308" icon={CheckCircle2} />
+              <PreviewMetric label="Avance" value="22 / 27" icon={ReceiptText} />
+            </div>
+            <div>
+              {ledgerRows.map((row) => (
+                <div
+                  key={row.name}
+                  className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 border-b border-border px-5 py-4 last:border-b-0"
+                >
+                  <div className="min-w-0">
+                    <p className="font-semibold">{row.name}</p>
+                    <p className="mt-0.5 text-xs text-muted-foreground">{row.category}</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="font-semibold tabular-nums">{row.value}</p>
+                    <p className={row.status === "Pagado" ? "mt-0.5 text-xs text-chart-5" : "mt-0.5 text-xs text-primary"}>
+                      {row.status}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </FadeInView>
+      </div>
+    </section>
+  );
+}
 
-            <FadeInView delay={0.25}>
-               <div className="fintech-panel relative overflow-hidden rounded-2xl p-5">
-                  <div className="mb-5 flex items-center justify-between">
-                     <div>
-                        <p className="font-mono text-[11px] font-semibold uppercase tracking-normal text-muted-foreground">
-                           Panel mensual
-                        </p>
-                        <p className="font-serif text-xl font-bold tracking-normal">
-                           Mis Mangos
-                        </p>
-                     </div>
-                     <div className="rounded-full border border-primary/20 bg-primary/10 px-3 py-1 font-mono text-xs font-semibold text-primary">
-                        LIVE
-                     </div>
-                  </div>
-                  <div className="space-y-3">
-                     {[
-                        ["Total estimado", "$ 842.500", "78% controlado"],
-                        ["Pendiente", "$ 185.200", "6 items"],
-                        ["Presupuesto", "$ 1.080.000", "dentro del límite"],
-                     ].map(([label, value, meta]) => (
-                        <div key={label} className="rounded-xl border border-border/60 bg-background/60 p-4">
-                           <div className="flex items-center justify-between gap-4">
-                              <span className="text-sm font-medium text-muted-foreground">{label}</span>
-                              <span className="font-mono text-[11px] font-semibold uppercase text-primary">{meta}</span>
-                           </div>
-                           <div className="mt-2 font-serif text-2xl font-extrabold tracking-normal">{value}</div>
-                        </div>
-                     ))}
-                  </div>
-               </div>
-            </FadeInView>
-         </div>
-      </section>
-   );
+function PreviewMetric({
+  label,
+  value,
+  icon: Icon,
+}: {
+  label: string;
+  value: string;
+  icon: typeof Clock3;
+}) {
+  return (
+    <div className="min-w-0 border-r border-border p-4 last:border-r-0">
+      <Icon className="mb-3 size-4 text-primary" aria-hidden="true" />
+      <p className="text-[10px] font-semibold uppercase tracking-[0.08em] text-muted-foreground">{label}</p>
+      <p className="mt-1 truncate text-sm font-semibold tabular-nums">{value}</p>
+    </div>
+  );
 }

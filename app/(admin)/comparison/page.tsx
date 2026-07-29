@@ -1,6 +1,5 @@
 import { getComparison } from "@/actions/expense-actions"
 import { AdminPageHeader } from "@/components/admin-page-header"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { TrendingUp, TrendingDown, DollarSign, Percent } from "lucide-react"
@@ -8,7 +7,8 @@ import { ComparisonSelector } from "@/components/comparison-selector"
 import { ComparisonCharts } from "@/components/comparison-charts"
 import { ExpensesByMonthChart } from "@/components/expenses-by-month-chart"
 import { ExpensesByMonthTable } from "@/components/expenses-by-month-table"
-import { MetricCard } from "@/components/metric-card"
+import { SummaryStrip } from "@/components/summary-strip"
+import { DataSection } from "@/components/data-section"
 import { formatCurrency } from '../../../lib/utils';
 
 interface ComparisonPageProps {
@@ -59,13 +59,15 @@ export default async function ComparisonPage({ searchParams }: ComparisonPagePro
         }
       />
 
-      {/* Summary Stats */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <MetricCard title="Periodo Estimado" value={formatCurrency(totalEstimated)} subtitle={`${comparisonData.length} meses`} icon={DollarSign} tone="muted" />
-        <MetricCard title="Periodo Actual" value={formatCurrency(totalActual)} subtitle={`${totalEstimated > 0 ? ((totalActual / totalEstimated) * 100).toFixed(1) : 0}% de lo estimado`} icon={TrendingDown} tone="danger" progress={totalEstimated > 0 ? (totalActual / totalEstimated) * 100 : 0} />
-        <MetricCard title="Total del Salario" value={formatCurrency(totalSalary)} subtitle="Ingresos del periodo" icon={TrendingUp} tone="success" />
-        <MetricCard title="Ahorro Promedio" value={`${avgSavingsRate.toFixed(1)}%`} subtitle="Promedio durante el periodo" icon={Percent} progress={avgSavingsRate} />
-      </div>
+      <SummaryStrip
+        aria-label="Resumen del período comparado"
+        items={[
+          { label: "Estimado", value: formatCurrency(totalEstimated), detail: `${comparisonData.length} meses`, icon: DollarSign },
+          { label: "Gasto real", value: formatCurrency(totalActual), detail: `${totalEstimated > 0 ? ((totalActual / totalEstimated) * 100).toFixed(1) : 0}% de lo estimado`, icon: TrendingDown, tone: "accent", progress: totalEstimated > 0 ? (totalActual / totalEstimated) * 100 : 0 },
+          { label: "Ingresos", value: formatCurrency(totalSalary), detail: "Total del período", icon: TrendingUp, tone: "success" },
+          { label: "Ahorro promedio", value: `${avgSavingsRate.toFixed(1)}%`, detail: "Promedio mensual", icon: Percent, tone: avgSavingsRate < 0 ? "danger" : "success", progress: Math.max(avgSavingsRate, 0) },
+        ]}
+      />
 
       {/* Charts */}
       <ComparisonCharts data={comparisonData} />
@@ -77,12 +79,7 @@ export default async function ComparisonPage({ searchParams }: ComparisonPagePro
       <ExpensesByMonthTable data={comparisonData} />
 
       {/* Detailed Table */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Desglose Mensual</CardTitle>
-          <CardDescription>Comparación detallada por mes</CardDescription>
-        </CardHeader>
-        <CardContent>
+      <DataSection title="Desglose mensual" description="Comparación detallada por mes">
           {comparisonData.length === 0 ? (
             <div className="text-center py-8 text-muted-foreground">
               <p>No hay datos disponibles para el periodo seleccionado</p>
@@ -146,8 +143,7 @@ export default async function ComparisonPage({ searchParams }: ComparisonPagePro
               </TableBody>
             </Table>
           )}
-        </CardContent>
-      </Card>
+      </DataSection>
     </div>
   )
 }

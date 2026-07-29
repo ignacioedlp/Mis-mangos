@@ -54,7 +54,7 @@ export function ExpenseCharts({ categoryData }: ExpenseChartsProps) {
   const topShare = totalActual > 0 && topCategory ? (topCategory.actual / totalActual) * 100 : 0
 
   return (
-    <div className="grid gap-5 lg:grid-cols-2">
+    <div className="grid min-w-0 gap-5 lg:grid-cols-2">
       {/* Bar Chart - Estimated vs Actual */}
       <Card>
         <CardHeader>
@@ -72,7 +72,10 @@ export function ExpenseCharts({ categoryData }: ExpenseChartsProps) {
           </div>
         </CardHeader>
         <CardContent>
-          <ChartContainer config={barConfig} className="min-h-[300px]">
+          <ChartContainer
+            config={barConfig}
+            className="min-h-[360px] lg:min-h-[420px]"
+          >
             <BarChart data={categoryData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
               <CartesianGrid strokeDasharray="3 3" className="stroke-border/35" vertical={false} />
               <XAxis
@@ -113,16 +116,16 @@ export function ExpenseCharts({ categoryData }: ExpenseChartsProps) {
           <CardTitle>Distribución de Gastos</CardTitle>
           <CardDescription>Mix real o estimado por categoría</CardDescription>
         </CardHeader>
-        <CardContent className="grid gap-4 md:grid-cols-[1fr_0.95fr] md:items-center">
-          <ChartContainer config={{}} className="min-h-[270px]">
+        <CardContent className="grid min-w-0 gap-5 xl:grid-cols-[minmax(13rem,0.9fr)_minmax(0,1.1fr)] xl:items-center">
+          <ChartContainer config={{}} className="min-h-[260px] min-w-0">
             <PieChart>
               <Pie
                 data={pieData}
                 cx="50%"
                 cy="50%"
                 labelLine={false}
-                outerRadius={100}
-                innerRadius={64}
+                outerRadius="78%"
+                innerRadius="50%"
                 stroke="var(--color-card)"
                 strokeWidth={3}
                 dataKey="value"
@@ -142,10 +145,10 @@ export function ExpenseCharts({ categoryData }: ExpenseChartsProps) {
               />
             </PieChart>
           </ChartContainer>
-          <div className="space-y-3">
+          <div className="min-w-0 space-y-3">
             <div className="data-panel p-3">
               <p className="metric-label">Categoría dominante</p>
-              <p className="metric-value mt-1 text-lg">{topCategory?.category ?? "-"}</p>
+              <p className="metric-value mt-1 break-words text-lg leading-tight">{topCategory?.category ?? "-"}</p>
               <p className="mt-1 text-xs text-muted-foreground">{topShare.toFixed(1)}% del gasto real</p>
             </div>
             <div className="space-y-2">
@@ -153,7 +156,7 @@ export function ExpenseCharts({ categoryData }: ExpenseChartsProps) {
                 <div key={item.name} className="flex items-center gap-2 text-xs">
                   <span className="h-2.5 w-2.5 rounded-sm" style={{ backgroundColor: `var(--color-chart-${(index % 5) + 1})` }} />
                   <span className="min-w-0 flex-1 truncate font-medium">{item.name}</span>
-                  <span className="font-mono text-muted-foreground">
+                  <span className="shrink-0 font-mono text-muted-foreground">
                     {totalDistribution > 0 ? `${((item.value / totalDistribution) * 100).toFixed(0)}%` : "0%"}
                   </span>
                 </div>

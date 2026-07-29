@@ -20,6 +20,9 @@ import Link from "next/link";
 import { CreditCard } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { formatCurrency } from "@/lib/utils";
+import { Input } from "@/components/ui/input";
+import { Search } from "lucide-react";
+import { DataToolbar } from "@/components/data-toolbar";
 
 // Tipo para los gastos con relaciones incluidas
 type ExpenseWithRelations = {
@@ -54,6 +57,7 @@ export function ExpensesTable({
   emptyMessage = "No hay gastos aún. Crea tu primer gasto para comenzar",
   emptyIcon,
 }: ExpensesTableProps) {
+  const [query, setQuery] = React.useState("");
   const frequencyColors = {
     WEEKLY: "bg-muted text-foreground",
     MONTHLY: "bg-primary/10 text-primary",
@@ -93,8 +97,19 @@ export function ExpensesTable({
     }
   };
 
+  const filteredData = React.useMemo(() => {
+    const normalized = query.trim().toLocaleLowerCase("es");
+    if (!normalized) return data;
+    return data.filter((expense) =>
+      [expense.name, expense.category.name, expense.subcategory.name]
+        .join(" ")
+        .toLocaleLowerCase("es")
+        .includes(normalized),
+    );
+  }, [data, query]);
+
   const { sortedData, sortConfig, requestSort } = useSortableData(
-    data,
+    filteredData,
     getSortValue,
   );
 
@@ -108,7 +123,23 @@ export function ExpensesTable({
   }
 
   return (
-    <Table>
+    <>
+      <DataToolbar
+        primary={
+          <label className="relative w-full max-w-sm">
+            <span className="sr-only">Buscar gastos</span>
+            <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
+            <Input
+              value={query}
+              onChange={(event) => setQuery(event.target.value)}
+              placeholder="Buscar por nombre o categoría"
+              className="pl-9"
+            />
+          </label>
+        }
+        secondary={<span className="text-xs text-muted-foreground">{filteredData.length} resultados</span>}
+      />
+      <Table>
       <TableHeader>
         <TableRow>
           <SortableTableHead
@@ -152,7 +183,7 @@ export function ExpensesTable({
       <TableBody>
         {sortedData.map((expense) => (
           <TableRow key={expense.id}>
-            <TableCell>
+            <TableCell className="text-right">
               <div className="flex flex-col">
                 <span className="font-medium">{expense.name}</span>
                 <span className="text-xs text-muted-foreground">
@@ -219,6 +250,7 @@ export function ExpensesTable({
           </TableRow>
         ))}
       </TableBody>
-    </Table>
+      </Table>
+    </>
   );
 }

@@ -85,7 +85,7 @@ export function DashboardCharts({ items }: DashboardChartsProps) {
   };
 
   return (
-    <div className="grid gap-5 lg:grid-cols-2">
+    <div className="grid min-w-0 gap-5 lg:grid-cols-2">
       <Card>
         <CardHeader>
           <div className="flex items-start justify-between gap-4">
@@ -103,7 +103,10 @@ export function DashboardCharts({ items }: DashboardChartsProps) {
         </CardHeader>
         <CardContent>
           <div className="-mx-1 overflow-x-auto rounded-lg bg-background/25 p-2">
-            <ChartContainer config={barConfig} className="min-h-[260px] w-[640px] sm:w-full">
+            <ChartContainer
+              config={barConfig}
+              className="min-h-[320px] w-[640px] sm:w-full lg:min-h-[360px]"
+            >
               <BarChart data={data} margin={{ top: 12, right: 8, left: 8, bottom: 40 }}>
                 <CartesianGrid strokeDasharray="3 3" className="stroke-border/35" vertical={false} />
                 <XAxis dataKey="category" tick={{ fontSize: 11 }} angle={-30} textAnchor="end" interval={0} height={64} />
@@ -140,20 +143,23 @@ export function DashboardCharts({ items }: DashboardChartsProps) {
       <Card>
         <CardHeader>
           <div className="flex items-start justify-between gap-4">
-            <div>
+            <div className="min-w-0">
               <CardTitle>Participación de Categorías</CardTitle>
               <CardDescription>Proporción del total estimado</CardDescription>
             </div>
-            <div className="hidden rounded-lg border border-border/75 bg-background/55 px-3 py-2 text-right sm:block">
+            <div className="hidden shrink-0 rounded-lg border border-border/75 bg-background/55 px-3 py-2 text-right sm:block">
               <p className="metric-label">Total</p>
               <p className="mt-0.5 text-xs font-bold text-foreground">{formatCurrency(totalEstimated)}</p>
             </div>
           </div>
         </CardHeader>
-        <CardContent className="grid gap-4 md:grid-cols-[1fr_0.95fr] md:items-center">
-          <ChartContainer config={{ value: { label: "Monto", color: "var(--color-chart-1)" } }} className="min-h-[260px]">
+        <CardContent className="grid min-w-0 gap-5 xl:grid-cols-[minmax(13rem,0.9fr)_minmax(0,1.1fr)] xl:items-center">
+          <ChartContainer
+            config={{ value: { label: "Monto", color: "var(--color-chart-1)" } }}
+            className="min-h-[260px] min-w-0"
+          >
             <PieChart>
-              <Pie data={pieData} dataKey="value" nameKey="name" outerRadius={102} innerRadius={68} stroke="var(--color-card)" strokeWidth={3}>
+              <Pie data={pieData} dataKey="value" nameKey="name" outerRadius="78%" innerRadius="50%" stroke="var(--color-card)" strokeWidth={3}>
                 {pieData.map((p) => (
                   <Cell key={p.name} fill={p.color} />
                 ))}
@@ -171,11 +177,11 @@ export function DashboardCharts({ items }: DashboardChartsProps) {
               />
             </PieChart>
           </ChartContainer>
-          <div className="space-y-3">
+          <div className="min-w-0 space-y-3">
             <div className="data-panel p-3">
               <p className="metric-label">Concentración</p>
               <p className="metric-value mt-1 text-xl">{topShare.toFixed(1)}%</p>
-              <p className="mt-1 text-xs text-muted-foreground">
+              <p className="mt-1 break-words text-xs leading-relaxed text-muted-foreground">
                 del total está en {topCategory?.category ?? "categorías"}
               </p>
             </div>
@@ -184,7 +190,7 @@ export function DashboardCharts({ items }: DashboardChartsProps) {
                 <div key={item.name} className="flex items-center gap-2 text-xs">
                   <span className="h-2.5 w-2.5 rounded-sm" style={{ backgroundColor: item.color }} />
                   <span className="min-w-0 flex-1 truncate font-medium">{item.name}</span>
-                  <span className="font-mono text-muted-foreground">
+                  <span className="shrink-0 font-mono text-muted-foreground">
                     {totalEstimated > 0 ? `${((item.value / totalEstimated) * 100).toFixed(0)}%` : "0%"}
                   </span>
                 </div>

@@ -18,16 +18,15 @@ const GoogleIcon = (
 export default function SignInSection() {
    return (
       <div className="w-full max-w-md mx-auto">
-         <div className="fintech-panel relative overflow-hidden rounded-2xl p-8">
-            <div className="pointer-events-none absolute right-0 top-0 h-24 w-24 rounded-full bg-primary/15 blur-2xl" />
-            <div className="relative">
+         <div className="rounded-lg border border-border bg-card p-6 sm:p-8">
+            <div>
             <div className="flex items-center gap-3 mb-8">
                <Logo />
                <span className="font-serif text-lg font-bold tracking-normal">Mis Mangos</span>
             </div>
 
-            <h1 className="font-serif text-2xl font-extrabold tracking-normal">
-               Bienvenido de nuevo
+            <h1 className="font-serif text-2xl font-bold tracking-[-0.02em]">
+               Volvé a tu libro
             </h1>
             <p className="mt-2 text-sm text-muted-foreground">
                ¿No tenés cuenta?{" "}
@@ -56,7 +55,7 @@ export default function SignInSection() {
                      <span className="w-full border-t border-border/60"></span>
                   </div>
                   <div className="relative flex justify-center text-xs">
-                     <span className="bg-card/90 px-3 text-muted-foreground font-medium">
+                     <span className="bg-card px-3 text-muted-foreground font-medium">
                         o con tu correo
                      </span>
                   </div>

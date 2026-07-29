@@ -1,5 +1,4 @@
 import { listCategories, listSubcategories } from "@/actions/expense-actions"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { FolderPlus } from "lucide-react"
 import { AdminPageHeader } from "@/components/admin-page-header"
 import { CreateCategoryDialog } from "@/components/category-dialog"
@@ -33,53 +32,37 @@ export default async function CategoriesPage() {
         description="Organiza tus gastos con categorías consistentes y subcategorías detalladas."
       />
 
-      <div className="grid gap-5 lg:grid-cols-2">
-        {/* Categories Card */}
-        <Card>
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <div>
-                <CardTitle className="flex items-center gap-2">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-primary/35 bg-primary/10">
-                    <FolderPlus className="h-4 w-4 text-primary" />
-                  </div>
-                  Categorías
-                </CardTitle>
-                <CardDescription className="mt-1">Categorías principales de gastos</CardDescription>
-              </div>
-              <CreateCategoryDialog />
+      <section className="ledger-section grid lg:grid-cols-2">
+        <div className="min-w-0 border-b border-border lg:border-b-0 lg:border-r">
+          <div className="flex items-center justify-between gap-3 border-b border-border px-4 py-4 sm:px-5">
+            <div>
+              <h2 className="font-serif text-lg font-bold">Categorías</h2>
+              <p className="mt-1 text-sm text-muted-foreground">Grupos principales de gastos</p>
             </div>
-          </CardHeader>
-          <CardContent>
+            <CreateCategoryDialog />
+          </div>
             <CategoriesTable
               data={categories}
               emptyMessage="No hay categorías aún. Crea tu primera categoría para comenzar"
               emptyIcon={<FolderPlus className="h-8 w-8 mx-auto mb-2 opacity-50" />}
             />
-          </CardContent>
-        </Card>
+        </div>
 
-        {/* Subcategories Card */}
-        <Card>
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <div>
-                <CardTitle>Subcategorías</CardTitle>
-                <CardDescription className="mt-1">Subcategorías de gastos detalladas</CardDescription>
-              </div>
-              <CreateSubcategoryDialog categories={categories} />
+        <div className="min-w-0">
+          <div className="flex items-center justify-between gap-3 border-b border-border px-4 py-4 sm:px-5">
+            <div>
+              <h2 className="font-serif text-lg font-bold">Subcategorías</h2>
+              <p className="mt-1 text-sm text-muted-foreground">Detalle dentro de cada categoría</p>
             </div>
-          </CardHeader>
-          <CardContent>
+            <CreateSubcategoryDialog categories={categories} />
+          </div>
             <SubcategoriesTable
               data={subcategories}
               categories={categories}
               emptyMessage="Aun no hay subcategorías. Crea tu primera subcategoría para comenzar"
             />
-          </CardContent>
-        </Card>
-      </div>
+        </div>
+      </section>
     </div>
   )
 }
-

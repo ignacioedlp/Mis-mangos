@@ -63,7 +63,7 @@ export function ComparisonCharts({ data }: ComparisonChartsProps) {
   }
 
   return (
-    <div className="grid gap-5 lg:grid-cols-2">
+    <div className="grid min-w-0 gap-5 lg:grid-cols-2">
       {/* Spending Trends */}
       <Card>
         <CardHeader>

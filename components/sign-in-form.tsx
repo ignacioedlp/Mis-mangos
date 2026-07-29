@@ -37,11 +37,11 @@ export default function SignInForm() {
          password,
       }, {
          onRequest: () => {
-            toast.loading("Signing in...")
+            toast.loading("Iniciando sesión...")
          },
          onSuccess: () => {
             toast.dismiss();
-            toast.success("Signed in successfully");
+            toast.success("Sesión iniciada");
             router.push("/dashboard")
             router.refresh()
          },
@@ -82,7 +82,7 @@ export default function SignInForm() {
                )}
             />
             <Button type="submit" className="w-full h-11 font-semibold shadow-sm shadow-primary/20">
-               Iniciar Sesión
+               Iniciar sesión
             </Button>
          </form>
       </Form>

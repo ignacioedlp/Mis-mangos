@@ -29,10 +29,15 @@ export default async function DashboardLayout({
          <SidebarProvider>
             <AppSidebar variant="inset" />
             <SidebarInset>
+               <a
+                  href="#main-content"
+                  className="fixed left-4 top-2 z-50 -translate-y-20 rounded-md bg-primary px-4 py-2 font-semibold text-primary-foreground transition-transform focus:translate-y-0"
+               >
+                  Ir al contenido
+               </a>
                <AppHeader user={user} />
-               <main className="relative flex-1 overflow-hidden bg-background p-3 sm:p-5 lg:p-6">
-                  <div className="fintech-grid pointer-events-none absolute inset-0 opacity-80" />
-                  <div className="relative mx-auto w-full max-w-[1680px]">
+               <main id="main-content" className="min-w-0 flex-1 overflow-x-hidden bg-background px-3 py-5 sm:px-5 lg:px-8 lg:py-7">
+                  <div className="mx-auto min-w-0 w-full max-w-[1520px]">
                   <Suspense fallback={null}>
                      <ToastHandler />
                   </Suspense>

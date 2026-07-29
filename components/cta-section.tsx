@@ -1,79 +1,34 @@
-import { Button } from "@/components/ui/button";
-import { ArrowRight, Check } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import Link from "next/link";
-import FadeInView from "./animate-ui/fade-in-view";
 
-const benefits = [
-   "Registro gratuito y sin compromisos",
-   "Interfaz intuitiva y fácil de usar",
-   "Datos seguros y privados",
-   "Soporte completo en español"
-];
+import { Button } from "@/components/ui/button";
 
 export default function CTASection() {
-   return (
-      <section className="relative py-24 md:py-36 overflow-hidden">
-         <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-accent/35 to-primary/5 pointer-events-none" />
-         <div className="fintech-grid pointer-events-none absolute inset-0 opacity-70" />
-         <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
-         <div className="absolute bottom-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
-
-         <div className="container mx-auto relative">
-            <div className="fintech-panel max-w-3xl mx-auto rounded-2xl p-6 text-center sm:p-10">
-               <FadeInView>
-                  <span className="font-mono text-[11px] font-semibold uppercase tracking-normal text-primary">¡Empezá hoy!</span>
-               </FadeInView>
-
-               <FadeInView delay={0.1}>
-                  <h2 className="font-serif text-4xl font-extrabold tracking-normal sm:text-5xl md:text-6xl mt-4">
-                     Tomá el control de tus finanzas{" "}
-                     <span className="text-transparent bg-gradient-to-r from-primary via-gold-300 to-primary bg-clip-text">
-                        en minutos
-                     </span>
-                  </h2>
-               </FadeInView>
-
-               <FadeInView delay={0.2}>
-                  <p className="text-lg text-muted-foreground max-w-xl mx-auto mt-6 leading-relaxed">
-                     Unite a usuarios que ya están mejorando su salud financiera con Mis Mangos.
-                  </p>
-               </FadeInView>
-
-               <FadeInView delay={0.3}>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-lg mx-auto mt-10 text-left">
-                     {benefits.map((benefit, index) => (
-                        <div key={index} className="flex items-center gap-2.5">
-                           <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary/10">
-                              <Check className="h-3 w-3 text-primary" />
-                           </div>
-                           <span className="text-sm text-muted-foreground">{benefit}</span>
-                        </div>
-                     ))}
-                  </div>
-               </FadeInView>
-
-               <FadeInView delay={0.4} className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-12">
-                  <Button asChild size="lg" className="group h-13 px-8 text-base font-semibold shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 transition-all">
-                     <Link href="/sign-up" className="flex items-center gap-2">
-                        <span>Crear cuenta gratis</span>
-                        <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                     </Link>
-                  </Button>
-
-                  <Button variant="ghost" size="lg" asChild className="h-13 px-8 text-base text-muted-foreground hover:text-foreground">
-                     <Link href="/sign-in">
-                        Ya tengo cuenta
-                     </Link>
-                  </Button>
-               </FadeInView>
-
-               <FadeInView delay={0.5}>
-                  <p className="text-xs text-muted-foreground mt-8">
-                     Sin tarjeta de crédito · Cancelá cuando quieras
-                  </p>
-               </FadeInView>
-            </div>
-         </div>
-      </section>
-   );
+  return (
+    <section className="py-20 md:py-28">
+      <div className="container">
+        <div className="grid items-end gap-8 border-b border-border pb-12 md:grid-cols-[minmax(0,1fr)_auto]">
+          <div className="max-w-3xl">
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-primary">
+              Empezá con el próximo mes
+            </p>
+            <h2 className="mt-4 font-serif text-4xl font-bold tracking-[-0.04em] sm:text-5xl">
+              Menos tiempo armando cuentas. Más claridad para decidir.
+            </h2>
+          </div>
+          <div className="flex flex-col gap-3 sm:flex-row md:flex-col">
+            <Button asChild size="lg">
+              <Link href="/sign-up">
+                Crear cuenta
+                <ArrowRight aria-hidden="true" />
+              </Link>
+            </Button>
+            <Button variant="outline" size="lg" asChild>
+              <Link href="/sign-in">Ya tengo cuenta</Link>
+            </Button>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
 }

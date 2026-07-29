@@ -163,7 +163,7 @@ export function ReportsTable({
   }
 
   return (
-    <Table>
+    <Table className="min-w-[1100px]">
       <TableHeader>
         <TableRow>
           <SortableTableHead

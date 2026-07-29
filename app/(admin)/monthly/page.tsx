@@ -14,8 +14,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
-import { Progress } from "@/components/ui/progress";
 import {
   CalendarDays,
   Plus,
@@ -32,7 +30,8 @@ import { SalaryDialog } from "@/components/salary-dialog";
 import { PendingAlerts } from "@/components/pending-alerts";
 import type { ExpenseFrequency } from "@/lib/types";
 import { MonthlyExpensesTable } from "@/components/tables/monthly-expenses-table";
-import { MetricCard } from "@/components/metric-card";
+import { SummaryStrip } from "@/components/summary-strip";
+import { DataSection } from "@/components/data-section";
 import { ExpenseHeatmap } from "@/components/expense-heatmap";
 import { getInstallmentProgressOverview } from "@/actions/installment-actions";
 import { InstallmentProgressSection } from "@/components/installment-progress-section";
@@ -120,157 +119,41 @@ export default async function MonthlyPage({ searchParams }: MonthlyPageProps) {
         }
       />
 
-      {/* Resumen con progreso */}
-      <Card>
-        <CardHeader className="pb-3">
-          <CardTitle>
-            Resumen
-          </CardTitle>
-          <CardDescription>
-            {activeCount > 0 ? (
-              <span>
-                {data.totalPaid} de {activeCount} gastos activos pagados •{" "}
-                {data.monthName}
-              </span>
-            ) : (
-              <span>Sin gastos activos este mes</span>
-            )}
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid gap-4 md:grid-cols-2">
-            <div>
-              <div className="mb-2 flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">
-                  Uso vs estimado
-                </span>
-                <span className="text-sm font-medium">
-                  {estUsagePct.toFixed(1)}%
-                </span>
-              </div>
-              <Progress value={estUsagePct} />
-              <div className="mt-2 flex flex-wrap gap-3 text-xs text-muted-foreground">
-                <span>
-                  Estimado:{" "}
-                  <strong className="text-foreground">
-                    {formatCurrency(data.totalEstimated)}
-                  </strong>
-                </span>
-                <span>
-                  Real:{" "}
-                  <strong className="text-foreground">
-                    {formatCurrency(data.totalActual)}
-                  </strong>
-                </span>
-                <span>
-                  {data.totalActual >= data.totalEstimated ? "Sobre" : "Bajo"}:{" "}
-                  {formatCurrency(
-                    Math.abs(data.totalEstimated - data.totalActual),
-                  )}
-                </span>
-              </div>
-            </div>
-            <div>
-              <div className="mb-2 flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">
-                  Uso del salario
-                </span>
-                <span className="text-sm font-medium">
-                  {salary?.amount ? salaryUsagePct.toFixed(1) : "—"}%
-                </span>
-              </div>
-              <Progress value={salary?.amount ? salaryUsagePct : 0} />
-              <div className="mt-2 flex flex-wrap gap-3 text-xs text-muted-foreground">
-                <span>
-                  Salario:{" "}
-                  <strong className="text-foreground">
-                    {salary?.amount
-                      ? formatCurrency(salary.amount)
-                      : "No establecido"}
-                  </strong>
-                </span>
-                <span>
-                  Disponible:{" "}
-                  <strong className="text-foreground">
-                    {salary?.amount
-                      ? formatCurrency(
-                          Math.max(0, salary.amount - data.totalActual),
-                        )
-                      : "—"}
-                  </strong>
-                </span>
-              </div>
-            </div>
-          </div>
-          <Separator />
-          <div className="flex items-center justify-between text-sm text-muted-foreground">
-            <span>Progreso de pagos</span>
-            <span className="font-medium text-foreground">
-              {data.totalPaid}/{activeCount} pagados ({completionPct.toFixed(1)}
-              %)
-            </span>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Tarjetas de métricas */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
-        <MetricCard
-          title="Salario Mensual"
-          value={salary ? formatCurrency(salary.amount) : "No establecido"}
-          subtitle={
-            salary && data.totalActual > 0
-              ? `${((data.totalActual / salary.amount) * 100).toFixed(1)}% utilizado`
-              : "Establecé un salario para ver el uso"
-          }
-          icon={DollarSign}
-          tone="success"
-          progress={salary?.amount ? salaryUsagePct : 0}
-        />
-        <MetricCard
-          title="Total Estimado"
-          value={
-            <div className="space-y-1">
-              <div>{formatCurrency(data.totalEstimated)}</div>
-              <div className="font-sans text-xs font-medium text-muted-foreground">
-                {formatArsToCryptoUsd(data.totalEstimated, cryptoDollarRate) ??
-                  "Cotización no disponible"}
-              </div>
-            </div>
-          }
-          subtitle={data.monthName}
-          icon={DollarSign}
-          tone="muted"
-          progress={estUsagePct}
-        />
-        <MetricCard
-          title="Total Real"
-          value={formatCurrency(data.totalActual)}
-          subtitle={`${data.totalEstimated > 0 ? ((data.totalActual / data.totalEstimated) * 100).toFixed(1) : 0}% del estimado`}
-          icon={TrendingDown}
-          tone="danger"
-          progress={estUsagePct}
-        />
-        <MetricCard
-          title="Ahorros"
-          value={salary ? formatCurrency(salary.amount - data.totalActual) : "-"}
-          subtitle={
-            salary
-              ? `${(((salary.amount - data.totalActual) / salary.amount) * 100).toFixed(1)}% ahorrado`
-              : "Establecé un salario para ver ahorros"
-          }
-          icon={TrendingUp}
-          tone="success"
-        />
-        <MetricCard
-          title="Progreso"
-          value={`${data.totalPaid}/${activeCount}`}
-          subtitle="gastos activos pagados"
-          icon={BarChart3}
-          tone="warning"
-          progress={completionPct}
-        />
-      </div>
+      <SummaryStrip
+        aria-label={`Resumen de ${data.monthName}`}
+        items={[
+          {
+            label: "Salario",
+            value: salary ? formatCurrency(salary.amount) : "Sin cargar",
+            detail: salary ? `${salaryUsagePct.toFixed(1)}% utilizado` : "Establecé el ingreso del mes",
+            icon: DollarSign,
+            tone: "success",
+            progress: salary?.amount ? salaryUsagePct : 0,
+          },
+          {
+            label: "Gasto real",
+            value: formatCurrency(data.totalActual),
+            detail: `${estUsagePct.toFixed(1)}% de ${formatCurrency(data.totalEstimated)} estimado`,
+            icon: TrendingDown,
+            tone: estUsagePct > 100 ? "danger" : "accent",
+            progress: estUsagePct,
+          },
+          {
+            label: "Disponible",
+            value: salary ? formatCurrency(salary.amount - data.totalActual) : "—",
+            detail: formatArsToCryptoUsd(data.totalEstimated, cryptoDollarRate) ?? "Cotización no disponible",
+            icon: TrendingUp,
+            tone: salary && salary.amount - data.totalActual < 0 ? "danger" : "success",
+          },
+          {
+            label: "Pagos",
+            value: `${data.totalPaid}/${activeCount}`,
+            detail: activeCount > 0 ? `${completionPct.toFixed(1)}% completado` : "Sin gastos activos",
+            icon: BarChart3,
+            progress: completionPct,
+          },
+        ]}
+      />
 
       {/* Charts */}
       <ExpenseCharts categoryData={data.categoryData} />
@@ -285,16 +168,10 @@ export default async function MonthlyPage({ searchParams }: MonthlyPageProps) {
       />
 
       {/* Detalle de gastos */}
-      <Card>
-        <CardHeader>
-          <CardTitle>
-            Detalle de Gastos
-          </CardTitle>
-          <CardDescription>
-            Lista completa de gastos para {data.monthName}
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
+      <DataSection
+        title="Detalle de gastos"
+        description={`Lista completa para ${data.monthName}`}
+      >
           <MonthlyExpensesTable
             data={data.items}
             year={year}
@@ -302,8 +179,7 @@ export default async function MonthlyPage({ searchParams }: MonthlyPageProps) {
             cryptoDollarRate={cryptoDollarRate}
             emptyMessage="No se encontraron gastos. Agregá gastos para comenzar."
           />
-        </CardContent>
-      </Card>
+      </DataSection>
 
       {/* Pending Alerts */}
       <PendingAlerts />

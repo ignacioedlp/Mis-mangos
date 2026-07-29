@@ -24,6 +24,8 @@ import {
   type WishlistSubcategoryOption,
 } from "@/components/wishlist-dialog";
 import { AdminPageHeader } from "@/components/admin-page-header";
+import { SummaryStrip } from "@/components/summary-strip";
+import { DataToolbar } from "@/components/data-toolbar";
 import { CryptoDollarQuote } from "@/components/crypto-dollar-quote";
 import {
   AlertDialog,
@@ -177,23 +179,27 @@ export function WishlistManager({
         }
       />
 
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <SummaryCard title="Planeados" value={String(summary.planned)} />
-        <SummaryCard title="Realizados" value={String(summary.completed)} />
-        <SummaryCard title="Descartados" value={String(summary.discarded)} />
-        <SummaryCard
-          title="Total financiado planeado"
-          value={formatCurrency(summary.plannedFinancedTotal)}
-          detail={
+      <SummaryStrip
+        aria-label="Resumen de la lista de deseos"
+        items={[
+          { label: "Planeados", value: String(summary.planned), detail: "Compras en evaluación" },
+          { label: "Realizados", value: String(summary.completed), detail: "Compras completadas", tone: "success" },
+          { label: "Descartados", value: String(summary.discarded), detail: "Decisiones archivadas" },
+          {
+            label: "Total financiado",
+            value: formatCurrency(summary.plannedFinancedTotal),
+            detail:
             formatArsToCryptoUsd(
               summary.plannedFinancedTotal,
               cryptoDollarRate,
-            ) ?? "Cotización no disponible"
-          }
-        />
-      </div>
+            ) ?? "Cotización no disponible",
+            tone: "accent",
+          },
+        ]}
+      />
 
-      <div className="fintech-surface flex flex-col gap-3 rounded-xl p-4 sm:flex-row">
+      <DataToolbar primary={
+        <>
         <Select value={statusFilter} onValueChange={setStatusFilter}>
           <SelectTrigger className="sm:w-48">
             <SelectValue />
@@ -216,7 +222,8 @@ export function WishlistManager({
             <SelectItem value="LOW">Baja</SelectItem>
           </SelectContent>
         </Select>
-      </div>
+        </>
+      } secondary={<span className="text-xs text-muted-foreground">{filteredItems.length} artículos</span>} />
 
       {subcategories.length === 0 ? (
         <Card className="border-dashed">
@@ -238,7 +245,7 @@ export function WishlistManager({
           </CardHeader>
         </Card>
       ) : (
-        <div className="grid gap-5 lg:grid-cols-2">
+        <div className="ledger-section divide-y divide-border">
           {filteredItems.map((item) => (
             <WishlistCard
               key={item.id}
@@ -287,32 +294,6 @@ export function WishlistManager({
   );
 }
 
-function SummaryCard({
-  title,
-  value,
-  detail,
-}: {
-  title: string;
-  value: string;
-  detail?: string;
-}) {
-  return (
-    <Card>
-      <CardHeader className="pb-2">
-        <CardDescription>{title}</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <p className="metric-value text-2xl">{value}</p>
-        {detail && (
-          <p className="mt-1 text-xs text-muted-foreground">
-            {detail} a vender
-          </p>
-        )}
-      </CardContent>
-    </Card>
-  );
-}
-
 function WishlistCard({
   item,
   cryptoDollarRate,
@@ -348,7 +329,7 @@ function WishlistCard({
   const AffordabilityIcon = affordability.icon;
 
   return (
-    <Card className="overflow-hidden">
+    <article className="bg-card py-5">
       <CardHeader className="gap-3">
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
@@ -483,7 +464,7 @@ function WishlistCard({
           {item.affordabilityReason}
         </p>
       </CardContent>
-    </Card>
+    </article>
   );
 }
 

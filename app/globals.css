@@ -4,42 +4,42 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --background: #f4f0e8;
-  --foreground: #171412;
-  --card: #fffaf2;
-  --card-foreground: #171412;
-  --popover: #fffaf2;
-  --popover-foreground: #171412;
-  --primary: #f97316;
-  --primary-foreground: #fff8ed;
-  --secondary: #ebe4da;
-  --secondary-foreground: #38322b;
-  --muted: #ede7dd;
-  --muted-foreground: #70675d;
-  --accent: #fff0dc;
-  --accent-foreground: #9a4b0f;
-  --destructive: #d13f32;
+  --background: #f2eee5;
+  --foreground: #171612;
+  --card: #faf7f0;
+  --card-foreground: #171612;
+  --popover: #fffdf8;
+  --popover-foreground: #171612;
+  --primary: #b85f14;
+  --primary-foreground: #fffaf2;
+  --secondary: #e7e1d6;
+  --secondary-foreground: #2c2924;
+  --muted: #eae4da;
+  --muted-foreground: #625c53;
+  --accent: #f3e4d2;
+  --accent-foreground: #7e3e0e;
+  --destructive: #bd342e;
   --destructive-foreground: #ffffff;
-  --border: #ded3c5;
-  --input: #ded3c5;
-  --ring: #f97316;
-  --chart-1: #f97316;
-  --chart-2: #14b8a6;
-  --chart-3: #5b7cfa;
-  --chart-4: #a855f7;
-  --chart-5: #22c55e;
-  --sidebar: #ebe4da;
-  --sidebar-foreground: #211d19;
-  --sidebar-primary: #f97316;
+  --border: #d3ccbf;
+  --input: #c9c1b4;
+  --ring: #b85f14;
+  --chart-1: #c8751f;
+  --chart-2: #357a70;
+  --chart-3: #55708f;
+  --chart-4: #8b6b89;
+  --chart-5: #4e7a4d;
+  --sidebar: #e9e4da;
+  --sidebar-foreground: #211f1b;
+  --sidebar-primary: #b85f14;
   --sidebar-primary-foreground: #fff8ed;
-  --sidebar-accent: #fff0dc;
-  --sidebar-accent-foreground: #9a4b0f;
-  --sidebar-border: #d9cebf;
-  --sidebar-ring: #f97316;
+  --sidebar-accent: #ddd6ca;
+  --sidebar-accent-foreground: #2d2923;
+  --sidebar-border: #d0c8bc;
+  --sidebar-ring: #b85f14;
   --font-sans: "DM Sans", sans-serif;
   --font-serif: "Bricolage Grotesque", serif;
   --font-mono: "JetBrains Mono", monospace;
-  --radius: 0.625rem;
+  --radius: 0.5rem;
   --shadow-2xs: 0 1px 2px 0 rgb(26 22 20 / 0.03);
   --shadow-xs: 0 1px 3px 0 rgb(26 22 20 / 0.05);
   --shadow-sm: 0 8px 20px -18px rgb(23 20 18 / 0.32), 0 1px 2px -1px rgb(23 20 18 / 0.08);
@@ -53,42 +53,42 @@
 }
 
 .dark {
-  --background: #090909;
-  --foreground: #f7f1e8;
-  --card: #171717;
-  --card-foreground: #f1ede6;
-  --popover: #1c1b19;
-  --popover-foreground: #f1ede6;
-  --primary: #ff6b2a;
-  --primary-foreground: #1a1009;
-  --secondary: #22211f;
-  --secondary-foreground: #e8dfd4;
-  --muted: #1d1c1a;
-  --muted-foreground: #aaa096;
-  --accent: #2a211a;
-  --accent-foreground: #ffb164;
-  --destructive: #ff5a4f;
+  --background: #0d0d0c;
+  --foreground: #f0ece3;
+  --card: #141412;
+  --card-foreground: #f0ece3;
+  --popover: #191816;
+  --popover-foreground: #f0ece3;
+  --primary: #e39a3b;
+  --primary-foreground: #181109;
+  --secondary: #20201d;
+  --secondary-foreground: #e9e4db;
+  --muted: #1d1c19;
+  --muted-foreground: #aaa399;
+  --accent: #28231c;
+  --accent-foreground: #f0b768;
+  --destructive: #ef665f;
   --destructive-foreground: #ffffff;
-  --border: #2c2925;
-  --input: #2c2925;
-  --ring: #ff6b2a;
-  --chart-1: #ff6b2a;
-  --chart-2: #4fd1c5;
-  --chart-3: #6f8cff;
-  --chart-4: #d946ef;
-  --chart-5: #84cc16;
-  --sidebar: #10100f;
+  --border: #302e2a;
+  --input: #3a3732;
+  --ring: #e39a3b;
+  --chart-1: #e39a3b;
+  --chart-2: #68a69b;
+  --chart-3: #7e98b7;
+  --chart-4: #a98aa6;
+  --chart-5: #79a66f;
+  --sidebar: #11110f;
   --sidebar-foreground: #f1ede6;
-  --sidebar-primary: #ff6b2a;
+  --sidebar-primary: #e39a3b;
   --sidebar-primary-foreground: #1a1009;
-  --sidebar-accent: #24211e;
-  --sidebar-accent-foreground: #ffb164;
-  --sidebar-border: #26231f;
-  --sidebar-ring: #ff6b2a;
+  --sidebar-accent: #211f1b;
+  --sidebar-accent-foreground: #f0ece3;
+  --sidebar-border: #292723;
+  --sidebar-ring: #e39a3b;
   --font-sans: "DM Sans", sans-serif;
   --font-serif: "Bricolage Grotesque", serif;
   --font-mono: "JetBrains Mono", monospace;
-  --radius: 0.625rem;
+  --radius: 0.5rem;
   --shadow-2xs: 0 1px 2px 0 rgb(0 0 0 / 0.10);
   --shadow-xs: 0 1px 3px 0 rgb(0 0 0 / 0.15);
   --shadow-sm: 0 4px 12px -8px rgb(0 0 0 / 0.90), 0 1px 2px -1px rgb(0 0 0 / 0.45);
@@ -171,18 +171,6 @@
     @apply bg-background text-foreground antialiased;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
     letter-spacing: 0;
-    background-image:
-      linear-gradient(180deg, rgb(255 255 255 / 0.40), transparent 18rem),
-      linear-gradient(to right, rgb(249 115 22 / 0.035) 1px, transparent 1px),
-      linear-gradient(to bottom, rgb(23 20 18 / 0.028) 1px, transparent 1px);
-    background-size: auto, 72px 72px, 72px 72px;
-    background-attachment: fixed;
-  }
-  .dark body {
-    background-image:
-      linear-gradient(180deg, rgb(255 107 42 / 0.055), transparent 22rem),
-      linear-gradient(to right, rgb(255 255 255 / 0.035) 1px, transparent 1px),
-      linear-gradient(to bottom, rgb(255 255 255 / 0.026) 1px, transparent 1px);
   }
   .container {
     @apply p-8 mx-auto max-w-screen;
@@ -191,114 +179,92 @@
     font-family: var(--font-serif);
     letter-spacing: 0;
   }
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+  :focus {
+    scroll-margin-top: 5rem;
+    scroll-margin-bottom: 4rem;
+  }
 }
 
-/* Noise grain overlay for textured backgrounds */
 @layer utilities {
   .grain-overlay {
     position: relative;
   }
   .grain-overlay::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    opacity: 0.03;
-    pointer-events: none;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-    background-repeat: repeat;
-    background-size: 128px 128px;
-    z-index: 1;
-  }
-  .dark .grain-overlay::before {
-    opacity: 0.06;
+    content: none;
   }
 
   .fintech-surface {
-    @apply border border-border/75 bg-card/[0.94] shadow-sm backdrop-blur-xl;
-    background-image:
-      linear-gradient(180deg, rgb(255 255 255 / 0.34), transparent 52%),
-      linear-gradient(135deg, rgb(249 115 22 / 0.055), transparent 45%);
-  }
-
-  .dark .fintech-surface {
-    background-image:
-      linear-gradient(180deg, rgb(255 255 255 / 0.045), transparent 54%),
-      linear-gradient(135deg, rgb(255 107 42 / 0.075), transparent 48%);
+    @apply border border-border bg-card shadow-none;
   }
 
   .fintech-panel {
-    @apply border border-border/75 bg-card/[0.90] shadow-md backdrop-blur-2xl;
-    background-image:
-      linear-gradient(180deg, rgb(255 255 255 / 0.42), transparent 58%),
-      linear-gradient(120deg, rgb(249 115 22 / 0.10), transparent 38%),
-      repeating-linear-gradient(90deg, rgb(23 20 18 / 0.035) 0 1px, transparent 1px 78px);
-  }
-
-  .dark .fintech-panel {
-    background-image:
-      linear-gradient(180deg, rgb(255 255 255 / 0.055), transparent 58%),
-      linear-gradient(120deg, rgb(255 107 42 / 0.12), transparent 38%),
-      repeating-linear-gradient(90deg, rgb(255 255 255 / 0.045) 0 1px, transparent 1px 78px);
+    @apply border border-border bg-card shadow-sm;
   }
 
   .fintech-grid {
-    background-image:
-      linear-gradient(to right, rgb(249 115 22 / 0.04) 1px, transparent 1px),
-      linear-gradient(to bottom, rgb(23 20 18 / 0.025) 1px, transparent 1px);
-    background-size: 56px 56px;
-    mask-image: linear-gradient(180deg, black, transparent 82%);
-  }
-
-  .dark .fintech-grid {
-    background-image:
-      linear-gradient(to right, rgb(255 255 255 / 0.04) 1px, transparent 1px),
-      linear-gradient(to bottom, rgb(255 255 255 / 0.025) 1px, transparent 1px);
+    background: none;
   }
 
   .fintech-hero {
-    @apply border border-border/75 bg-card/[0.94] shadow-md backdrop-blur-xl;
-    background-image:
-      linear-gradient(180deg, rgb(255 255 255 / 0.38), transparent 60%),
-      linear-gradient(105deg, rgb(249 115 22 / 0.10), transparent 40%),
-      repeating-linear-gradient(90deg, rgb(23 20 18 / 0.035) 0 1px, transparent 1px 84px);
-  }
-
-  .dark .fintech-hero {
-    background-image:
-      linear-gradient(180deg, rgb(255 255 255 / 0.05), transparent 62%),
-      linear-gradient(105deg, rgb(255 107 42 / 0.11), transparent 40%),
-      repeating-linear-gradient(90deg, rgb(255 255 255 / 0.045) 0 1px, transparent 1px 84px);
+    @apply border-b border-border bg-transparent;
   }
 
   .fintech-kpi {
-    @apply border border-border/75 bg-background/55 shadow-xs backdrop-blur-xl;
-    background-image:
-      linear-gradient(180deg, rgb(255 255 255 / 0.32), transparent),
-      linear-gradient(135deg, rgb(249 115 22 / 0.05), transparent 52%);
-  }
-
-  .dark .fintech-kpi {
-    background-image:
-      linear-gradient(180deg, rgb(255 255 255 / 0.045), transparent),
-      linear-gradient(135deg, rgb(255 107 42 / 0.075), transparent 52%);
+    @apply border-l border-border bg-transparent;
   }
 
   .data-panel {
-    @apply rounded-xl border border-border/75 bg-background/45;
-    background-image:
-      linear-gradient(180deg, rgb(255 255 255 / 0.24), transparent 62%);
-  }
-
-  .dark .data-panel {
-    background-image:
-      linear-gradient(180deg, rgb(255 255 255 / 0.035), transparent 62%);
+    @apply rounded-lg border border-border bg-card;
   }
 
   .metric-label {
-    @apply font-mono text-[10px] font-bold uppercase tracking-normal text-muted-foreground;
+    @apply text-[11px] font-semibold uppercase tracking-[0.08em] text-muted-foreground;
   }
 
   .metric-value {
-    @apply font-serif font-extrabold leading-none tracking-normal tabular-nums text-foreground;
+    @apply font-sans font-semibold leading-none tracking-[-0.025em] tabular-nums text-foreground;
+  }
+
+  .ledger-section {
+    @apply overflow-hidden rounded-lg border border-border bg-card;
+  }
+
+  .touch-target {
+    @apply min-h-11 min-w-11;
+  }
+
+  .entry-reveal {
+    animation: entry-reveal var(--entry-duration, 0.6s) ease-out
+      var(--entry-delay, 0s) both;
+  }
+}
+
+@keyframes entry-reveal {
+  from {
+    opacity: 0;
+    transform: translate(var(--entry-x, 0), var(--entry-y, 1.25rem));
+  }
+  to {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .entry-reveal {
+    animation: none !important;
   }
 }

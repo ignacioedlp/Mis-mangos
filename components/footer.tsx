@@ -1,25 +1,19 @@
-import React from 'react'
+import Link from "next/link";
 
 export default function Footer() {
-   return (
-      <footer className="relative border-t border-border/60 overflow-hidden">
-         {/* Giant background text */}
-         <div className="flex items-center justify-center overflow-hidden py-8 md:py-0">
-            <div className="text-[7rem] md:text-[11rem] lg:text-[15rem] font-serif font-extrabold select-none pointer-events-none leading-none bg-gradient-to-b from-primary/15 to-transparent bg-clip-text text-transparent tracking-normal">
-               MANGOS
-            </div>
-         </div>
-
-         <div className="container flex flex-col items-center justify-center gap-2 pb-8 -mt-4 md:-mt-8">
-            <div className="flex items-center gap-2 text-primary">
-               <span className="text-xs">◆</span>
-               <span className="text-xs">◆</span>
-               <span className="text-xs">◆</span>
-            </div>
-            <p className="text-center text-sm text-muted-foreground">
-               &copy; {new Date().getFullYear()} Mis Mangos. Todos los derechos reservados.
-            </p>
-         </div>
-      </footer>
-   )
+  return (
+    <footer className="border-t border-border">
+      <div className="container flex flex-col gap-5 py-8 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
+        <p>
+          <span className="font-serif font-bold text-foreground">Mis Mangos</span>
+          {" · "}Finanzas personales
+        </p>
+        <div className="flex items-center gap-5">
+          <Link href="/sign-in" className="hover:text-foreground">Ingresar</Link>
+          <Link href="/sign-up" className="hover:text-foreground">Crear cuenta</Link>
+          <span>© {new Date().getFullYear()}</span>
+        </div>
+      </div>
+    </footer>
+  );
 }

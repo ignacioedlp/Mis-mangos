@@ -12,8 +12,8 @@ import { ThemeToggle } from './theme-toggle'
 export default function Navbar() {
    const user = useUser();
    return (
-      <header className="sticky top-0 z-100 flex justify-center py-3 px-4">
-         <div className="container border border-border/60 rounded-2xl w-full bg-background/80 backdrop-blur-xl py-3 px-5 shadow-sm">
+      <header className="sticky top-0 z-100 border-b border-border bg-background/95 backdrop-blur-xl">
+         <div className="container w-full px-4 py-3 sm:px-8">
             <nav className="flex items-center justify-between gap-4 sm:gap-6">
                <div className="flex items-center gap-3">
                   <Logo />
@@ -30,10 +30,10 @@ export default function Navbar() {
                   ) : (
                      <>
                         <Button variant="ghost" size="sm" asChild className="text-muted-foreground hover:text-foreground">
-                           <Link href="/sign-in">Iniciar Sesión</Link>
+                           <Link href="/sign-in">Ingresar</Link>
                         </Button>
                         <Button asChild size="sm" className="font-semibold shadow-sm shadow-primary/20">
-                           <Link href="/sign-up">Registrarse</Link>
+                           <Link href="/sign-up">Crear cuenta</Link>
                         </Button>
                      </>
                   )}

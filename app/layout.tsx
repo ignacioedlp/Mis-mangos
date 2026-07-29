@@ -20,9 +20,9 @@ const bricolage = Bricolage_Grotesque({
 });
 
 export const metadata: Metadata = {
-  title: "Mis Mangos - Personal Finance Manager",
+  title: "Mis Mangos — Finanzas personales",
   description:
-    "Complete personal finance management with budget tracking, expense management, and intelligent notifications",
+    "Gestión de gastos, presupuesto y fondos personales en un solo lugar.",
   keywords: [
     "finance",
     "budget",
@@ -49,15 +49,15 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     siteName: "Mis Mangos",
-    title: "Mis Mangos - Personal Finance Manager",
+    title: "Mis Mangos — Finanzas personales",
     description:
-      "Complete personal finance management with budget tracking, expense management, and intelligent notifications",
+      "Gestión clara de gastos, presupuesto y fondos personales.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Mis Mangos - Personal Finance Manager",
+    title: "Mis Mangos — Finanzas personales",
     description:
-      "Complete personal finance management with budget tracking, expense management, and intelligent notifications",
+      "Gestión clara de gastos, presupuesto y fondos personales.",
   },
   icons: {
     icon: "/logo.png",
@@ -68,8 +68,6 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  maximumScale: 1,
-  userScalable: false,
   themeColor: [
     { media: "(prefers-color-scheme: light)", color: "#f4f0e8" },
     { media: "(prefers-color-scheme: dark)", color: "#090909" },
@@ -90,7 +88,7 @@ export default function RootLayout({
       <body className={`${dmSans.className} antialiased`}>
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
+          defaultTheme="dark"
           enableSystem
           disableTransitionOnChange
         >

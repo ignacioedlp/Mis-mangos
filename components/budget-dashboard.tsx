@@ -3,8 +3,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Separator } from "@/components/ui/separator"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
-import { TrendingUp, TrendingDown, AlertTriangle, DollarSign, Percent, PiggyBank } from "lucide-react"
+import { TrendingUp, AlertTriangle, DollarSign, Percent, PiggyBank } from "lucide-react"
 import { formatCurrency, formatPercentage } from "@/lib/utils"
+import { DataSection } from "@/components/data-section"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 
 // Tipos locales para evitar any y mejorar DX
 type CategoryBudget = {
@@ -133,7 +135,7 @@ export async function BudgetDashboard({ year, month }: BudgetDashboardProps) {
     )
   }
 
-  const monthName = new Date(budgetData.year, budgetData.month - 1).toLocaleString('default', {
+  const monthName = new Date(budgetData.year, budgetData.month - 1).toLocaleString('es-AR', {
     month: 'long',
     year: 'numeric'
   })
@@ -206,104 +208,64 @@ export async function BudgetDashboard({ year, month }: BudgetDashboardProps) {
         </CardContent>
       </Card>
 
-      {/* Category Breakdown */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+      <DataSection
+        title="Presupuesto por categoría"
+        description="Comparación entre asignación, gasto real y disponibilidad estimada."
+      >
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Categoría</TableHead>
+              <TableHead className="text-right">Presupuesto</TableHead>
+              <TableHead className="text-right">Gastado</TableHead>
+              <TableHead className="text-right">Disponible</TableHead>
+              <TableHead>Uso</TableHead>
+              <TableHead>Estado</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
         {(budgetData.categories as CategoryBudget[])
           .filter(category => category.budgetPercentage > 0)
           .map((category: CategoryBudget) => (
-            <Card key={category.id} className={category.isOverBudget ? "border-destructive/35 bg-destructive/5" : "transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-md"}>
-              <CardHeader className="pb-3">
-                <div className="flex items-center justify-between">
-                  <CardTitle className="text-base">{category.name}</CardTitle>
-                  {category.isOverBudget && (
-                    <Badge variant="destructive" className="text-xs">
-                      Sobre Presupuesto
-                    </Badge>
-                  )}
+            <TableRow key={category.id} className={category.isOverBudget ? "bg-destructive/5" : undefined}>
+              <TableCell>
+                <div>
+                  <p className="font-semibold">{category.name}</p>
+                  <p className="mt-0.5 text-xs text-muted-foreground">
+                    {category.budgetPercentage}% del ingreso · {category.expenseCount} gastos
+                  </p>
                 </div>
-                <CardDescription className="flex items-center gap-1">
-                  <Percent className="h-3 w-3" />
-                  {category.budgetPercentage}% del ingreso
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-2">
-                  <div className="flex justify-between text-sm">
-                    <span>Gastado</span>
-                    <span className={category.isOverBudget ? "text-destructive" : "text-primary"}>
-                      {formatCurrency(category.actualSpent)}
-                    </span>
-                  </div>
-                  <div className="flex justify-between text-sm text-muted-foreground">
-                    <span>Presupuesto</span>
-                    <span>{formatCurrency(category.budgetAmount)}</span>
-                  </div>
-                  <div className="data-panel p-3">
-                    <div className="flex items-start justify-between gap-3">
-                      <div>
-                        <p className="metric-label">
-                          Disponible para usar
-                        </p>
-                        <p
-                          className={
-                            category.estimatedRemaining >= 0
-                              ? "metric-value text-xl text-primary"
-                              : "metric-value text-xl text-destructive"
-                          }
-                        >
-                          {category.estimatedRemaining >= 0
-                            ? formatCurrency(category.estimatedRemaining)
-                            : `${formatCurrency(Math.abs(category.estimatedRemaining))} sobre`}
-                        </p>
-                      </div>
-                      <Badge variant="outline" className="shrink-0 text-xs">
-                        Est. {formatCurrency(category.estimatedSpent)}
-                      </Badge>
-                    </div>
-                    <div className="mt-2 flex justify-between text-xs text-muted-foreground">
-                      <span>Según gastos estimados</span>
-                      <span>{formatPercentage(category.estimatedUsagePercentage)} previsto</span>
-                    </div>
-                  </div>
+              </TableCell>
+              <TableCell className="text-right font-medium">{formatCurrency(category.budgetAmount)}</TableCell>
+              <TableCell className={`text-right font-medium ${category.isOverBudget ? "text-destructive" : ""}`}>
+                {formatCurrency(category.actualSpent)}
+              </TableCell>
+              <TableCell className={`text-right font-semibold ${category.estimatedRemaining >= 0 ? "text-chart-5" : "text-destructive"}`}>
+                {category.estimatedRemaining >= 0
+                  ? formatCurrency(category.estimatedRemaining)
+                  : `−${formatCurrency(Math.abs(category.estimatedRemaining))}`}
+              </TableCell>
+              <TableCell className="min-w-44">
+                <div className="flex items-center gap-3">
                   <Progress
                     value={Math.min(category.usagePercentage, 100)}
-                    className="h-2"
+                    className="h-1.5 min-w-24"
                   />
-                  <div className="flex justify-between text-xs text-muted-foreground">
-                    <span>{formatPercentage(category.usagePercentage)} usado</span>
-                    <span>
-                      {category.remaining >= 0 ? (
-                        <span className="text-primary">
-                          {formatCurrency(category.remaining)} restante
-                        </span>
-                      ) : (
-                        <span className="text-destructive">
-                          {formatCurrency(Math.abs(category.remaining))} sobre
-                        </span>
-                      )}
-                    </span>
-                  </div>
-                </div>
-
-                <div className="flex items-center justify-between text-xs text-muted-foreground">
-                  <span>
-                    {category.expenseCount} gastos
-                    {category.oneTimeCount > 0 && (
-                      <span className="ml-2 inline-flex items-center gap-1">
-                        • {category.oneTimeCount} único(s) ({formatCurrency(category.oneTimeSpent)})
-                      </span>
-                    )}
+                  <span className="w-14 text-right text-xs text-muted-foreground">
+                    {formatPercentage(category.usagePercentage)}
                   </span>
-                  {category.isOverBudget ? (
-                    <TrendingDown className="h-3 w-3 text-destructive" />
-                  ) : (
-                    <TrendingUp className="h-3 w-3 text-primary" />
-                  )}
                 </div>
-              </CardContent>
-            </Card>
+              </TableCell>
+              <TableCell>
+                <Badge variant={category.isOverBudget ? "destructive" : "outline"}>
+                  {category.isOverBudget ? "Excedido" : "En orden"}
+                </Badge>
+              </TableCell>
+            </TableRow>
           ))}
-      </div>
+          </TableBody>
+        </Table>
+      </DataSection>
 
       {/* Categories without budget */}
       {budgetData.categories.filter(c => c.budgetPercentage === 0).length > 0 && (

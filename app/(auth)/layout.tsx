@@ -15,13 +15,8 @@ export default async function AuthLayout({
       return redirect("/")
    }
    return (
-      <main className="relative min-h-screen grain-overlay">
-         <div className="fixed inset-0 -z-10 pointer-events-none">
-            <div className="fintech-grid absolute inset-0" />
-            <div className="absolute top-1/4 left-1/3 w-[500px] h-[500px] rounded-full bg-primary/[0.08] blur-[120px]" />
-            <div className="absolute bottom-1/4 right-1/3 w-[420px] h-[420px] rounded-full bg-accent/30 blur-[100px]" />
-         </div>
-         <div className="flex min-h-screen flex-col items-center justify-center px-4 py-12">
+      <main className="min-h-screen bg-background">
+         <div className="flex min-h-screen flex-col items-center justify-center px-4 py-10">
             {children}
          </div>
       </main>

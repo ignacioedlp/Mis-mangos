@@ -124,7 +124,12 @@ export function NotificationsPanel() {
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
-        <Button variant="outline" size="sm" className="relative">
+        <Button
+          variant="outline"
+          size="icon"
+          className="relative"
+          aria-label="Abrir notificaciones"
+        >
           <Bell className="h-4 w-4" />
           {unreadCount > 0 && (
             <Badge

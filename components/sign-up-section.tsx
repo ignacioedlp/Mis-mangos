@@ -19,15 +19,14 @@ const GoogleIcon = (
 export default function SignUpSection() {
    return (
       <div className="w-full max-w-md mx-auto">
-         <div className="fintech-panel relative overflow-hidden rounded-2xl p-8">
-            <div className="pointer-events-none absolute right-0 top-0 h-24 w-24 rounded-full bg-primary/15 blur-2xl" />
-            <div className="relative">
+         <div className="rounded-lg border border-border bg-card p-6 sm:p-8">
+            <div>
             <div className="flex items-center gap-3 mb-8">
                <Logo />
                <span className="font-serif text-lg font-bold tracking-normal">Mis Mangos</span>
             </div>
 
-            <h1 className="font-serif text-2xl font-extrabold tracking-normal">
+            <h1 className="font-serif text-2xl font-bold tracking-[-0.02em]">
                Creá tu cuenta
             </h1>
             <p className="mt-2 text-sm text-muted-foreground">
@@ -36,7 +35,7 @@ export default function SignUpSection() {
                   href="/sign-in"
                   className="font-semibold text-primary hover:text-primary/80 transition-colors"
                >
-                  Iniciar Sesión
+                  Iniciar sesión
                </Link>
             </p>
 
@@ -57,7 +56,7 @@ export default function SignUpSection() {
                      <span className="w-full border-t border-border/60"></span>
                   </div>
                   <div className="relative flex justify-center text-xs">
-                     <span className="bg-card/90 px-3 text-muted-foreground font-medium">
+                     <span className="bg-card px-3 text-muted-foreground font-medium">
                         o con tu correo
                      </span>
                   </div>

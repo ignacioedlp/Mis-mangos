@@ -1,12 +1,12 @@
 import { listCategories, listExpenses, listSubcategories } from "@/actions/expense-actions"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { DollarSign, Calendar, Filter, Layers } from "lucide-react"
+import { DollarSign, Calendar, FolderTree, ReceiptText } from "lucide-react"
 import { AdminPageHeader } from "@/components/admin-page-header"
 import { CreateExpenseDialog } from "@/components/expense-dialog"
 import { DeletedExpensesDialog } from "@/components/deleted-expenses-dialog"
 import { ExpensesTable } from "@/components/tables/expenses-table"
-import { MetricCard } from "@/components/metric-card"
 import { formatCurrency } from "@/lib/utils"
+import { SummaryStrip } from "@/components/summary-strip"
+import { DataSection } from "@/components/data-section"
 
 async function Prefetch() {
   const [categories, subcategories, expenses] = await Promise.all([
@@ -37,21 +37,20 @@ export default async function ExpensesPage() {
         }
       />
 
-      {/* Stats Cards */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <MetricCard title="Total de Gastos" value={expenses.length} subtitle="Gastos recurrentes activos" icon={DollarSign} />
-        <MetricCard title="Estimado Mensual" value={formatCurrency(totalEstimated)} subtitle="Total mensual estimado" icon={Calendar} />
-        <MetricCard title="Categorías" value={categories.length} subtitle="Categorías activas" icon={Filter} tone="warning" />
-        <MetricCard title="Subcategorías" value={totalSubcategories} subtitle="Subcategorías disponibles" icon={Layers} tone="muted" />
-      </div>
+      <SummaryStrip
+        aria-label="Resumen de gastos recurrentes"
+        items={[
+          { label: "Estimado mensual", value: formatCurrency(totalEstimated), detail: "Proyección recurrente", icon: DollarSign, tone: "accent" },
+          { label: "Gastos activos", value: expenses.length, detail: "Recurrentes y únicos", icon: ReceiptText },
+          { label: "Categorías", value: categories.length, detail: "Categorías activas", icon: FolderTree },
+          { label: "Subcategorías", value: totalSubcategories, detail: "Clasificaciones disponibles", icon: Calendar },
+        ]}
+      />
 
-      {/* Expenses Table */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Lista de Gastos</CardTitle>
-          <CardDescription>Administra tus gastos recurrentes</CardDescription>
-        </CardHeader>
-        <CardContent>
+      <DataSection
+        title="Lista de gastos"
+        description="Administrá tus gastos recurrentes y sus condiciones."
+      >
           <ExpensesTable
             data={expenses}
             categories={categories}
@@ -59,9 +58,7 @@ export default async function ExpensesPage() {
             emptyMessage="No hay gastos aún. Crea tu primer gasto para comenzar"
             emptyIcon={<DollarSign className="h-8 w-8 mx-auto mb-2 opacity-50" />}
           />
-        </CardContent>
-      </Card>
+      </DataSection>
     </div>
   )
 }
-

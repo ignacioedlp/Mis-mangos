@@ -39,13 +39,16 @@ export default function SignUpForm() {
          name,
       }, {
          onRequest: () => {
-            toast("Signing up...")
+            toast.loading("Creando cuenta...")
          },
          onSuccess: () => {
+            toast.dismiss()
             form.reset()
+            toast.success("Cuenta creada")
             router.push("/sign-in")
          },
          onError: (ctx) => {
+            toast.dismiss()
             toast.error(ctx.error.message);
          },
       });

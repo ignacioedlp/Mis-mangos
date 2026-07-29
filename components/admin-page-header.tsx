@@ -18,34 +18,32 @@ export function AdminPageHeader({
   className,
 }: AdminPageHeaderProps) {
   return (
-    <section
+    <header
       className={cn(
-        "fintech-panel relative overflow-hidden rounded-xl p-4 sm:p-5",
+        "flex flex-col gap-4 border-b border-border pb-5 pt-1 md:flex-row md:items-end md:justify-between",
         className,
       )}
     >
-      <div className="relative flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-        <div className="min-w-0 space-y-2">
+        <div className="min-w-0">
           {eyebrow && (
-            <span className="inline-flex rounded-md border border-primary/25 bg-primary/10 px-2.5 py-1 font-mono text-[10px] font-bold uppercase tracking-normal text-primary">
+            <span className="mb-2 block text-[11px] font-semibold uppercase tracking-[0.12em] text-primary">
               {eyebrow}
             </span>
           )}
-          <div className="space-y-1">
-            <h2 className="font-serif text-2xl font-extrabold tracking-normal sm:text-3xl">
+          <div>
+            <h1 className="font-serif text-2xl font-bold tracking-[-0.02em] sm:text-[2rem]">
               {title}
-            </h2>
-            <div className="max-w-3xl text-sm leading-relaxed text-muted-foreground">
+            </h1>
+            <div className="mt-1 max-w-3xl text-sm leading-relaxed text-muted-foreground">
               {description}
             </div>
           </div>
         </div>
         {actions && (
-          <div className="flex shrink-0 flex-wrap items-center gap-2">
+          <div className="flex shrink-0 flex-wrap items-center gap-2 md:justify-end">
             {actions}
           </div>
         )}
-      </div>
-    </section>
+    </header>
   );
 }
