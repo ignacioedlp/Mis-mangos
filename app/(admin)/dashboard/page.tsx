@@ -10,7 +10,6 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle2, Clock3, ReceiptText, Target, Wallet } from "lucide-react";
 // Iconos se gestionan dentro de StatCard para evitar pasar funciones a componentes cliente
-import { ExpenseActionButtons } from "@/components/expense-action-buttons";
 import { BudgetAlerts } from "@/components/budget-alerts";
 import { formatCurrency, formatUsdCurrency } from "@/lib/utils";
 import { DashboardCharts } from "@/components/dashboard-charts";
@@ -22,6 +21,7 @@ import { formatArsToCryptoUsd } from "@/lib/crypto-dollar";
 import { CryptoDollarQuote } from "@/components/crypto-dollar-quote";
 import { AdminPageHeader } from "@/components/admin-page-header";
 import { SummaryStrip } from "@/components/summary-strip";
+import { DashboardExpenseList } from "@/components/dashboard-expense-list";
 
 export default async function DashboardPage() {
   const [data, installmentProgress, cryptoDollarRate] = await Promise.all([
@@ -195,80 +195,12 @@ function DashboardList({
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-2">
-        {data.items.length === 0 ? (
-          <div className="text-center py-12 text-muted-foreground">
-            <div className="mb-3 inline-flex h-12 w-12 items-center justify-center rounded-lg border border-border bg-muted/40">
-              <ReceiptText className="size-5" aria-hidden="true" />
-            </div>
-            <p className="font-medium">
-              No se encontraron gastos para este mes.
-            </p>
-            <p className="text-sm mt-1">
-              Agregá algunos gastos para comenzar.
-            </p>
-          </div>
-        ) : (
-          <div className="space-y-1.5">
-            {data.items.map((item) => (
-              <div
-                key={item.expenseId}
-                className="grid gap-3 border-b border-border px-4 py-3.5 last:border-b-0 hover:bg-muted/25 md:grid-cols-[minmax(0,1fr)_9rem_12rem] md:items-center"
-              >
-                <div className="flex flex-col space-y-1 min-w-0">
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <span className="max-w-[70vw] truncate text-sm font-semibold leading-tight sm:max-w-[40vw]">
-                      {item.name}
-                    </span>
-                    {item.isPaid && (
-                      <Badge
-                        variant="secondary"
-                        className="border-0 bg-chart-5/10 px-2 text-chart-5"
-                      >
-                        Pagado
-                      </Badge>
-                    )}
-                    {item.isHidden && (
-                      <Badge
-                        variant="outline"
-                        className="px-2 text-muted-foreground"
-                      >
-                        Oculto
-                      </Badge>
-                    )}
-                  </div>
-                  <span className="text-xs text-muted-foreground">
-                    {item.categoryName} <span className="text-border">·</span>{" "}
-                    {item.subcategoryName}
-                  </span>
-                </div>
-                <div className="flex flex-col md:items-end md:text-right">
-                  <span className="font-serif text-sm font-bold tabular-nums text-foreground">
-                    {formatCurrency(item.estimatedAmount)}
-                  </span>
-                  <span className="text-xs tabular-nums text-muted-foreground">
-                    {formatArsToCryptoUsd(
-                      item.estimatedAmount,
-                      cryptoDollarRate,
-                    ) ?? "Cotización no disponible"}
-                  </span>
-                </div>
-                <div className="flex min-w-0 items-center md:justify-end">
-                  <ExpenseActionButtons
-                    expenseId={item.expenseId}
-                    expenseName={item.name}
-                    estimatedAmount={item.estimatedAmount}
-                    isPaid={item.isPaid}
-                    isSkipped={item.isSkipped}
-                    hasInstallments={item.hasInstallments}
-                    isHidden={item.isHidden}
-                    year={data.year}
-                    month={data.month}
-                  />
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
+        <DashboardExpenseList
+          items={data.items}
+          year={data.year}
+          month={data.month}
+          cryptoDollarRate={cryptoDollarRate}
+        />
       </CardContent>
     </Card>
   );
