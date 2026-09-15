@@ -9,6 +9,7 @@ import { CryptoDollarQuote } from "@/components/crypto-dollar-quote";
 import { UsdCsvImportDialog } from "@/components/usd-csv-import-dialog";
 import { UsdIncomeDialog } from "@/components/usd-income-dialog";
 import { UsdTransferDialog } from "@/components/usd-transfer-dialog";
+import { UsdTransfersByDescriptionChart } from "@/components/usd-transfers-by-description-chart";
 import { UsdTransfersTable } from "@/components/usd-transfers-table";
 import {
   Card,
@@ -187,6 +188,15 @@ export default async function UsdCashflowPage({
               </strong>
             </span>
           </div>
+        </div>
+      </DataSection>
+
+      <DataSection
+        title="Total por descripción"
+        description="Suma de las transferencias del mes agrupadas por su descripción."
+      >
+        <div className="p-4 sm:p-5">
+          <UsdTransfersByDescriptionChart transfers={transfers} />
         </div>
       </DataSection>
 
